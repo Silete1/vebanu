@@ -98,25 +98,23 @@ export function SiteHeader() {
 
   return (
     <header className="absolute inset-x-0 top-0 z-50 pt-6 w-full" data-intro-header>
-      <Container>
-        {/* Single Cohesive Liquid Glass Capsule Navbar */}
+      <Container className="flex items-center justify-between gap-4">
+        {/* Left side: Logo (Clean, separate, monochrome white for dark hero background) */}
+        <AnuLogo className="brightness-0 invert transition-opacity hover:opacity-90" />
+
+        {/* Right side: Single Liquid Glass Capsule Menu */}
         <div
           ref={navRef}
           onMouseMove={handleMouseMove}
-          className="liquid-nav theme-glass-dark p-2 flex items-center justify-between gap-4 w-full"
+          className="liquid-nav p-2 flex items-center gap-1 transition-all duration-500 ease-out theme-glass-dark"
         >
           {/* Glare effect */}
           <div className="liquid-glare-container">
             <div ref={glareRef} className="liquid-glare" />
           </div>
 
-          {/* Left Block: Logo (framed within the same capsule) */}
-          <div className="flex items-center pl-3 pr-2 border-r border-white/10">
-            <AnuLogo className="h-8" />
-          </div>
-
-          {/* Center Block: Main Navigation Links (Desktop Only) */}
-          <div className="hidden lg:flex items-center gap-1 relative flex-1 pl-2">
+          {/* Desktop Navigation Links */}
+          <div className="hidden lg:flex items-center gap-1 relative">
             <div ref={pillRef} className="active-pill" />
             
             {navigationItems.map((item) => {
@@ -144,8 +142,9 @@ export function SiteHeader() {
             })}
           </div>
 
-          {/* Right Block: Distinct Solid CTA Button (Desktop Only) */}
-          <div className="hidden lg:block pr-1.5">
+          {/* Distinct Solid CTA Button inside the Nav Bar (Desktop Only) */}
+          <div className="hidden lg:flex items-center">
+            <div className="h-5 w-px bg-white/15 mx-2" />
             <Link
               href="/contact"
               className="mono-label flex h-10 items-center justify-center rounded-full bg-white text-[var(--color-abyssal-ink)] px-6 text-xs font-bold shadow-sm transition-all duration-200 hover:bg-slate-100 active:scale-95"
@@ -155,7 +154,7 @@ export function SiteHeader() {
           </div>
 
           {/* Mobile menu trigger */}
-          <div className="lg:hidden pr-1.5 flex items-center">
+          <div className="lg:hidden flex items-center px-1.5">
             <MobileNavSheet items={navigationItems} />
           </div>
         </div>
