@@ -20,9 +20,9 @@ export function AnuLogo({ className }: AnuLogoProps) {
       <Image
         src={logoImg}
         alt="ANU Software Solutions"
-        width={120}
-        height={36}
-        className="h-9 w-auto object-contain"
+        width={160}
+        height={48}
+        className="h-11 md:h-12 w-auto object-contain"
         priority
       />
     </Link>

@@ -98,7 +98,7 @@ export function SiteHeader() {
 
   return (
     <header className="absolute inset-x-0 top-0 z-50 pt-6 w-full" data-intro-header>
-      <Container className="flex items-center justify-between gap-4">
+      <div className="w-full px-8 md:px-12 lg:px-16 flex items-center justify-between gap-4">
         {/* Left side: Logo (Clean, separate, monochrome white for dark hero background) */}
         <AnuLogo className="brightness-0 invert transition-opacity hover:opacity-90" />
 
@@ -147,7 +147,7 @@ export function SiteHeader() {
             <div className="h-5 w-px bg-white/15 mx-2" />
             <Link
               href="/contact"
-              className="mono-label flex h-10 items-center justify-center rounded-full bg-white text-[var(--color-abyssal-ink)] px-6 text-xs font-bold shadow-sm transition-all duration-200 hover:bg-slate-100 active:scale-95"
+              className="mono-label btn-brand-grad flex h-10 items-center justify-center rounded-full px-6 text-xs font-bold active:scale-95"
             >
               WORK WITH ANU
             </Link>
@@ -158,7 +158,7 @@ export function SiteHeader() {
             <MobileNavSheet items={navigationItems} />
           </div>
         </div>
-      </Container>
+      </div>
     </header>
   )
 }
