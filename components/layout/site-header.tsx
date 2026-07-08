@@ -3,181 +3,279 @@
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useGSAP } from "@gsap/react"
 import { gsap } from "gsap"
-import {
-  BriefcaseIcon,
-  CompassIcon,
-  LayersIcon,
-  Building2Icon,
-  FileTextIcon,
-} from "lucide-react"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { ArrowUpRightIcon } from "lucide-react"
 
-import { navigationItems } from "@/lib/navigation"
 import { AnuLogo } from "@/components/brand/anu-logo"
-import { Container } from "@/components/layout/container"
-import { MobileNavSheet } from "@/components/navigation/mobile-nav-sheet"
+import { navigationItems } from "@/lib/navigation"
 import { cn } from "@/lib/utils"
 
-const iconsMap: Record<string, React.ComponentType<{ className?: string }>> = {
-  Work: BriefcaseIcon,
-  Method: CompassIcon,
-  Platform: LayersIcon,
-  Industries: Building2Icon,
-  Insights: FileTextIcon,
-}
+gsap.registerPlugin(useGSAP, ScrollTrigger)
+
+type HeaderTheme = "dark" | "light"
+
+const availableItems = navigationItems.filter((item) => item.available)
 
 export function SiteHeader() {
   const pathname = usePathname()
-  const [activeHash, setActiveHash] = useState("")
-  const [activeId, setActiveId] = useState("")
+  const [activeHash, setActiveHash] = useState(() =>
+    typeof window === "undefined" ? "" : window.location.hash
+  )
+  const [scrollActiveId, setScrollActiveId] = useState("")
+  const [previewId, setPreviewId] = useState("")
+  const [headerTheme, setHeaderTheme] = useState<HeaderTheme>("dark")
+  const [isCompact, setIsCompact] = useState(false)
 
+  const headerRef = useRef<HTMLElement>(null)
   const logoRef = useRef<HTMLDivElement>(null)
   const navRef = useRef<HTMLDivElement>(null)
-  const glareRef = useRef<HTMLDivElement>(null)
-  const pillRef = useRef<HTMLDivElement>(null)
+  const lineRef = useRef<HTMLSpanElement>(null)
 
-  // Animate logo and navbar on active nav item change (navigating)
-  useEffect(() => {
-    if (!activeId) return
-    
-    gsap.fromTo(
-      logoRef.current,
-      { x: -14, opacity: 0.78 },
-      { x: 0, opacity: 1, duration: 0.85, ease: "back.out(1.6)" }
-    )
-    
-    gsap.fromTo(
-      navRef.current,
-      { x: 14, scale: 0.985 },
-      { x: 0, scale: 1, duration: 0.85, ease: "back.out(1.6)" }
-    )
-  }, [activeId])
-
-  // Track hash changes in browser
   useEffect(() => {
     const handleHashChange = () => {
       setActiveHash(window.location.hash)
     }
 
-    setActiveHash(window.location.hash)
     window.addEventListener("hashchange", handleHashChange)
     return () => window.removeEventListener("hashchange", handleHashChange)
   }, [])
 
-  // Determine active item id
   useEffect(() => {
-    const currentFullHref = pathname + activeHash
-    const matchedItem = navigationItems.find(
-      (item) => item.href === currentFullHref || item.href === activeHash
-    )
+    let frame = 0
 
-    if (matchedItem) {
-      setActiveId(matchedItem.title)
-    } else if (activeHash) {
-      const hashItem = navigationItems.find((item) => item.href.endsWith(activeHash))
-      if (hashItem) setActiveId(hashItem.title)
-    } else {
-      setActiveId(navigationItems[0]?.title || "")
+    const updateLogoTheme = () => {
+      cancelAnimationFrame(frame)
+
+      frame = requestAnimationFrame(() => {
+        const rect = logoRef.current?.getBoundingClientRect()
+        const x = rect ? rect.left + rect.width / 2 : 48
+        const y = rect ? rect.top + rect.height / 2 : 48
+        const section = document
+          .elementsFromPoint(x, y)
+          .map((element) =>
+            element instanceof HTMLElement
+              ? element.closest<HTMLElement>("[data-header-theme]")
+              : null
+          )
+          .find(Boolean)
+
+        const nextTheme =
+          section?.dataset.headerTheme === "light" ? "light" : "dark"
+        document.documentElement.dataset.logoTheme = nextTheme
+        setHeaderTheme((currentTheme) =>
+          currentTheme === nextTheme ? currentTheme : nextTheme
+        )
+      })
     }
-  }, [pathname, activeHash])
 
-  // Update active pill position and size
+    updateLogoTheme()
+    window.addEventListener("scroll", updateLogoTheme, { passive: true })
+    document.addEventListener("scroll", updateLogoTheme, {
+      passive: true,
+      capture: true,
+    })
+    window.addEventListener("resize", updateLogoTheme)
+    const interval = window.setInterval(updateLogoTheme, 200)
+
+    return () => {
+      cancelAnimationFrame(frame)
+      window.clearInterval(interval)
+      window.removeEventListener("scroll", updateLogoTheme)
+      document.removeEventListener("scroll", updateLogoTheme, {
+        capture: true,
+      })
+      window.removeEventListener("resize", updateLogoTheme)
+    }
+  }, [pathname])
+
+  const currentFullHref = pathname + activeHash
+  const matchedRouteItem = availableItems.find(
+    (item) => item.href === currentFullHref || item.href === activeHash
+  )
+  const matchedHashItem = activeHash
+    ? availableItems.find((item) => item.href.endsWith(activeHash))
+    : null
+  const routeActiveId =
+    matchedRouteItem?.title ??
+    matchedHashItem?.title ??
+    availableItems[0]?.title ??
+    ""
+  const activeId =
+    pathname === "/" ? scrollActiveId || routeActiveId : routeActiveId
+  const displayId = previewId || activeId
+
   useEffect(() => {
-    const updatePill = () => {
-      if (!navRef.current || !pillRef.current) return
+    const updateMarker = () => {
+      if (!navRef.current || !lineRef.current) return
 
-      const activeBtn = navRef.current.querySelector(
-        `[data-nav-id="${activeId}"]`
-      ) as HTMLElement
+      const activeLink = navRef.current.querySelector(
+        `[data-nav-id="${displayId}"]`
+      ) as HTMLElement | null
 
-      if (activeBtn) {
-        pillRef.current.style.width = `${activeBtn.offsetWidth}px`
-        pillRef.current.style.transform = `translateX(${activeBtn.offsetLeft}px)`
-        pillRef.current.style.opacity = "1"
-      } else {
-        pillRef.current.style.opacity = "0"
+      if (!activeLink) {
+        lineRef.current.style.opacity = "0"
+        return
       }
+
+      const left = activeLink.offsetLeft
+      const width = activeLink.offsetWidth
+
+      lineRef.current.style.width = `${Math.max(24, width - 18)}px`
+      lineRef.current.style.transform = `translateX(${left + 9}px)`
+      lineRef.current.style.opacity = "1"
     }
 
-    updatePill()
-    window.addEventListener("resize", updatePill)
-    return () => window.removeEventListener("resize", updatePill)
-  }, [activeId])
+    updateMarker()
+    window.addEventListener("resize", updateMarker)
+    return () => window.removeEventListener("resize", updateMarker)
+  }, [displayId, isCompact])
 
-  // Mouse Move Glare Effect
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!navRef.current || !glareRef.current) return
-    const rect = navRef.current.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const y = e.clientY - rect.top
-    
-    glareRef.current.style.setProperty("--x", `${x}px`)
-    glareRef.current.style.setProperty("--y", `${y}px`)
-  }
+  useGSAP(
+    () => {
+      availableItems.forEach((item) => {
+        const id = item.href.replace("/#", "")
+        if (!id || !item.href.startsWith("/#")) return
+
+        const section = document.getElementById(id)
+        if (!section) return
+
+        ScrollTrigger.create({
+          trigger: section,
+          start: "top top+=140",
+          end: "bottom top+=140",
+          onEnter: () => {
+            if (pathname === "/") setScrollActiveId(item.title)
+            const nextTheme =
+              section.dataset.headerTheme === "light" ? "light" : "dark"
+            document.documentElement.dataset.logoTheme = nextTheme
+            setHeaderTheme(nextTheme)
+          },
+          onEnterBack: () => {
+            if (pathname === "/") setScrollActiveId(item.title)
+            const nextTheme =
+              section.dataset.headerTheme === "light" ? "light" : "dark"
+            document.documentElement.dataset.logoTheme = nextTheme
+            setHeaderTheme(nextTheme)
+          },
+        })
+      })
+
+      ScrollTrigger.create({
+        start: 52,
+        end: "max",
+        onEnter: () => setIsCompact(true),
+        onLeaveBack: () => setIsCompact(false),
+      })
+
+      const currentActiveSection = availableItems.find((item) => {
+        if (!item.href.startsWith("/#")) return false
+
+        const id = item.href.replace("/#", "")
+        const element = document.getElementById(id)
+        if (!element) return false
+
+        const rect = element.getBoundingClientRect()
+        return rect.top <= 140 && rect.bottom >= 140
+      })
+
+      if (pathname === "/" && currentActiveSection) {
+        setScrollActiveId(currentActiveSection.title)
+      }
+
+      ScrollTrigger.refresh()
+    },
+    { scope: headerRef, dependencies: [pathname] }
+  )
 
   return (
-    <header className="absolute inset-x-0 top-0 z-50 pt-6 w-full" data-intro-header>
-      <div className="w-full px-8 md:px-12 lg:px-16 flex items-center justify-between gap-4">
-        {/* Left side: Logo (Clean, separate, monochrome white for dark hero background) */}
-        <div ref={logoRef} className="transition-all duration-300 hover:scale-102 hover:translate-x-0.5 active:scale-98">
-          <AnuLogo className="brightness-0 invert transition-opacity hover:opacity-90" />
+    <header
+      ref={headerRef}
+      className="pointer-events-none fixed inset-x-0 top-0 z-50 w-full pt-5 sm:pt-6"
+      data-intro-header
+    >
+      <div className="flex items-start justify-between gap-4 px-4 sm:px-6 lg:px-10">
+        <div
+          ref={logoRef}
+          className={cn(
+            "pointer-events-auto transition-transform duration-300",
+            isCompact && "translate-y-[-1px] scale-[0.985]"
+          )}
+        >
+          <AnuLogo
+            theme={headerTheme}
+            compact={isCompact}
+            className="header-brand"
+          />
         </div>
 
-        {/* Right side: Single Liquid Glass Capsule Menu */}
         <div
-          ref={navRef}
-          onMouseMove={handleMouseMove}
-          className="liquid-nav p-2 flex items-center gap-1 transition-all duration-500 ease-out theme-glass-dark"
+          className={cn(
+            "header-segmented-shell header-segmented-static pointer-events-auto",
+            isCompact && "header-segmented-shell-compact"
+          )}
+          style={{ gap: 0 }}
         >
-          {/* Glare effect */}
-          <div className="liquid-glare-container">
-            <div ref={glareRef} className="liquid-glare" />
-          </div>
-
-          {/* Desktop Navigation Links */}
-          <div className="hidden lg:flex items-center gap-1 relative">
-            <div ref={pillRef} className="active-pill" />
-            
-            {navigationItems.map((item) => {
-              const isActive = activeId === item.title
-              const Icon = iconsMap[item.title]
-
-              if (!item.available) return null
-
-              return (
-                <Link
-                  key={item.title}
-                  href={item.href}
-                  data-nav-id={item.title}
-                  className={cn(
-                    "nav-btn relative flex h-10 items-center justify-center rounded-full px-5 font-heading font-medium text-sm transition-colors duration-300 outline-none select-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-                    isActive ? "active text-[var(--icon-active)]" : "text-[var(--icon-color)] hover:text-[var(--icon-active)]"
-                  )}
-                >
-                  <div className="btn-content flex items-center gap-2 transition-transform duration-200 active:scale-95">
-                    {Icon && <Icon className="size-4 shrink-0" />}
-                    <span>{item.title}</span>
-                  </div>
-                </Link>
-              )
-            })}
-          </div>
-
-          {/* Distinct Solid CTA Button inside the Nav Bar (Desktop Only) */}
-          <div className="hidden lg:flex items-center">
-            <div className="h-5 w-px bg-white/15 mx-2" />
-            <Link
-              href="/contact"
-              className="mono-label btn-brand-grad flex h-10 items-center justify-center rounded-full px-6 text-xs font-bold active:scale-95"
+          <nav
+            className="header-segmented-nav"
+            aria-label="Primary"
+            style={{
+              borderRightWidth: 0,
+              borderTopRightRadius: 0,
+              borderBottomRightRadius: 0,
+            }}
+          >
+            <div
+              ref={navRef}
+              className="header-segmented-track relative flex scrollbar-none items-stretch justify-end overflow-x-auto"
             >
-              WORK WITH ANU
-            </Link>
-          </div>
+              {availableItems.map((item, index) => {
+                const isCurrent = activeId === item.title
 
-          {/* Mobile menu trigger */}
-          <div className="lg:hidden flex items-center px-1.5">
-            <MobileNavSheet items={navigationItems} />
-          </div>
+                return (
+                  <Link
+                    key={item.title}
+                    href={item.href}
+                    data-nav-id={item.title}
+                    onMouseEnter={() => setPreviewId(item.title)}
+                    onMouseLeave={() => setPreviewId("")}
+                    onFocus={() => setPreviewId(item.title)}
+                    onBlur={() => setPreviewId("")}
+                    className={cn(
+                      "header-segmented-link relative shrink-0 px-4 py-3 text-[0.92rem] transition-colors duration-300 outline-none",
+                      index !== 0 &&
+                        "border-l border-[var(--header-segment-border)]",
+                      "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                      isCurrent
+                        ? "text-[var(--header-link-active)]"
+                        : "text-[var(--header-link)] hover:text-[var(--header-link-active)]"
+                    )}
+                  >
+                    {item.title}
+                  </Link>
+                )
+              })}
+
+              <span className="header-segmented-rail" aria-hidden="true" />
+              <span
+                ref={lineRef}
+                className="header-segmented-line"
+                aria-hidden="true"
+              />
+            </div>
+          </nav>
+          <Link
+            href="/#assessment"
+            className="header-segmented-cta mono-label relative shrink-0 py-3 transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            style={{
+              borderTopLeftRadius: 0,
+              borderBottomLeftRadius: 0,
+            }}
+          >
+            <span>Start assessment</span>
+            <ArrowUpRightIcon className="size-3.5" />
+          </Link>
         </div>
       </div>
     </header>

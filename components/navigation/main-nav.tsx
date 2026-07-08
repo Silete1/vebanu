@@ -29,8 +29,9 @@ const iconsMap: Record<string, React.ComponentType<{ className?: string }>> = {
 
 export function MainNav({ items, isScrolled = false }: MainNavProps) {
   const pathname = usePathname()
-  const [activeHash, setActiveHash] = useState("")
-  const [activeId, setActiveId] = useState("")
+  const [activeHash, setActiveHash] = useState(() =>
+    typeof window === "undefined" ? "" : window.location.hash
+  )
 
   const navRef = useRef<HTMLDivElement>(null)
   const glareRef = useRef<HTMLDivElement>(null)
@@ -42,33 +43,19 @@ export function MainNav({ items, isScrolled = false }: MainNavProps) {
       setActiveHash(window.location.hash)
     }
 
-    // Set initial
-    setActiveHash(window.location.hash)
-
     window.addEventListener("hashchange", handleHashChange)
     return () => window.removeEventListener("hashchange", handleHashChange)
   }, [])
 
-  // Determine active item id
-  useEffect(() => {
-    // Check which navigation item matches current pathname + hash
-    const currentFullHref = pathname + activeHash
-    
-    // Find matching item or default to first item
-    const matchedItem = items.find(
-      (item) => item.href === currentFullHref || item.href === activeHash
-    )
-
-    if (matchedItem) {
-      setActiveId(matchedItem.title)
-    } else if (activeHash) {
-      const hashItem = items.find((item) => item.href.endsWith(activeHash))
-      if (hashItem) setActiveId(hashItem.title)
-    } else {
-      // Default to "Work" or first active item if on homepage
-      setActiveId(items[0]?.title || "")
-    }
-  }, [pathname, activeHash, items])
+  const currentFullHref = pathname + activeHash
+  const matchedItem = items.find(
+    (item) => item.href === currentFullHref || item.href === activeHash
+  )
+  const matchedHashItem = activeHash
+    ? items.find((item) => item.href.endsWith(activeHash))
+    : null
+  const activeId =
+    matchedItem?.title ?? matchedHashItem?.title ?? items[0]?.title ?? ""
 
   // Update active pill position and size
   useEffect(() => {
@@ -103,7 +90,7 @@ export function MainNav({ items, isScrolled = false }: MainNavProps) {
     const rect = navRef.current.getBoundingClientRect()
     const x = e.clientX - rect.left
     const y = e.clientY - rect.top
-    
+
     glareRef.current.style.setProperty("--x", `${x}px`)
     glareRef.current.style.setProperty("--y", `${y}px`)
   }
@@ -139,8 +126,10 @@ export function MainNav({ items, isScrolled = false }: MainNavProps) {
               href={item.href}
               data-nav-id={item.title}
               className={cn(
-                "nav-btn relative flex h-10 items-center justify-center rounded-full px-5 font-heading font-medium text-sm transition-colors duration-300 outline-none select-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-                isActive ? "active text-[var(--icon-active)]" : "text-[var(--icon-color)] hover:text-[var(--icon-active)]"
+                "nav-btn relative flex h-10 items-center justify-center rounded-full px-5 font-heading text-sm font-medium transition-colors duration-300 outline-none select-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                isActive
+                  ? "active text-[var(--icon-active)]"
+                  : "text-[var(--icon-color)] hover:text-[var(--icon-active)]"
               )}
             >
               <div className="btn-content flex items-center gap-2 transition-transform duration-200 active:scale-95">

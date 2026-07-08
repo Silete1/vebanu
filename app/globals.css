@@ -53,8 +53,11 @@
 }
 
 :root {
-  --font-aspekta: var(--font-display), "Inter Tight", ui-sans-serif, system-ui, sans-serif;
-  --font-utility: var(--font-mono), "Roboto Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
+  --font-aspekta:
+    var(--font-display), "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+  --font-utility:
+    var(--font-mono), "Roboto Mono", ui-monospace, SFMono-Regular, Consolas,
+    monospace;
   --color-bioluminescent-lime: #2563eb;
   --color-abyssal-ink: #090b11;
   --color-bone-white: #f8fafc;
@@ -150,6 +153,15 @@
     margin-inline: auto;
   }
 
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
   .mono-label {
     font-family: var(--font-utility);
     font-size: 13px;
@@ -224,6 +236,19 @@
     background: var(--color-bioluminescent-lime);
   }
 
+  @keyframes loader-safety-hide {
+    0%,
+    80% {
+      opacity: 1;
+      visibility: visible;
+    }
+    100% {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+  }
+
   .intro-loader {
     position: fixed;
     inset: 0;
@@ -233,6 +258,7 @@
     background: var(--color-abyssal-ink);
     color: var(--color-paper);
     pointer-events: none;
+    animation: loader-safety-hide 2.2s ease-in-out forwards;
   }
 
   .intro-loader-inner {
@@ -277,10 +303,27 @@
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(ellipse 68% 36% at 88% 18%, rgba(37, 99, 235, 0.38), rgba(9, 11, 17, 0) 55%),
-      radial-gradient(ellipse 58% 34% at 75% 78%, rgba(99, 102, 241, 0.34), rgba(9, 11, 17, 0) 48%),
-      radial-gradient(ellipse 46% 62% at 17% 42%, rgba(124, 58, 237, 0.24), rgba(9, 11, 17, 0) 58%),
-      linear-gradient(126deg, rgba(9, 11, 17, 0.98), rgba(15, 23, 42, 0.94) 45%, rgba(9, 11, 17, 1));
+      radial-gradient(
+        ellipse 68% 36% at 88% 18%,
+        rgba(37, 99, 235, 0.38),
+        rgba(9, 11, 17, 0) 55%
+      ),
+      radial-gradient(
+        ellipse 58% 34% at 75% 78%,
+        rgba(99, 102, 241, 0.34),
+        rgba(9, 11, 17, 0) 48%
+      ),
+      radial-gradient(
+        ellipse 46% 62% at 17% 42%,
+        rgba(124, 58, 237, 0.24),
+        rgba(9, 11, 17, 0) 58%
+      ),
+      linear-gradient(
+        126deg,
+        rgba(9, 11, 17, 0.98),
+        rgba(15, 23, 42, 0.94) 45%,
+        rgba(9, 11, 17, 1)
+      );
     filter: saturate(0.95);
   }
 
@@ -289,9 +332,25 @@
     position: absolute;
     inset: -6% -8%;
     background:
-      linear-gradient(167deg, transparent 0 22%, rgba(37, 99, 235, 0.24) 23%, rgba(99, 102, 241, 0.16) 24%, transparent 27% 100%),
-      linear-gradient(153deg, transparent 0 58%, rgba(255, 255, 255, 0.12) 59%, rgba(15, 23, 42, 0.54) 60%, transparent 63% 100%),
-      repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 160px);
+      linear-gradient(
+        167deg,
+        transparent 0 22%,
+        rgba(37, 99, 235, 0.24) 23%,
+        rgba(99, 102, 241, 0.16) 24%,
+        transparent 27% 100%
+      ),
+      linear-gradient(
+        153deg,
+        transparent 0 58%,
+        rgba(255, 255, 255, 0.12) 59%,
+        rgba(15, 23, 42, 0.54) 60%,
+        transparent 63% 100%
+      ),
+      repeating-linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.035) 0 1px,
+        transparent 1px 160px
+      );
     opacity: 0.72;
   }
 
@@ -478,132 +537,175 @@ body {
   background-color: var(--color-abyssal-ink);
 }
 
-/* =========================================
-   APPLE LIQUID GLASS NAV STYLING
-   ========================================= */
-.theme-glass-dark {
-  --glass-bg: rgba(15, 23, 42, 0.45);
-  --glass-border: rgba(255, 255, 255, 0.12);
-  --glass-shadow: rgba(0, 0, 0, 0.5);
-  --glass-highlight: rgba(255, 255, 255, 0.2);
-  --glass-caustic: rgba(255, 255, 255, 0.03);
-  --reflection-start: rgba(255, 255, 255, 0.12);
-  --reflection-end: rgba(255, 255, 255, 0.0);
-  --glare-color: rgba(255, 255, 255, 0.15);
-  --pill-bg: rgba(255, 255, 255, 0.15);
-  --pill-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.15);
-  --icon-color: rgba(255, 255, 255, 0.65);
-  --icon-active: #ffffff;
+.anu-logo-monochrome {
+  filter: brightness(0) invert(1);
 }
 
-.theme-glass-light {
-  --glass-bg: rgba(255, 255, 255, 0.45);
-  --glass-border: rgba(9, 11, 17, 0.08);
-  --glass-shadow: rgba(0, 0, 0, 0.06);
-  --glass-highlight: rgba(255, 255, 255, 0.65);
-  --glass-caustic: rgba(255, 255, 255, 0.25);
-  --reflection-start: rgba(255, 255, 255, 0.5);
-  --reflection-end: rgba(255, 255, 255, 0.0);
-  --glare-color: rgba(255, 255, 255, 0.4);
-  --pill-bg: rgba(255, 255, 255, 0.85);
-  --pill-shadow: 0 4px 12px rgba(0, 0, 0, 0.05), inset 0 1px 1px rgba(255, 255, 255, 0.7);
-  --icon-color: rgba(9, 11, 17, 0.6);
-  --icon-active: rgba(9, 11, 17, 0.95);
+.anu-logo-flip {
+  perspective: 800px;
+  transform-style: preserve-3d;
 }
 
-.liquid-nav {
+.anu-logo-flip-inner {
   position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 420ms cubic-bezier(0.25, 1, 0.2, 1);
+}
+
+.anu-logo-flip-light .anu-logo-flip-inner {
+  transform: rotateY(0deg);
+}
+
+.anu-logo-flip-dark .anu-logo-flip-inner {
+  transform: rotateY(180deg);
+}
+
+html[data-logo-theme="light"] .anu-logo-flip-inner {
+  transform: rotateY(0deg);
+}
+
+html[data-logo-theme="dark"] .anu-logo-flip-inner {
+  transform: rotateY(180deg);
+}
+
+.anu-logo-face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-origin: center center;
+  transform: translateZ(0.01px);
+}
+
+.anu-logo-face-front {
+  transform: rotateY(0deg) translateZ(0.01px);
+}
+
+.anu-logo-face-back {
+  transform: rotateY(180deg) translateZ(0.01px);
+}
+
+.header-segmented-static {
+  --header-shell-bg: rgba(255, 255, 255, 0.92);
+  --header-shell-border: rgba(9, 11, 17, 0.08);
+  --header-link: rgba(9, 11, 17, 0.68);
+  --header-link-active: rgba(9, 11, 17, 0.96);
+  --header-track: rgba(71, 85, 105, 0.18);
+  --header-segment-border: rgba(148, 163, 184, 0.24);
+  --header-cta-bg: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  --header-cta-text: #ffffff;
+}
+
+.header-segmented-shell {
   display: flex;
-  align-items: center;
-  border-radius: 99px;
-  background: var(--glass-bg);
-  backdrop-filter: blur(40px) saturate(190%);
-  -webkit-backdrop-filter: blur(40px) saturate(190%);
-  box-shadow: 
-    0 30px 60px -15px var(--glass-shadow),
-    0 10px 20px -10px var(--glass-shadow),
-    inset 0 2px 3px -1px var(--glass-highlight),
-    inset 0 -2px 4px -1px var(--glass-caustic),
-    inset 0 0 0 1px var(--glass-border);
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  align-items: stretch;
+  gap: 0;
+  width: fit-content;
+  max-width: min(100%, 920px);
+  margin-left: auto;
+  transition:
+    transform 260ms ease,
+    opacity 260ms ease;
 }
 
-.liquid-nav::before {
-  content: '';
-  position: absolute;
-  top: 1px; left: 1px; right: 1px; height: 46%;
-  border-radius: 99px 99px 24px 24px / 99px 99px 12px 12px;
-  background: linear-gradient(180deg, var(--reflection-start) 0%, var(--reflection-end) 100%);
-  pointer-events: none;
-  z-index: 6; 
-  transition: background 0.4s ease;
+.header-segmented-shell-compact {
+  transform: translateY(-2px) scale(0.985);
 }
 
-.liquid-glare-container {
-  position: absolute;
-  inset: 0;
-  border-radius: 99px;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 5;
-}
-
-.liquid-glare {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  background: radial-gradient(circle 100px at var(--x, 50%) var(--y, 50%), var(--glare-color) 0%, transparent 100%);
-  mix-blend-mode: overlay;
-}
-
-.liquid-nav:hover .liquid-glare {
-  opacity: 1;
-}
-
-.active-pill {
-  position: absolute;
-  top: 6px;
-  bottom: 6px;
-  left: 0; 
-  background: var(--pill-bg);
-  border-radius: 99px;
-  box-shadow: var(--pill-shadow);
-  transition: transform 0.5s cubic-bezier(0.25, 1, 0.2, 1), 
-              width 0.5s cubic-bezier(0.25, 1, 0.2, 1);
-  z-index: 1; 
-}
-
-/* Shimmering Brand Gradient Button for Navbar */
-.btn-brand-grad {
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-  color: #ffffff;
+.header-segmented-nav {
   position: relative;
-  overflow: hidden;
-  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.25);
-  transition: all 0.3s cubic-bezier(0.25, 1, 0.2, 1);
+  border: 1px solid var(--header-shell-border);
+  border-right: 0;
+  border-radius: 16px 0 0 16px;
+  background: var(--header-shell-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 18px 40px -26px rgba(0, 0, 0, 0.45);
 }
 
-.btn-brand-grad::before {
+.header-segmented-track {
+  min-height: 52px;
+}
+
+.header-segmented-link,
+.header-segmented-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  white-space: nowrap;
+}
+
+.header-segmented-link {
+  position: relative;
+  z-index: 2;
+}
+
+.header-segmented-cta {
+  position: relative;
+  z-index: 2;
+  gap: 8px;
+  min-width: clamp(198px, 15vw, 214px);
+  min-height: 54px;
+  padding-inline: 18px 16px;
+  color: var(--header-cta-text);
+  background: var(--header-cta-bg);
+  border-radius: 0 15px 15px 0;
+  box-shadow: 0 12px 22px -22px rgba(37, 99, 235, 0.75);
+}
+
+.header-segmented-cta::before {
   content: "";
   position: absolute;
-  top: 0; left: -100%; width: 100%; height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
-  transition: all 0.6s ease;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.12),
+    transparent 42%
+  );
+  opacity: 0.9;
+  pointer-events: none;
 }
 
-.btn-brand-grad:hover::before {
-  left: 100%;
+@media (max-width: 900px) {
+  .header-brand .anu-logo-flip {
+    width: 96px;
+    height: 36px;
+  }
+
+  .header-segmented-link {
+    padding-inline: 12px;
+    font-size: 0.86rem;
+  }
+
+  .header-segmented-cta {
+    min-width: 196px;
+    padding-inline: 16px 14px;
+  }
 }
 
-.btn-brand-grad:hover {
-  filter: brightness(1.1);
-  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.45);
-  transform: translateY(-1px) scale(1.02);
+.header-segmented-rail {
+  position: absolute;
+  right: 14px;
+  bottom: 9px;
+  left: 14px;
+  height: 1px;
+  background: var(--header-track);
+  pointer-events: none;
 }
 
-.btn-brand-grad:active {
-  transform: translateY(1px) scale(0.98);
+.header-segmented-line {
+  position: absolute;
+  bottom: 9px;
+  left: 0;
+  height: 2px;
+  border-radius: 9999px;
+  background: var(--color-bioluminescent-lime);
+  opacity: 0;
+  transition:
+    transform 420ms cubic-bezier(0.25, 1, 0.2, 1),
+    width 420ms cubic-bezier(0.25, 1, 0.2, 1),
+    opacity 180ms ease;
+  pointer-events: none;
 }
-
-

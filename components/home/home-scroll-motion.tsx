@@ -35,7 +35,19 @@ export function HomeScrollMotion() {
             introActions,
           ].filter(Boolean)
 
+          // Failsafe: ensure loader hides within 2.2s even if timeline is interrupted
+          const safetyTimer = setTimeout(() => {
+            const el = document.querySelector<HTMLElement>("[data-intro-loader]")
+            if (el) {
+              el.style.display = "none"
+              el.style.visibility = "hidden"
+              el.style.opacity = "0"
+              el.style.pointerEvents = "none"
+            }
+          }, 2200)
+
           if (reduceMotion) {
+            clearTimeout(safetyTimer)
             gsap.set(introLoader, { autoAlpha: 0, display: "none" })
             gsap.set(introItems, { autoAlpha: 1, y: 0, scale: 1, clearProps: "transform,visibility" })
             gsap.set(".story-track, .story-counter-track", {
@@ -44,7 +56,7 @@ export function HomeScrollMotion() {
             })
             gsap.set(".story-counter", { clearProps: "all" })
             gsap.set(".story-progress-fill", { scaleX: 1 })
-            return
+            return () => clearTimeout(safetyTimer)
           }
 
           if (introLoader && introLoaderLine) {
@@ -71,6 +83,13 @@ export function HomeScrollMotion() {
             const introTl = gsap.timeline({
               defaults: { ease: "power4.out" },
               onComplete: () => {
+                clearTimeout(safetyTimer)
+                if (introLoader) {
+                  introLoader.style.display = "none"
+                  introLoader.style.visibility = "hidden"
+                  introLoader.style.opacity = "0"
+                  introLoader.style.pointerEvents = "none"
+                }
                 ScrollTrigger.refresh()
               },
             })
@@ -94,19 +113,29 @@ export function HomeScrollMotion() {
               .to(introActions, { autoAlpha: 1, y: 0, duration: 0.72 }, 1.36)
               .set(introLoader, { display: "none" })
           }
-
-          gsap.to("[data-motion-hero] [data-hero-bg]", {
-            scale: desktop ? 1.1 : 1.04,
-            yPercent: desktop ? -5 : -2,
-            transformOrigin: "50% 50%",
-            ease: "none",
-            scrollTrigger: {
+          // Border frame scroll animation — mirrors integratedbiosciences.com exactly
+          // Uses ScrollTrigger.create() with onUpdate to manually set layout properties
+          const heroVisual = document.querySelector<HTMLElement>("[data-motion-hero] [data-lab-visual]")
+          if (heroVisual) {
+            ScrollTrigger.create({
               trigger: "[data-motion-hero]",
               start: "top top",
-              end: "bottom top",
-              scrub: 0.8,
-            },
-          })
+              end: "bottom+=50px bottom",
+              scrub: 1,
+              onUpdate: (self) => {
+                const progress = self.progress
+                const maxInset = desktop ? 12 : 8
+                const inset = maxInset - maxInset * progress
+                const radius = 20 - 20 * progress
+
+                heroVisual.style.top = `${inset}px`
+                heroVisual.style.left = `${inset}px`
+                heroVisual.style.width = `calc(100% - ${inset * 2}px)`
+                heroVisual.style.height = `calc(100lvh - ${inset * 2}px)`
+                heroVisual.style.borderRadius = `${radius}px`
+              },
+            })
+          }
 
           gsap.to("[data-motion-story] [data-hero-bg]", {
             scale: desktop ? 1.2 : 1.1,

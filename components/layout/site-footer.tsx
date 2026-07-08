@@ -14,7 +14,11 @@ const footerLinks = [
 
 export function SiteFooter() {
   return (
-    <footer className="footer-reference text-white" data-motion-footer>
+    <footer
+      className="footer-reference text-white"
+      data-motion-footer
+      data-header-theme="dark"
+    >
       <div className="footer-light-cap" aria-hidden="true" />
       <div className="footer-signal-field" data-footer-bg aria-hidden="true">
         <span className="footer-signal footer-signal-a" />
@@ -39,7 +43,11 @@ export function SiteFooter() {
               >
                 WORK WITH ANU
               </Link>
-              <Link href="/contact" className="arrow-cta" aria-label="Work with ANU">
+              <Link
+                href="/contact"
+                className="arrow-cta"
+                aria-label="Work with ANU"
+              >
                 <ArrowUpRightIcon className="size-4" />
               </Link>
             </div>
@@ -82,7 +90,7 @@ export function SiteFooter() {
 
         <div className="mt-auto overflow-hidden pt-24">
           <p
-            className="footer-wordmark whitespace-nowrap text-[clamp(7rem,21vw,19rem)] leading-[0.76] tracking-[-0.065em]"
+            className="footer-wordmark text-[clamp(7rem,21vw,19rem)] leading-[0.76] tracking-[-0.065em] whitespace-nowrap"
             data-footer-wordmark
           >
             ANU Software

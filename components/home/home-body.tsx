@@ -118,7 +118,13 @@ export function HomeBody() {
   )
 }
 
-function SectionLabel({ children, dark = false }: { children: string; dark?: boolean }) {
+function SectionLabel({
+  children,
+  dark = false,
+}: {
+  children: string
+  dark?: boolean
+}) {
   return (
     <p
       className={`mono-label tag-dot flex items-center gap-2 ${
@@ -132,8 +138,16 @@ function SectionLabel({ children, dark = false }: { children: string; dark?: boo
 
 function IntroSection() {
   return (
-    <section id="work" className="relative h-[360svh] bg-[var(--color-abyssal-ink)] text-white" data-motion-story>
-      <div className="hero-lab-visual sticky top-0 flex h-svh overflow-hidden" data-lab-visual>
+    <section
+      id="work"
+      className="relative h-[360svh] bg-[var(--color-abyssal-ink)] text-white"
+      data-motion-story
+      data-header-theme="dark"
+    >
+      <div
+        className="hero-lab-visual sticky top-0 flex h-svh overflow-hidden"
+        data-lab-visual
+      >
         <div className="hero-bg-motion" data-hero-bg aria-hidden="true" />
         <Container className="relative z-10 flex h-full flex-col justify-center">
           <div className="story-progress" aria-hidden="true">
@@ -144,29 +158,29 @@ function IntroSection() {
               <SectionLabel dark>WHAT WE DO</SectionLabel>
               <div className="story-counter-mask">
                 <div className="story-counter-track">
-                {workStory.map((step) => (
-                  <span
-                    key={step.counter}
-                    className="mono-label story-counter inline-flex rounded-full border border-[var(--color-graphite)] px-5 py-3 text-white/76"
-                  >
-                    {step.counter}
-                  </span>
-                ))}
+                  {workStory.map((step) => (
+                    <span
+                      key={step.counter}
+                      className="mono-label story-counter inline-flex rounded-full border border-[var(--color-graphite)] px-5 py-3 text-white/76"
+                    >
+                      {step.counter}
+                    </span>
+                  ))}
                 </div>
               </div>
             </div>
             <div className="story-mask">
               <div className="story-track">
-              {workStory.map((step) => (
-                <article key={step.counter} className="story-panel">
-                  <h2 className="max-w-4xl text-[clamp(2.4rem,4.1vw,4rem)] leading-[1.06] tracking-[-0.03em] text-white/76">
-                    {step.title}
-                  </h2>
-                  <p className="mt-10 max-w-3xl text-[clamp(1.1rem,1.55vw,1.45rem)] leading-[1.22] tracking-[-0.02em] text-white/88">
-                    {step.text}
-                  </p>
-                </article>
-              ))}
+                {workStory.map((step) => (
+                  <article key={step.counter} className="story-panel">
+                    <h2 className="max-w-4xl text-[clamp(2.4rem,4.1vw,4rem)] leading-[1.06] tracking-[-0.03em] text-white/76">
+                      {step.title}
+                    </h2>
+                    <p className="mt-10 max-w-3xl text-[clamp(1.1rem,1.55vw,1.45rem)] leading-[1.22] tracking-[-0.02em] text-white/88">
+                      {step.text}
+                    </p>
+                  </article>
+                ))}
               </div>
             </div>
           </div>
@@ -178,13 +192,17 @@ function IntroSection() {
 
 function WorkCardsSection() {
   return (
-    <section className="bg-[var(--color-abyssal-ink)] pb-28 text-white lg:pb-40" data-reveal-section>
+    <section
+      className="bg-[var(--color-abyssal-ink)] pb-28 text-white lg:pb-40"
+      data-reveal-section
+      data-header-theme="dark"
+    >
       <Container>
         <div className="grid gap-0 border-t border-[var(--color-graphite)] md:grid-cols-3">
           {workCards.map((card) => (
             <article
               key={card.title}
-              className="border-b border-[var(--color-graphite)] py-10 md:border-b-0 md:border-r md:pr-10 md:last:border-r-0 md:[&+article]:pl-10"
+              className="border-b border-[var(--color-graphite)] py-10 md:border-r md:border-b-0 md:pr-10 md:last:border-r-0 md:[&+article]:pl-10"
             >
               <h3 className="text-[24px] leading-[1.2] tracking-[-0.006em] text-white">
                 {card.title}
@@ -202,7 +220,12 @@ function WorkCardsSection() {
 
 function MethodSection() {
   return (
-    <section id="method" className="bg-[var(--color-abyssal-ink)] py-24 text-white lg:py-32" data-reveal-section>
+    <section
+      id="method"
+      className="bg-[var(--color-abyssal-ink)] py-24 text-white lg:py-32"
+      data-reveal-section
+      data-header-theme="dark"
+    >
       <Container>
         <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr]">
           <SectionLabel dark>02 / METHOD</SectionLabel>
@@ -237,7 +260,12 @@ function MethodSection() {
 
 function PlatformSection() {
   return (
-    <section id="platform" className="bg-[var(--color-bone-white)] py-24 lg:py-32" data-reveal-section>
+    <section
+      id="platform"
+      className="bg-[var(--color-bone-white)] py-24 lg:py-32"
+      data-reveal-section
+      data-header-theme="light"
+    >
       <Container>
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_420px]">
           <div>
@@ -278,24 +306,36 @@ function OperationalDiagram() {
           <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-bioluminescent-lime)]" />
         </div>
         <div className="mt-10 grid grid-cols-3 gap-3">
-          {["SALES", "STOCK", "FIN", "PO", "APP", "REP", "CRM", "MFG", "HR"].map(
-            (item, index) => (
-              <div
-                key={item}
-                className="rounded-lg border border-[var(--color-graphite)] px-3 py-5 text-center"
-              >
-                <p className="mono-label text-white/70">{item}</p>
-                <span
-                  className={`mx-auto mt-4 block h-1.5 w-1.5 rounded-full ${
-                    index === 4 ? "bg-[var(--color-bioluminescent-lime)]" : "bg-[var(--color-graphite)]"
-                  }`}
-                />
-              </div>
-            )
-          )}
+          {[
+            "SALES",
+            "STOCK",
+            "FIN",
+            "PO",
+            "APP",
+            "REP",
+            "CRM",
+            "MFG",
+            "HR",
+          ].map((item, index) => (
+            <div
+              key={item}
+              className="rounded-lg border border-[var(--color-graphite)] px-3 py-5 text-center"
+            >
+              <p className="mono-label text-white/70">{item}</p>
+              <span
+                className={`mx-auto mt-4 block h-1.5 w-1.5 rounded-full ${
+                  index === 4
+                    ? "bg-[var(--color-bioluminescent-lime)]"
+                    : "bg-[var(--color-graphite)]"
+                }`}
+              />
+            </div>
+          ))}
         </div>
         <div className="mt-8 h-px bg-[var(--color-graphite)]" />
-        <p className="mono-label mt-5 text-white/48">OWNER DASHBOARD / PROCESS EVIDENCE</p>
+        <p className="mono-label mt-5 text-white/48">
+          OWNER DASHBOARD / PROCESS EVIDENCE
+        </p>
       </div>
     </div>
   )
@@ -303,7 +343,12 @@ function OperationalDiagram() {
 
 function IndustriesSection() {
   return (
-    <section id="industries" className="bg-[var(--color-bone-white)] py-24 lg:py-32" data-reveal-section>
+    <section
+      id="industries"
+      className="bg-[var(--color-bone-white)] py-24 lg:py-32"
+      data-reveal-section
+      data-header-theme="light"
+    >
       <Container>
         <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr]">
           <SectionLabel>04 / INDUSTRIES</SectionLabel>
@@ -313,7 +358,10 @@ function IndustriesSection() {
             </h2>
             <div className="mt-16 grid gap-5 md:grid-cols-2">
               {industries.map((industry) => (
-                <article key={industry.title} className="flat-card rounded-2xl p-10">
+                <article
+                  key={industry.title}
+                  className="flat-card rounded-2xl p-10"
+                >
                   <h3 className="text-2xl leading-tight tracking-[-0.01em]">
                     {industry.title}
                   </h3>
@@ -332,7 +380,12 @@ function IndustriesSection() {
 
 function AssessmentSection() {
   return (
-    <section id="assessment" className="bg-[var(--color-tissue)] py-24 lg:py-32" data-reveal-section>
+    <section
+      id="assessment"
+      className="bg-[var(--color-tissue)] py-24 lg:py-32"
+      data-reveal-section
+      data-header-theme="light"
+    >
       <Container>
         <div className="rounded-[40px] border border-[var(--color-lichen)] bg-white p-8 md:p-12">
           <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_420px]">
@@ -343,12 +396,14 @@ function AssessmentSection() {
               </h2>
               <p className="body-copy mt-8 max-w-3xl text-[var(--color-graphite)]">
                 ANU starts with a Business Control Assessment. The assessment
-                reviews how work moves through the company, where approvals fail,
-                where stock becomes unclear, where finance loses visibility, and
-                where management depends on manual follow-up instead of system
-                evidence.
+                reviews how work moves through the company, where approvals
+                fail, where stock becomes unclear, where finance loses
+                visibility, and where management depends on manual follow-up
+                instead of system evidence.
               </p>
-              <Button className="mt-10" size="lg">START ASSESSMENT</Button>
+              <Button className="mt-10" size="lg">
+                START ASSESSMENT
+              </Button>
             </div>
             <div className="grid gap-3">
               {assessmentPoints.map((point, index) => (
@@ -356,7 +411,9 @@ function AssessmentSection() {
                   key={point}
                   className="flex items-center gap-4 rounded-xl border border-[var(--color-lichen)] px-4 py-4"
                 >
-                  <span className="mono-label text-[var(--color-graphite)]">0{index + 1}</span>
+                  <span className="mono-label text-[var(--color-graphite)]">
+                    0{index + 1}
+                  </span>
                   <p className="text-lg leading-6">{point}</p>
                 </div>
               ))}
@@ -370,7 +427,12 @@ function AssessmentSection() {
 
 function InsightSection() {
   return (
-    <section id="insights" className="bg-[var(--color-bone-white)] py-24 lg:py-32" data-reveal-section>
+    <section
+      id="insights"
+      className="bg-[var(--color-bone-white)] py-24 lg:py-32"
+      data-reveal-section
+      data-header-theme="light"
+    >
       <Container>
         <article className="flat-card grid gap-8 rounded-[40px] p-6 md:grid-cols-[0.95fr_1.05fr] md:p-10">
           <InsightDiagram />
@@ -382,10 +444,10 @@ function InsightSection() {
               Your ERP fails when the process is not designed first.
             </h2>
             <p className="body-copy mt-8 text-[var(--color-graphite)]">
-              Software does not fix unclear approvals, weak inventory discipline,
-              disconnected accounting, manual reporting, or undocumented
-              responsibility. ERP works when the business control model is
-              defined before configuration starts.
+              Software does not fix unclear approvals, weak inventory
+              discipline, disconnected accounting, manual reporting, or
+              undocumented responsibility. ERP works when the business control
+              model is defined before configuration starts.
             </p>
             <a
               href="#work"
@@ -405,7 +467,10 @@ function InsightSection() {
 
 function InsightDiagram() {
   return (
-    <div className="min-h-[420px] rounded-2xl border border-[var(--color-graphite)] bg-[var(--color-abyssal-ink)] p-5" data-insight-image>
+    <div
+      className="min-h-[420px] rounded-2xl border border-[var(--color-graphite)] bg-[var(--color-abyssal-ink)] p-5"
+      data-insight-image
+    >
       <div className="grid h-full grid-cols-6 grid-rows-6 gap-3">
         {Array.from({ length: 36 }).map((_, index) => (
           <span
