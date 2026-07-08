@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { gsap } from "gsap"
 import {
   BriefcaseIcon,
   CompassIcon,
@@ -30,9 +31,27 @@ export function SiteHeader() {
   const [activeHash, setActiveHash] = useState("")
   const [activeId, setActiveId] = useState("")
 
+  const logoRef = useRef<HTMLDivElement>(null)
   const navRef = useRef<HTMLDivElement>(null)
   const glareRef = useRef<HTMLDivElement>(null)
   const pillRef = useRef<HTMLDivElement>(null)
+
+  // Animate logo and navbar on active nav item change (navigating)
+  useEffect(() => {
+    if (!activeId) return
+    
+    gsap.fromTo(
+      logoRef.current,
+      { x: -14, opacity: 0.78 },
+      { x: 0, opacity: 1, duration: 0.85, ease: "back.out(1.6)" }
+    )
+    
+    gsap.fromTo(
+      navRef.current,
+      { x: 14, scale: 0.985 },
+      { x: 0, scale: 1, duration: 0.85, ease: "back.out(1.6)" }
+    )
+  }, [activeId])
 
   // Track hash changes in browser
   useEffect(() => {
@@ -100,7 +119,9 @@ export function SiteHeader() {
     <header className="absolute inset-x-0 top-0 z-50 pt-6 w-full" data-intro-header>
       <div className="w-full px-8 md:px-12 lg:px-16 flex items-center justify-between gap-4">
         {/* Left side: Logo (Clean, separate, monochrome white for dark hero background) */}
-        <AnuLogo className="brightness-0 invert transition-opacity hover:opacity-90" />
+        <div ref={logoRef} className="transition-all duration-300 hover:scale-102 hover:translate-x-0.5 active:scale-98">
+          <AnuLogo className="brightness-0 invert transition-opacity hover:opacity-90" />
+        </div>
 
         {/* Right side: Single Liquid Glass Capsule Menu */}
         <div
