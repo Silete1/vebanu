@@ -38,7 +38,7 @@ export function MainNav({ items }: MainNavProps) {
             href={item.href}
             className={cn(
               "mono-label rounded-lg border border-transparent px-5 py-3 text-current transition-colors hover:border-[var(--color-lichen)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-              isActive ? "bg-[var(--color-bioluminescent-lime)] text-[var(--color-abyssal-ink)]" : undefined
+              isActive ? "bg-[var(--color-bioluminescent-lime)] text-white" : undefined
             )}
           >
             {item.title}

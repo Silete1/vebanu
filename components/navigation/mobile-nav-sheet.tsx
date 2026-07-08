@@ -69,7 +69,7 @@ export function MobileNavSheet({ items }: MobileNavSheetProps) {
                   className={cn(
                     "mono-label rounded-xl border border-transparent px-4 py-3 transition-colors hover:border-[var(--color-graphite)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
                     isActive
-                      ? "bg-[var(--color-bioluminescent-lime)] text-[var(--color-abyssal-ink)]"
+                      ? "bg-[var(--color-bioluminescent-lime)] text-white"
                       : "text-[var(--color-graphite)]"
                   )}
                 >

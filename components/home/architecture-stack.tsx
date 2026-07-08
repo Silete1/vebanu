@@ -98,7 +98,7 @@ export function ArchitectureStack({
                             rtl ? "flex-row-reverse text-right" : undefined
                           )}
                         >
-                          <span className="flex size-10 shrink-0 items-center justify-center rounded-full border border-primary/20 bg-accent text-primary">
+                          <span className="flex size-10 shrink-0 items-center justify-center rounded-full border border-primary/20 bg-accent text-white">
                             {index < items.length - 1 ? (
                               <ArrowDownIcon className="size-4" />
                             ) : (

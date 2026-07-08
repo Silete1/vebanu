@@ -1,4 +1,6 @@
 import Link from "next/link"
+import Image from "next/image"
+import logoImg from "./anu_logo.png"
 
 import { cn } from "@/lib/utils"
 
@@ -11,21 +13,18 @@ export function AnuLogo({ className }: AnuLogoProps) {
     <Link
       href="/"
       className={cn(
-        "pointer-events-auto flex items-center gap-3 rounded-xl bg-[var(--color-frost)] px-4 py-3 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+        "pointer-events-auto flex items-center outline-none transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
         className
       )}
     >
-      <span className="mono-label flex size-7 items-center justify-center rounded-full border border-[var(--color-abyssal-ink)] text-[10px] text-[var(--color-abyssal-ink)]">
-        ANU
-      </span>
-      <span className="flex min-w-0 flex-col">
-        <span className="text-2xl leading-none tracking-[-0.04em] text-current">
-          ANU
-        </span>
-        <span className="sr-only">
-          Software Solutions
-        </span>
-      </span>
+      <Image
+        src={logoImg}
+        alt="ANU Software Solutions"
+        width={120}
+        height={36}
+        className="h-9 w-auto object-contain"
+        priority
+      />
     </Link>
   )
 }
