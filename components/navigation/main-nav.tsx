@@ -1,7 +1,15 @@
 "use client"
 
+import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import {
+  BriefcaseIcon,
+  CompassIcon,
+  LayersIcon,
+  Building2Icon,
+  FileTextIcon,
+} from "lucide-react"
 
 import type { NavigationItem } from "@/lib/navigation"
 import { cn } from "@/lib/utils"
@@ -11,53 +19,138 @@ type MainNavProps = {
   isScrolled?: boolean
 }
 
+const iconsMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  Work: BriefcaseIcon,
+  Method: CompassIcon,
+  Platform: LayersIcon,
+  Industries: Building2Icon,
+  Insights: FileTextIcon,
+}
+
 export function MainNav({ items, isScrolled = false }: MainNavProps) {
   const pathname = usePathname()
+  const [activeHash, setActiveHash] = useState("")
+  const [activeId, setActiveId] = useState("")
+
+  const navRef = useRef<HTMLDivElement>(null)
+  const glareRef = useRef<HTMLDivElement>(null)
+  const pillRef = useRef<HTMLDivElement>(null)
+
+  // Track hash changes in browser
+  useEffect(() => {
+    const handleHashChange = () => {
+      setActiveHash(window.location.hash)
+    }
+
+    // Set initial
+    setActiveHash(window.location.hash)
+
+    window.addEventListener("hashchange", handleHashChange)
+    return () => window.removeEventListener("hashchange", handleHashChange)
+  }, [])
+
+  // Determine active item id
+  useEffect(() => {
+    // Check which navigation item matches current pathname + hash
+    const currentFullHref = pathname + activeHash
+    
+    // Find matching item or default to first item
+    const matchedItem = items.find(
+      (item) => item.href === currentFullHref || item.href === activeHash
+    )
+
+    if (matchedItem) {
+      setActiveId(matchedItem.title)
+    } else if (activeHash) {
+      const hashItem = items.find((item) => item.href.endsWith(activeHash))
+      if (hashItem) setActiveId(hashItem.title)
+    } else {
+      // Default to "Work" or first active item if on homepage
+      setActiveId(items[0]?.title || "")
+    }
+  }, [pathname, activeHash, items])
+
+  // Update active pill position and size
+  useEffect(() => {
+    const updatePill = () => {
+      if (!navRef.current || !pillRef.current) return
+
+      // Find the currently active button element in the nav
+      const activeBtn = navRef.current.querySelector(
+        `[data-nav-id="${activeId}"]`
+      ) as HTMLElement
+
+      if (activeBtn) {
+        pillRef.current.style.width = `${activeBtn.offsetWidth}px`
+        pillRef.current.style.transform = `translateX(${activeBtn.offsetLeft}px)`
+        pillRef.current.style.opacity = "1"
+      } else {
+        pillRef.current.style.opacity = "0"
+      }
+    }
+
+    // Run immediately
+    updatePill()
+
+    // Setup observers & listeners for window resize
+    window.addEventListener("resize", updatePill)
+    return () => window.removeEventListener("resize", updatePill)
+  }, [activeId])
+
+  // Mouse Move Glare Effect
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!navRef.current || !glareRef.current) return
+    const rect = navRef.current.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    
+    glareRef.current.style.setProperty("--x", `${x}px`)
+    glareRef.current.style.setProperty("--y", `${y}px`)
+  }
 
   return (
-    <nav
-      aria-label="Primary"
+    <div
+      ref={navRef}
+      onMouseMove={handleMouseMove}
       className={cn(
-        "pointer-events-auto hidden items-center gap-1 rounded-xl p-1 transition-all duration-300 lg:flex",
-        isScrolled
-          ? "bg-slate-100/80 border border-slate-200/30"
-          : "bg-black/20 backdrop-blur-md border border-white/10"
+        "liquid-nav p-2 transition-all duration-500 ease-out",
+        isScrolled ? "theme-glass-light" : "theme-glass-dark"
       )}
     >
-      {items.map((item) => {
-        const isActive = pathname === item.href
+      {/* Glare container for light reflection effect */}
+      <div className="liquid-glare-container">
+        <div ref={glareRef} className="liquid-glare" />
+      </div>
 
-        if (!item.available) {
+      {/* Dynamic pill moving behind links */}
+      <div ref={pillRef} className="active-pill" />
+
+      {/* Nav links */}
+      <div className="nav-items flex items-center gap-1">
+        {items.map((item) => {
+          const isActive = activeId === item.title
+          const Icon = iconsMap[item.title]
+
+          if (!item.available) return null
+
           return (
-            <span
+            <Link
               key={item.title}
+              href={item.href}
+              data-nav-id={item.title}
               className={cn(
-                "mono-label rounded-lg px-5 py-2.5 text-xs transition-colors",
-                isScrolled ? "text-slate-400" : "text-white/40"
+                "nav-btn relative flex h-10 items-center justify-center rounded-full px-5 font-heading font-medium text-sm transition-colors duration-300 outline-none select-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                isActive ? "active text-[var(--icon-active)]" : "text-[var(--icon-color)] hover:text-[var(--icon-active)]"
               )}
             >
-              {item.title}
-            </span>
+              <div className="btn-content flex items-center gap-2 transition-transform duration-200 active:scale-95">
+                {Icon && <Icon className="size-4 shrink-0" />}
+                <span>{item.title}</span>
+              </div>
+            </Link>
           )
-        }
-
-        return (
-          <Link
-            key={item.title}
-            href={item.href}
-            className={cn(
-              "mono-label rounded-lg px-5 py-2.5 text-xs transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-              isActive
-                ? "bg-[var(--color-bioluminescent-lime)] text-white shadow-sm"
-                : isScrolled
-                  ? "text-slate-600 hover:bg-slate-200/60 hover:text-slate-900"
-                  : "text-white/80 hover:bg-white/10 hover:text-white"
-            )}
-          >
-            {item.title}
-          </Link>
-        )
-      })}
-    </nav>
+        })}
+      </div>
+    </div>
   )
 }

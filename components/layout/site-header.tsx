@@ -47,7 +47,7 @@ export function SiteHeader() {
       data-intro-header
     >
       <Container className="flex items-center justify-between gap-4">
-        {/* Logo wrapper - frames the black text logo in a white capsule at the top */}
+        {/* Logo (Left) */}
         <div
           className={cn(
             "rounded-xl px-4 py-2 transition-all duration-300",
@@ -59,33 +59,34 @@ export function SiteHeader() {
           <AnuLogo />
         </div>
 
-        {/* Main Navigation */}
-        <div className="hidden lg:block">
-          <MainNav items={navigationItems} isScrolled={isScrolled} />
-        </div>
+        {/* Navigation & CTA Cluster (Right) */}
+        <div className="flex items-center gap-4">
+          <div className="hidden lg:block">
+            <MainNav items={navigationItems} isScrolled={isScrolled} />
+          </div>
 
-        {/* Right Call-To-Action buttons */}
-        <div className="flex items-center gap-3">
-          <Button
-            variant="default"
-            size="lg"
-            className={cn(
-              "hidden transition-all duration-300 lg:inline-flex",
-              isScrolled
-                ? "bg-[var(--color-abyssal-ink)] text-white hover:bg-slate-800"
-                : "bg-white text-[var(--color-abyssal-ink)] hover:bg-slate-100 shadow-sm border border-slate-200/20"
-            )}
-          >
-            WORK WITH ANU
-          </Button>
-          
-          <div
-            className={cn(
-              "rounded-xl p-1 transition-all duration-300",
-              !isScrolled && "bg-white shadow-sm border border-slate-200/20"
-            )}
-          >
-            <MobileNavSheet items={navigationItems} />
+          <div className="flex items-center gap-3">
+            <Button
+              variant="default"
+              size="lg"
+              className={cn(
+                "hidden transition-all duration-300 lg:inline-flex",
+                isScrolled
+                  ? "bg-[var(--color-abyssal-ink)] text-white hover:bg-slate-800"
+                  : "bg-white text-[var(--color-abyssal-ink)] hover:bg-slate-100 shadow-sm border border-slate-200/20"
+              )}
+            >
+              WORK WITH ANU
+            </Button>
+            
+            <div
+              className={cn(
+                "rounded-xl p-1 transition-all duration-300",
+                !isScrolled && "bg-white shadow-sm border border-slate-200/20"
+              )}
+            >
+              <MobileNavSheet items={navigationItems} />
+            </div>
           </div>
         </div>
       </Container>
