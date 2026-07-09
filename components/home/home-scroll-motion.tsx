@@ -157,7 +157,7 @@ export function HomeScrollMotion() {
               trigger: "[data-motion-story]",
               start: "top 65%",
               end: "top top",
-              scrub: 0.6,
+              scrub: 1.2,
             },
           })
 
@@ -191,7 +191,7 @@ export function HomeScrollMotion() {
                 trigger: story,
                 start: "top top",
                 end: "bottom bottom",
-                scrub: 0.65,
+                scrub: 1.4,
                 invalidateOnRefresh: true,
               },
             })
@@ -239,7 +239,7 @@ export function HomeScrollMotion() {
           gsap.utils.toArray<HTMLElement>("[data-reveal-section]").forEach((section) => {
             const items = gsap.utils.toArray<HTMLElement>(
               section.querySelectorAll(
-                "h2, h3, p, [data-reveal-item], article, .flat-card"
+                "h2:not([data-method-card] *), h3:not([data-method-card] *), p:not([data-method-card] *), [data-reveal-item], article:not([data-method-card]), .flat-card"
               )
             )
 
@@ -267,8 +267,6 @@ export function HomeScrollMotion() {
           })
 
           const footer = document.querySelector<HTMLElement>("[data-motion-footer]")
-          const footerBg = footer?.querySelector<HTMLElement>("[data-footer-bg]")
-          const footerWordmark = footer?.querySelector<HTMLElement>("[data-footer-wordmark]")
           const footerItems = footer
             ? gsap.utils.toArray<HTMLElement>(footer.querySelectorAll("[data-footer-reveal]"))
             : []
@@ -290,37 +288,6 @@ export function HomeScrollMotion() {
                 },
               }
             )
-
-            if (footerBg) {
-              gsap.to(footerBg, {
-                yPercent: desktop ? -12 : -5,
-                scale: desktop ? 1.06 : 1.02,
-                ease: "none",
-                scrollTrigger: {
-                  trigger: footer,
-                  start: "top bottom",
-                  end: "bottom bottom",
-                  scrub: 1,
-                },
-              })
-            }
-
-            if (footerWordmark) {
-              gsap.fromTo(
-                footerWordmark,
-                { xPercent: desktop ? 3 : 0 },
-                {
-                  xPercent: desktop ? -7 : -4,
-                  ease: "none",
-                  scrollTrigger: {
-                    trigger: footer,
-                    start: "top bottom",
-                    end: "bottom bottom",
-                    scrub: 1,
-                  },
-                }
-              )
-            }
           }
 
           gsap.fromTo(

@@ -18,15 +18,34 @@ type HeaderTheme = "dark" | "light"
 
 const availableItems = navigationItems.filter((item) => item.available)
 
+function themeFromBackgroundColor(backgroundColor: string): HeaderTheme | null {
+  const match = backgroundColor.match(
+    /rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([.\d]+))?\)/
+  )
+
+  if (!match) return null
+
+  const [, redValue, greenValue, blueValue, alphaValue] = match
+  const alpha = alphaValue === undefined ? 1 : Number(alphaValue)
+
+  if (alpha < 0.45) return null
+
+  const red = Number(redValue)
+  const green = Number(greenValue)
+  const blue = Number(blueValue)
+  const luminance = (0.2126 * red + 0.7152 * green + 0.0722 * blue) / 255
+
+  return luminance > 0.58 ? "light" : "dark"
+}
+
 export function SiteHeader() {
   const pathname = usePathname()
-  const [activeHash, setActiveHash] = useState(() =>
-    typeof window === "undefined" ? "" : window.location.hash
-  )
+  const [activeHash, setActiveHash] = useState("")
   const [scrollActiveId, setScrollActiveId] = useState("")
   const [previewId, setPreviewId] = useState("")
   const [headerTheme, setHeaderTheme] = useState<HeaderTheme>("dark")
   const [isCompact, setIsCompact] = useState(false)
+  const [isFooterCapActive, setIsFooterCapActive] = useState(false)
 
   const headerRef = useRef<HTMLElement>(null)
   const logoRef = useRef<HTMLDivElement>(null)
@@ -38,6 +57,7 @@ export function SiteHeader() {
       setActiveHash(window.location.hash)
     }
 
+    handleHashChange()
     window.addEventListener("hashchange", handleHashChange)
     return () => window.removeEventListener("hashchange", handleHashChange)
   }, [])
@@ -49,20 +69,57 @@ export function SiteHeader() {
       cancelAnimationFrame(frame)
 
       frame = requestAnimationFrame(() => {
+        if (isFooterCapActive) {
+          document.documentElement.dataset.logoTheme = "light"
+          setHeaderTheme((currentTheme) =>
+            currentTheme === "light" ? currentTheme : "light"
+          )
+          return
+        }
+
         const rect = logoRef.current?.getBoundingClientRect()
         const x = rect ? rect.left + rect.width / 2 : 48
         const y = rect ? rect.top + rect.height / 2 : 48
-        const section = document
-          .elementsFromPoint(x, y)
-          .map((element) =>
-            element instanceof HTMLElement
-              ? element.closest<HTMLElement>("[data-header-theme]")
-              : null
-          )
-          .find(Boolean)
+        const elementsUnderLogo = document.elementsFromPoint(x, y)
+        let nextTheme: HeaderTheme | null = null
 
-        const nextTheme =
-          section?.dataset.headerTheme === "light" ? "light" : "dark"
+        for (const element of elementsUnderLogo) {
+          if (!(element instanceof HTMLElement)) continue
+          if (
+            element.dataset.headerBackdropTheme === "light" &&
+            window.getComputedStyle(element).opacity !== "0"
+          ) {
+            nextTheme = "light"
+            break
+          }
+          if (headerRef.current?.contains(element)) continue
+
+          let current: HTMLElement | null = element
+
+          while (current) {
+            const sampledTheme = themeFromBackgroundColor(
+              window.getComputedStyle(current).backgroundColor
+            )
+
+            if (sampledTheme) {
+              nextTheme = sampledTheme
+              break
+            }
+
+            current = current.parentElement
+          }
+
+          if (nextTheme) break
+
+          const section = element.closest<HTMLElement>("[data-header-theme]")
+          if (section?.dataset.headerTheme) {
+            nextTheme =
+              section.dataset.headerTheme === "light" ? "light" : "dark"
+            break
+          }
+        }
+
+        nextTheme ??= "dark"
         document.documentElement.dataset.logoTheme = nextTheme
         setHeaderTheme((currentTheme) =>
           currentTheme === nextTheme ? currentTheme : nextTheme
@@ -87,6 +144,52 @@ export function SiteHeader() {
         capture: true,
       })
       window.removeEventListener("resize", updateLogoTheme)
+    }
+  }, [isFooterCapActive, pathname])
+
+  useEffect(() => {
+    let frame = 0
+
+    const updateFooterCap = () => {
+      cancelAnimationFrame(frame)
+
+      frame = requestAnimationFrame(() => {
+        const footer = document.querySelector<HTMLElement>("[data-motion-footer]")
+        const navRect = navRef.current?.getBoundingClientRect()
+        const logoRect = logoRef.current?.getBoundingClientRect()
+        const footerRect = footer?.getBoundingClientRect()
+
+        if (!footerRect) {
+          setIsFooterCapActive(false)
+          return
+        }
+
+        const headerBottom = Math.max(
+          navRect?.bottom ?? 0,
+          logoRect?.bottom ?? 0,
+          112
+        )
+
+        const nextFooterCapActive =
+          footerRect.top <= headerBottom && footerRect.bottom > 0
+
+        setIsFooterCapActive(nextFooterCapActive)
+
+        if (nextFooterCapActive) {
+          document.documentElement.dataset.logoTheme = "light"
+          setHeaderTheme("light")
+        }
+      })
+    }
+
+    updateFooterCap()
+    window.addEventListener("scroll", updateFooterCap, { passive: true })
+    window.addEventListener("resize", updateFooterCap)
+
+    return () => {
+      cancelAnimationFrame(frame)
+      window.removeEventListener("scroll", updateFooterCap)
+      window.removeEventListener("resize", updateFooterCap)
     }
   }, [pathname])
 
@@ -147,17 +250,9 @@ export function SiteHeader() {
           end: "bottom top+=140",
           onEnter: () => {
             if (pathname === "/") setScrollActiveId(item.title)
-            const nextTheme =
-              section.dataset.headerTheme === "light" ? "light" : "dark"
-            document.documentElement.dataset.logoTheme = nextTheme
-            setHeaderTheme(nextTheme)
           },
           onEnterBack: () => {
             if (pathname === "/") setScrollActiveId(item.title)
-            const nextTheme =
-              section.dataset.headerTheme === "light" ? "light" : "dark"
-            document.documentElement.dataset.logoTheme = nextTheme
-            setHeaderTheme(nextTheme)
           },
         })
       })
@@ -195,7 +290,15 @@ export function SiteHeader() {
       className="pointer-events-none fixed inset-x-0 top-0 z-50 w-full pt-5 sm:pt-6"
       data-intro-header
     >
-      <div className="flex items-start justify-between gap-4 px-4 sm:px-6 lg:px-10">
+      <span
+        aria-hidden="true"
+        data-header-backdrop-theme="light"
+        className={cn(
+          "header-light-cap",
+          isFooterCapActive && "header-light-cap-active"
+        )}
+      />
+      <div className="relative z-10 flex items-start justify-between gap-4 px-4 sm:px-6 lg:px-10">
         <div
           ref={logoRef}
           className={cn(

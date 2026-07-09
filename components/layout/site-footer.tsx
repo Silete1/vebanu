@@ -25,21 +25,21 @@ export function SiteFooter() {
         <span className="footer-signal footer-signal-b" />
         <span className="footer-signal footer-signal-c" />
       </div>
-      <Container className="relative z-10 flex min-h-[calc(100svh-110px)] flex-col pt-40">
-        <div className="grid gap-16 lg:grid-cols-[minmax(0,0.95fr)_minmax(360px,0.8fr)]">
+      <Container className="footer-content relative z-10 flex flex-col">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(280px,0.7fr)]">
           <div data-footer-reveal>
-            <h2 className="max-w-[620px] text-[clamp(2.7rem,4.2vw,5rem)] leading-[1.02] tracking-[-0.03em]">
+            <h2 className="max-w-[580px] text-[clamp(1.8rem,3.2vw,3.2rem)] leading-[1.06] tracking-[-0.03em]">
               Redesign the operation before implementing the system.
             </h2>
-            <p className="mt-8 max-w-[540px] text-[clamp(1.1rem,1.35vw,1.35rem)] leading-[1.18] tracking-[-0.02em] text-white/70">
+            <p className="mt-4 max-w-[480px] text-[clamp(0.95rem,1.1vw,1.15rem)] leading-[1.25] tracking-[-0.02em] text-white/70">
               ANU works with Iraqi businesses that need clearer approvals,
               cleaner data, stronger reporting, and more control over daily
               execution.
             </p>
-            <div className="mt-10 flex items-center gap-2">
+            <div className="mt-5 flex items-center gap-2">
               <Link
                 href="/contact"
-                className="mono-label inline-flex h-12 items-center rounded-lg bg-[var(--color-abyssal-ink)] px-5 text-white"
+                className="mono-label inline-flex h-10 items-center rounded-lg bg-[var(--color-abyssal-ink)] px-4 text-white"
               >
                 WORK WITH ANU
               </Link>
@@ -53,33 +53,33 @@ export function SiteFooter() {
             </div>
           </div>
 
-          <div className="grid gap-10 sm:grid-cols-2" data-footer-reveal>
-            <div className="border-l border-white/18 pl-6">
+          <div className="grid gap-6 sm:grid-cols-2" data-footer-reveal>
+            <div className="border-l border-white/18 pl-5">
               <p className="mono-label text-white/64">NAVIGATE</p>
-              <nav className="mt-5 grid gap-3" aria-label="Footer">
+              <nav className="mt-3 grid gap-2" aria-label="Footer">
                 {footerLinks.map((link) => (
                   <Link
                     key={link.label}
                     href={link.href}
-                    className="text-[22px] leading-none tracking-[-0.03em] text-white/78 transition-colors hover:text-white"
+                    className="text-[clamp(0.95rem,1.2vw,1.15rem)] leading-none tracking-[-0.03em] text-white/78 transition-colors hover:text-white"
                   >
                     {link.label}
                   </Link>
                 ))}
               </nav>
             </div>
-            <div className="border-l border-white/18 pl-6">
+            <div className="border-l border-white/18 pl-5">
               <p className="mono-label text-white/64">CONNECT</p>
-              <div className="mt-5 grid gap-3">
+              <div className="mt-3 grid gap-2">
                 <Link
                   href="/contact"
-                  className="text-[22px] leading-none tracking-[-0.03em] text-white/78 transition-colors hover:text-white"
+                  className="text-[clamp(0.95rem,1.2vw,1.15rem)] leading-none tracking-[-0.03em] text-white/78 transition-colors hover:text-white"
                 >
                   Contact
                 </Link>
                 <Link
                   href="/#assessment"
-                  className="text-[22px] leading-none tracking-[-0.03em] text-white/78 transition-colors hover:text-white"
+                  className="text-[clamp(0.95rem,1.2vw,1.15rem)] leading-none tracking-[-0.03em] text-white/78 transition-colors hover:text-white"
                 >
                   Assessment
                 </Link>
@@ -88,15 +88,15 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <div className="mt-auto overflow-hidden pt-24">
+        <div className="footer-wordmark-wrap flex flex-col items-center text-center">
           <p
-            className="footer-wordmark text-[clamp(7rem,21vw,19rem)] leading-[0.76] tracking-[-0.065em] whitespace-nowrap"
+            className="footer-wordmark text-[clamp(4rem,14vw,12rem)] leading-[0.78] tracking-[-0.065em] whitespace-nowrap"
             data-footer-wordmark
           >
-            ANU Software
+            ANU
           </p>
-          <p className="mono-label mt-4 pb-7 text-white/70">
-            ANU Software Solutions - Business Control & Odoo ERP Implementation.
+          <p className="mono-label mt-2 pb-3 text-white/70">
+            ANU - Business Control & Odoo ERP Implementation.
           </p>
         </div>
       </Container>

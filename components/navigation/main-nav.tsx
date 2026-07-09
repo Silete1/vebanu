@@ -29,9 +29,7 @@ const iconsMap: Record<string, React.ComponentType<{ className?: string }>> = {
 
 export function MainNav({ items, isScrolled = false }: MainNavProps) {
   const pathname = usePathname()
-  const [activeHash, setActiveHash] = useState(() =>
-    typeof window === "undefined" ? "" : window.location.hash
-  )
+  const [activeHash, setActiveHash] = useState("")
 
   const navRef = useRef<HTMLDivElement>(null)
   const glareRef = useRef<HTMLDivElement>(null)
@@ -43,6 +41,7 @@ export function MainNav({ items, isScrolled = false }: MainNavProps) {
       setActiveHash(window.location.hash)
     }
 
+    handleHashChange()
     window.addEventListener("hashchange", handleHashChange)
     return () => window.removeEventListener("hashchange", handleHashChange)
   }, [])

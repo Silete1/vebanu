@@ -2,6 +2,9 @@ import { ArrowUpRightIcon } from "lucide-react"
 
 import { HomeScrollMotion } from "@/components/home/home-scroll-motion"
 import { Container } from "@/components/layout/container"
+import { MethodCardStack } from "@/components/method/method-card-stack"
+import { PlatformMacbookShowcase } from "@/components/platform/platform-macbook-showcase"
+import { IndustriesAccordionShowcase } from "@/components/industries/industries-accordion-showcase"
 import { Button } from "@/components/ui/button"
 
 const workCards = [
@@ -71,29 +74,6 @@ const modules = [
   "INTEGRATIONS",
 ]
 
-const industries = [
-  {
-    title: "Distribution & wholesale",
-    text: "Inventory, sales, purchasing, collections, warehouse visibility, supplier control, and owner dashboards.",
-  },
-  {
-    title: "Light manufacturing",
-    text: "Production orders, materials, inventory valuation, cost visibility, purchasing discipline, and reporting.",
-  },
-  {
-    title: "Multi-branch retail",
-    text: "POS, branch stock, accounting, transfers, permissions, pricing control, and management oversight.",
-  },
-  {
-    title: "Logistics & service operations",
-    text: "Projects, fleet, maintenance, jobs, approvals, billing, operational reporting, and execution visibility.",
-  },
-  {
-    title: "Healthcare and service groups",
-    text: "Appointments, billing, inventory, approvals, finance reporting, and management dashboards.",
-  },
-]
-
 const assessmentPoints = [
   "Workflow and approval review",
   "Inventory and warehouse control review",
@@ -140,7 +120,7 @@ function IntroSection() {
   return (
     <section
       id="work"
-      className="relative h-[360svh] bg-[var(--color-abyssal-ink)] text-white"
+      className="relative h-[250svh] bg-[var(--color-abyssal-ink)] text-white"
       data-motion-story
       data-header-theme="dark"
     >
@@ -226,34 +206,11 @@ function MethodSection() {
       data-reveal-section
       data-header-theme="dark"
     >
-      <Container>
-        <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr]">
-          <SectionLabel dark>02 / METHOD</SectionLabel>
-          <div>
-            <h2 className="section-headline max-w-4xl">
-              From scattered work to governed execution.
-            </h2>
-            <div className="mt-16 grid gap-4">
-              {methodSteps.map((step, index) => (
-                <article
-                  key={step.title}
-                  className="grid gap-6 rounded-2xl border border-[var(--color-graphite)] p-8 md:grid-cols-[120px_1fr]"
-                >
-                  <p className="mono-label text-white/48">STEP 0{index + 1}</p>
-                  <div>
-                    <h3 className="text-3xl leading-tight tracking-[-0.015em]">
-                      {step.title}
-                    </h3>
-                    <p className="mt-4 max-w-2xl text-lg leading-7 text-white/64">
-                      {step.text}
-                    </p>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </div>
-        </div>
-      </Container>
+      <MethodCardStack
+        label="02 / METHOD"
+        headline="From scattered work to governed execution."
+        steps={methodSteps}
+      />
     </section>
   )
 }
@@ -262,82 +219,38 @@ function PlatformSection() {
   return (
     <section
       id="platform"
-      className="bg-[var(--color-bone-white)] py-24 lg:py-32"
+      className="bg-[var(--color-bone-white)] py-24 lg:py-32 overflow-hidden"
       data-reveal-section
       data-header-theme="light"
     >
       <Container>
-        <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_420px]">
-          <div>
-            <SectionLabel>03 / PLATFORM</SectionLabel>
-            <h2 className="section-headline mt-10 max-w-3xl">
-              Odoo becomes the operating layer.
-            </h2>
-            <p className="body-copy mt-8 max-w-3xl text-[var(--color-graphite)]">
-              Sales, CRM, inventory, purchasing, accounting, manufacturing,
-              projects, HR, approvals, and dashboards can work as one control
-              system when the implementation is scoped around the company&apos;s
-              real operating model.
-            </p>
-            <div className="mt-14 flex flex-wrap gap-3">
-              {modules.map((module) => (
-                <span
-                  key={module}
-                  className="mono-label rounded-xl border border-[var(--color-lichen)] bg-white px-4 py-3 text-[var(--color-graphite)]"
-                >
-                  {module}
-                </span>
-              ))}
-            </div>
+        <div className="mx-auto max-w-4xl text-center">
+          <SectionLabel>03 / PLATFORM</SectionLabel>
+          <h2 className="section-headline mt-6">
+            Odoo becomes the operating layer.
+          </h2>
+          <p className="body-copy mx-auto mt-6 max-w-2xl text-[var(--color-graphite)]">
+            Sales, CRM, inventory, purchasing, accounting, manufacturing,
+            projects, HR, approvals, and dashboards work as one single control
+            system when implemented around the company&apos;s real operating model.
+          </p>
+          <div className="mt-10 flex flex-wrap justify-center gap-2">
+            {modules.map((module) => (
+              <span
+                key={module}
+                className="mono-label rounded-xl border border-[var(--color-lichen)] bg-white px-3.5 py-2 text-[11px] text-[var(--color-graphite)] shadow-2xs"
+              >
+                {module}
+              </span>
+            ))}
           </div>
-          <OperationalDiagram />
+        </div>
+
+        <div className="mt-16">
+          <PlatformMacbookShowcase />
         </div>
       </Container>
     </section>
-  )
-}
-
-function OperationalDiagram() {
-  return (
-    <div className="rounded-2xl border border-[var(--color-graphite)] bg-[var(--color-abyssal-ink)] p-5">
-      <div className="rounded-xl border border-[var(--color-graphite)] p-5">
-        <div className="flex items-center justify-between">
-          <p className="mono-label text-white/56">ODOO CONTROL LAYER</p>
-          <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-bioluminescent-lime)]" />
-        </div>
-        <div className="mt-10 grid grid-cols-3 gap-3">
-          {[
-            "SALES",
-            "STOCK",
-            "FIN",
-            "PO",
-            "APP",
-            "REP",
-            "CRM",
-            "MFG",
-            "HR",
-          ].map((item, index) => (
-            <div
-              key={item}
-              className="rounded-lg border border-[var(--color-graphite)] px-3 py-5 text-center"
-            >
-              <p className="mono-label text-white/70">{item}</p>
-              <span
-                className={`mx-auto mt-4 block h-1.5 w-1.5 rounded-full ${
-                  index === 4
-                    ? "bg-[var(--color-bioluminescent-lime)]"
-                    : "bg-[var(--color-graphite)]"
-                }`}
-              />
-            </div>
-          ))}
-        </div>
-        <div className="mt-8 h-px bg-[var(--color-graphite)]" />
-        <p className="mono-label mt-5 text-white/48">
-          OWNER DASHBOARD / PROCESS EVIDENCE
-        </p>
-      </div>
-    </div>
   )
 }
 
@@ -345,34 +258,22 @@ function IndustriesSection() {
   return (
     <section
       id="industries"
-      className="bg-[var(--color-bone-white)] py-24 lg:py-32"
+      className="bg-[var(--color-bone-white)] py-24 lg:py-32 overflow-hidden"
       data-reveal-section
       data-header-theme="light"
     >
       <Container>
-        <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr]">
+        <div className="mx-auto max-w-4xl text-center">
           <SectionLabel>04 / INDUSTRIES</SectionLabel>
-          <div>
-            <h2 className="section-headline max-w-4xl">
-              Built for companies where operational control matters.
-            </h2>
-            <div className="mt-16 grid gap-5 md:grid-cols-2">
-              {industries.map((industry) => (
-                <article
-                  key={industry.title}
-                  className="flat-card rounded-2xl p-10"
-                >
-                  <h3 className="text-2xl leading-tight tracking-[-0.01em]">
-                    {industry.title}
-                  </h3>
-                  <p className="mt-7 text-lg leading-7 text-[var(--color-graphite)]">
-                    {industry.text}
-                  </p>
-                </article>
-              ))}
-            </div>
-          </div>
+          <h2 className="section-headline mt-6">
+            Built for companies where operational control matters.
+          </h2>
+          <p className="body-copy mx-auto mt-6 max-w-2xl text-[var(--color-graphite)]">
+            We scope, design, and govern Odoo implementations specifically tailored to complex operational sectors with physical inventory, multi-location execution, and strict financial compliance.
+          </p>
         </div>
+
+        <IndustriesAccordionShowcase />
       </Container>
     </section>
   )

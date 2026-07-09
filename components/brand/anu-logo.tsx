@@ -28,8 +28,8 @@ export function AnuLogo({
           "anu-logo-flip relative block overflow-hidden",
           theme === "dark" ? "anu-logo-flip-dark" : "anu-logo-flip-light",
           compact
-            ? "h-9 w-[112px] md:h-10 md:w-[124px]"
-            : "h-10 w-[124px] md:h-11 md:w-[144px]"
+            ? "h-20 w-[264px] md:h-[88px] md:w-[300px]"
+            : "h-[88px] w-[292px] md:h-[104px] md:w-[352px]"
         )}
       >
         <span className="anu-logo-flip-inner">

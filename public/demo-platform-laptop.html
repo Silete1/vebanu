@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ANU — Platform MacBook Odoo Showcase Prototype (Option A)</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-abyssal: #080b11;
+      --card-bg: rgba(16, 22, 36, 0.94);
+      --border-graphite: rgba(255, 255, 255, 0.12);
+      --lime: #00ff66;
+      --blue-accent: #2563eb;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg-abyssal);
+      color: #fff;
+      font-family: 'Inter', -apple-system, sans-serif;
+      overflow-x: hidden;
+    }
+    .spacer-section {
+      height: 70vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border-bottom: 1px solid var(--border-graphite);
+      padding: 2rem;
+    }
+    .spacer-section h1 { font-size: 2.8rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .spacer-section p { color: rgba(255,255,255,0.6); font-size: 1.15rem; max-width: 600px; }
+    
+    /* Platform Section Pinned Wrapper */
+    .platform-section {
+      min-height: 350vh;
+      position: relative;
+    }
+    .platform-pinned {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      perspective: 1800px;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      z-index: 20;
+    }
+    .mono-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      letter-spacing: 0.15em;
+      color: var(--lime);
+      text-transform: uppercase;
+      display: inline-block;
+      margin-bottom: 0.8rem;
+    }
+    .headline {
+      font-size: 3.2rem;
+      line-height: 1.1;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .subhead {
+      color: rgba(255, 255, 255, 0.65);
+      font-size: 1.15rem;
+      margin-top: 0.6rem;
+      max-width: 650px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Interactive Module Pills Header */
+    .module-tabs {
+      display: flex;
+      gap: 0.6rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      z-index: 20;
+    }
+    .module-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0.45rem 1rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.6);
+      transition: all 0.4s ease;
+    }
+    .module-pill.active {
+      background: rgba(0, 255, 102, 0.15);
+      border-color: var(--lime);
+      color: var(--lime);
+      box-shadow: 0 0 20px rgba(0, 255, 102, 0.25);
+    }
+
+    /* MacBook Hardware Frame */
+    .macbook-wrapper {
+      width: 100%;
+      max-width: 1040px;
+      transform-style: preserve-3d;
+      transform: rotateX(28deg) scale(0.86);
+      transition: box-shadow 0.5s ease;
+      will-change: transform;
+    }
+    
+    .macbook-lid {
+      background: #141824;
+      border-radius: 20px 20px 0 0;
+      border: 2px solid #2d3548;
+      border-bottom: 4px solid #0a0d14;
+      padding: 14px;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.15);
+      position: relative;
+    }
+    .webcam-dot {
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #080b11;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    /* Laptop Screen Container */
+    .macbook-screen {
+      background: #0b0f19;
+      border-radius: 10px;
+      height: 520px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Odoo OS Top Bar */
+    .os-topbar {
+      height: 42px;
+      background: #111623;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.2rem;
+      font-size: 0.85rem;
+    }
+    .os-dots { display: flex; gap: 6px; }
+    .os-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-r { background: #ff5f56; }
+    .dot-y { background: #ffbd2e; }
+    .dot-g { background: #27c93f; }
+    
+    .os-title { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: rgba(255,255,255,0.7); display: flex; align-items: center; gap: 8px; }
+    .os-status { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--lime); background: rgba(0,255,102,0.1); padding: 2px 8px; border-radius: 4px; }
+
+    /* OS Body (Sidebar + Content Panels) */
+    .os-body {
+      flex: 1;
+      display: flex;
+      position: relative;
+      overflow: hidden;
+    }
+    .os-sidebar {
+      width: 200px;
+      background: #0f1420;
+      border-right: 1px solid rgba(255,255,255,0.08);
+      padding: 1.2rem 0.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .sidebar-item {
+      padding: 0.6rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.6);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+    }
+    .sidebar-item.active {
+      background: rgba(37, 99, 235, 0.2);
+      color: #60a5fa;
+      font-weight: 600;
+    }
+
+    /* Screen Panels (Only 1 visible at a time during scroll) */
+    .screen-panels-container {
+      flex: 1;
+      position: relative;
+      padding: 1.8rem;
+      background: radial-gradient(circle at top right, rgba(37,99,235,0.08), transparent 60%);
+    }
+    .ui-panel {
+      position: absolute;
+      inset: 1.8rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+    .ui-panel.active {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    /* UI Panel Cards inside Laptop */
+    .panel-header { display: flex; justify-content: space-between; align-items: center; }
+    .panel-title { font-size: 1.4rem; font-weight: 600; }
+    .badge-chip { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; padding: 4px 10px; border-radius: 6px; background: rgba(37,99,235,0.2); color: #93c5fd; border: 1px solid rgba(37,99,235,0.4); }
+    
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .stat-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 1.2rem; }
+    .stat-label { font-size: 0.8rem; color: rgba(255,255,255,0.5); font-family: 'JetBrains Mono', monospace; }
+    .stat-value { font-size: 1.6rem; font-weight: 700; margin-top: 0.3rem; color: #fff; }
+    .stat-delta { font-size: 0.75rem; color: var(--lime); margin-top: 0.2rem; display: block; }
+
+    .table-sim { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 1rem; flex: 1; }
+    .row-sim { display: flex; justify-content: space-between; padding: 0.7rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.88rem; }
+    .row-sim:last-child { border-bottom: none; }
+    .status-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--lime); margin-right: 6px; }
+
+    /* MacBook Base/Keyboard Lip */
+    .macbook-base {
+      height: 18px;
+      background: linear-gradient(180deg, #283040 0%, #171c26 100%);
+      border-radius: 0 0 24px 24px;
+      margin: 0 -30px;
+      position: relative;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+    }
+    .macbook-notch {
+      width: 120px;
+      height: 6px;
+      background: #0d1017;
+      margin: 0 auto;
+      border-radius: 0 0 6px 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="spacer-section">
+    <span class="mono-label">03 / PLATFORM SHOWCASE</span>
+    <h1>Scroll Down to Experience Option A</h1>
+    <p>Watch how the MacBook 3D lid tilts upright into crystal-clear view, then smoothly switches Odoo operating modules as you continue scrolling.</p>
+  </div>
+
+  <section class="platform-section">
+    <div class="platform-pinned">
+      
+      <div class="section-header">
+        <span class="mono-label">03 / PLATFORM</span>
+        <h2 class="headline">Odoo becomes the operating layer.</h2>
+        <p class="subhead">A single governed interface connecting sales, inventory, accounting, and executive decision-making.</p>
+      </div>
+
+      <div class="module-tabs">
+        <span class="module-pill active" id="tab-sales">SALES & CRM</span>
+        <span class="module-pill" id="tab-inventory">INVENTORY & PO</span>
+        <span class="module-pill" id="tab-finance">FINANCE & REP</span>
+        <span class="module-pill">MANUFACTURING</span>
+        <span class="module-pill">APPROVALS</span>
+      </div>
+
+      <!-- 3D MacBook Frame -->
+      <div class="macbook-wrapper" id="macbook">
+        <div class="macbook-lid">
+          <div class="webcam-dot"></div>
+          
+          <div class="macbook-screen">
+            <!-- OS Topbar -->
+            <div class="os-topbar">
+              <div class="os-dots">
+                <span class="os-dot dot-r"></span>
+                <span class="os-dot dot-y"></span>
+                <span class="os-dot dot-g"></span>
+              </div>
+              <div class="os-title">
+                <span>ANU_ODOO_ENTERPRISE_V17</span>
+                <span style="color: rgba(255,255,255,0.3)">—</span>
+                <span id="topbar-sub">Control Room</span>
+              </div>
+              <div class="os-status">● LIVE GOVERNANCE</div>
+            </div>
+
+            <div class="os-body">
+              <!-- Sidebar -->
+              <div class="os-sidebar">
+                <div class="sidebar-item active" id="sidebar-sales">📊 Sales & CRM</div>
+                <div class="sidebar-item" id="sidebar-inv">📦 Inventory Matrix</div>
+                <div class="sidebar-item" id="sidebar-fin">💰 Finance & P&L</div>
+                <div class="sidebar-item">⚙️ Automations</div>
+                <div class="sidebar-item">🛡️ Access Rights</div>
+              </div>
+
+              <!-- Screen Panels -->
+              <div class="screen-panels-container">
+                
+                <!-- Panel 1: Sales & CRM -->
+                <div class="ui-panel active" id="panel-sales">
+                  <div class="panel-header">
+                    <div>
+                      <h4 class="panel-title">Sales & CRM Pipeline</h4>
+                      <p style="color: rgba(255,255,255,0.5); font-size: 0.85rem">Real-time quotation approvals and stage velocity</p>
+                    </div>
+                    <span class="badge-chip">STAGE: STABILIZED</span>
+                  </div>
+                  <div class="stats-grid">
+                    <div class="stat-card">
+                      <span class="stat-label">MONTHLY REVENUE</span>
+                      <div class="stat-value">$1,248,500</div>
+                      <span class="stat-delta">↑ +18.4% vs last month</span>
+                    </div>
+                    <div class="stat-card">
+                      <span class="stat-label">PENDING APPROVALS</span>
+                      <div class="stat-value">0 Bottlenecks</div>
+                      <span class="stat-delta" style="color: #60a5fa">✔ 100% SLA Compliant</span>
+                    </div>
+                    <div class="stat-card">
+                      <span class="stat-label">QUOTE TO CASH</span>
+                      <div class="stat-value">4.2 Days</div>
+                      <span class="stat-delta">↓ -65% cycle reduction</span>
+                    </div>
+                  </div>
+                  <div class="table-sim">
+                    <div class="row-sim" style="color: rgba(255,255,255,0.5); font-weight: 600">
+                      <span>QUOTATION REF</span><span>CLIENT</span><span>CONTROL STAGE</span><span>AMOUNT</span>
+                    </div>
+                    <div class="row-sim">
+                      <span>SO-2026-089</span><span>Apex Logistics LLC</span><span><span class="status-dot"></span>Director Approved</span><span>$142,000</span>
+                    </div>
+                    <div class="row-sim">
+                      <span>SO-2026-090</span><span>Vanguard Global</span><span><span class="status-dot" style="background:#60a5fa"></span>Finance Check Passed</span><span>$385,500</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Panel 2: Inventory & PO -->
+                <div class="ui-panel" id="panel-inv">
+                  <div class="panel-header">
+                    <div>
+                      <h4 class="panel-title">Multi-Warehouse Inventory & POs</h4>
+                      <p style="color: rgba(255,255,255,0.5); font-size: 0.85rem">Automated reorder triggers and valuation accuracy</p>
+                    </div>
+                    <span class="badge-chip" style="border-color: var(--lime); color: var(--lime); background: rgba(0,255,102,0.1)">VALUATION LOCKED</span>
+                  </div>
+                  <div class="stats-grid">
+                    <div class="stat-card">
+                      <span class="stat-label">STOCK ACCURACY</span>
+                      <div class="stat-value">99.84%</div>
+                      <span class="stat-delta">↑ Zero shrinkage</span>
+                    </div>
+                    <div class="stat-card">
+                      <span class="stat-label">AUTOMATED POs</span>
+                      <div class="stat-value">14 Triggered</div>
+                      <span class="stat-delta" style="color: #60a5fa">Rule: Min-Max buffer</span>
+                    </div>
+                    <div class="stat-card">
+                      <span class="stat-label">VALUATION VARIANCE</span>
+                      <div class="stat-value">$0.00</div>
+                      <span class="stat-delta">✔ Reconciled daily</span>
+                    </div>
+                  </div>
+                  <div class="table-sim">
+                    <div class="row-sim" style="color: rgba(255,255,255,0.5); font-weight: 600">
+                      <span>PO REF</span><span>SUPPLIER</span><span>WAREHOUSE DESTINATION</span><span>STATUS</span>
+                    </div>
+                    <div class="row-sim">
+                      <span>PO-9042</span><span>EuroTech Industries</span><span>WH / Main Distribution</span><span><span class="status-dot"></span>Received & Verified</span>
+                    </div>
+                    <div class="row-sim">
+                      <span>PO-9043</span><span>Precision Parts Inc</span><span>WH / Assembly Line B</span><span><span class="status-dot" style="background:#60a5fa"></span>In Transit (GPS Synced)</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Panel 3: Finance & Governance -->
+                <div class="ui-panel" id="panel-fin">
+                  <div class="panel-header">
+                    <div>
+                      <h4 class="panel-title">Executive P&L & Audit Governance</h4>
+                      <p style="color: rgba(255,255,255,0.5); font-size: 0.85rem">Real-time journal entry validation and cashflow forecast</p>
+                    </div>
+                    <span class="badge-chip" style="border-color: #f59e0b; color: #fcb040; background: rgba(245,158,11,0.1)">AUDIT TRAIL SECURED</span>
+                  </div>
+                  <div class="stats-grid">
+                    <div class="stat-card">
+                      <span class="stat-label">OPERATING MARGIN</span>
+                      <div class="stat-value">34.2%</div>
+                      <span class="stat-delta">↑ +4.8% post-redesign</span>
+                    </div>
+                    <div class="stat-card">
+                      <span class="stat-label">UNRECONCILED ITEMS</span>
+                      <div class="stat-value">0 Entries</div>
+                      <span class="stat-delta" style="color: var(--lime)">✔ Auto-matched bank feeds</span>
+                    </div>
+                    <div class="stat-card">
+                      <span class="stat-label">CASH POSITION</span>
+                      <div class="stat-value">$4.82M</div>
+                      <span class="stat-delta" style="color: #60a5fa">90-Day Runway: Positive</span>
+                    </div>
+                  </div>
+                  <div class="table-sim">
+                    <div class="row-sim" style="color: rgba(255,255,255,0.5); font-weight: 600">
+                      <span>JOURNAL ID</span><span>CONTROL TEST</span><span>EVIDENCE LOG</span><span>AUDIT STATE</span>
+                    </div>
+                    <div class="row-sim">
+                      <span>JRN-2026-881</span><span>3-Way Matching (PO/Receipt/Bill)</span><span>System verified match 100%</span><span><span class="status-dot"></span>Passed</span>
+                    </div>
+                    <div class="row-sim">
+                      <span>JRN-2026-882</span><span>Threshold Limit Approval</span><span>CFO Digital Signature #892</span><span><span class="status-dot"></span>Locked</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="macbook-base">
+          <div class="macbook-notch"></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="spacer-section">
+    <h1>End of Platform Showcase Demo</h1>
+    <p>Scroll back up to watch the MacBook smoothly fold back and reverse through the Odoo modules.</p>
+  </div>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    // 1. Scrub MacBook from tilted 3D perspective to perfectly flat & crystal clear
+    gsap.to('#macbook', {
+      rotateX: 0,
+      scale: 1.0,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: '.platform-section',
+        start: 'top top',
+        end: 'top+=40% top',
+        scrub: 0.5
+      }
+    });
+
+    // 2. Timeline sequence for switching Odoo screens & tabs during scroll
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '.platform-section',
+        start: 'top+=35% top',
+        end: 'bottom-=20% bottom',
+        scrub: 0.4
+      }
+    });
+
+    // Helper to switch active classes
+    function switchState(panelId, sidebarId, tabId, subText) {
+      document.querySelectorAll('.ui-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.module-pill').forEach(t => t.classList.remove('active'));
+      
+      document.getElementById(panelId).classList.add('active');
+      document.getElementById(sidebarId).classList.add('active');
+      document.getElementById(tabId).classList.add('active');
+      document.getElementById('topbar-sub').innerText = subText;
+    }
+
+    // Phase 1 -> Phase 2 (Inventory)
+    tl.to('#panel-sales', { opacity: 0, translateY: -15, duration: 0.3 })
+      .add(() => switchState('panel-inv', 'sidebar-inv', 'tab-inventory', 'Inventory Matrix'))
+      .fromTo('#panel-inv', { opacity: 0, translateY: 15 }, { opacity: 1, translateY: 0, duration: 0.3 })
+      
+    // Phase 2 -> Phase 3 (Finance)
+      .to('#panel-inv', { opacity: 0, translateY: -15, duration: 0.3 }, '+=0.4')
+      .add(() => switchState('panel-fin', 'sidebar-fin', 'tab-finance', 'Executive P&L & Audit'))
+      .fromTo('#panel-fin', { opacity: 0, translateY: 15 }, { opacity: 1, translateY: 0, duration: 0.3 });
+
+  </script>
+</body>
+</html>
