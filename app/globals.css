@@ -136,6 +136,13 @@
     font-family: var(--font-arabic), var(--font-aspekta), sans-serif;
   }
 
+  [lang="ar"] h1,
+  [lang="ar"] h2,
+  [lang="ar"] h3,
+  [lang="ar"] h4 {
+    letter-spacing: 0;
+  }
+
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;
@@ -168,6 +175,12 @@
     line-height: 1.23;
     letter-spacing: -0.02em;
     text-transform: uppercase;
+  }
+
+  [lang="ar"] .mono-label {
+    font-family: var(--font-arabic), var(--font-aspekta), sans-serif;
+    letter-spacing: 0;
+    text-transform: none;
   }
 
   .body-copy {
@@ -236,58 +249,16 @@
     background: var(--color-bioluminescent-lime);
   }
 
-  @keyframes loader-safety-hide {
-    0%,
-    80% {
-      opacity: 1;
-      visibility: visible;
-    }
-    100% {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
-  }
-
-  .intro-loader {
-    position: fixed;
-    inset: 0;
-    z-index: 60;
-    display: grid;
-    place-items: center;
-    background: var(--color-abyssal-ink);
-    color: var(--color-paper);
-    pointer-events: none;
-    animation: loader-safety-hide 2.2s ease-in-out forwards;
-  }
-
-  .intro-loader-inner {
-    display: grid;
-    width: min(100% - 48px, 560px);
-    gap: 18px;
-  }
-
-  .intro-loader-brand {
-    color: rgba(255, 255, 255, 0.64);
-  }
-
-  .intro-loader-track {
-    height: 1px;
-    overflow: hidden;
-    background: var(--color-graphite);
-  }
-
-  .intro-loader-line {
-    display: block;
-    height: 1px;
-    width: 100%;
-    background: var(--color-bioluminescent-lime);
-    transform: scaleX(0);
-    transform-origin: left center;
-  }
-
   .hero-lab-visual {
     background: var(--color-abyssal-ink);
+  }
+
+  body:has([data-intro-visual]) [data-intro-header],
+  body:has([data-intro-visual]) [data-intro-title],
+  body:has([data-intro-visual]) [data-intro-copy],
+  body:has([data-intro-visual]) [data-intro-actions] {
+    visibility: hidden;
+    opacity: 0;
   }
 
   .hero-bg-motion {
@@ -359,9 +330,8 @@
   }
 
   [data-lab-visual],
+  [data-intro-visual],
   .hero-bg-motion,
-  .intro-loader,
-  .intro-loader-line,
   .method-route-pulse,
   [data-method-route-halo],
   .story-track,
@@ -536,9 +506,16 @@
   }
 
   .method-card-active {
-    border-color: rgba(37, 99, 235, 0.65) !important;
-    box-shadow: 0 0 45px -10px rgba(37, 99, 235, 0.35), 0 25px 50px -12px rgba(0, 0, 0, 0.85) !important;
-    background-color: rgba(18, 24, 40, 0.96) !important;
+    border-color: rgba(37, 99, 235, 0.85) !important;
+    box-shadow:
+      0 0 0 1px rgba(37, 99, 235, 0.16),
+      0 28px 70px -34px rgba(0, 0, 0, 0.9) !important;
+    background-color: var(--color-bone-white) !important;
+  }
+
+  .method-card-active [data-method-phase] {
+    background-color: var(--color-bioluminescent-lime);
+    color: white;
   }
 
   .section-card-enter,
@@ -763,6 +740,40 @@ html[data-logo-theme="dark"] .anu-logo-flip-inner {
   }
 }
 
+@media (max-width: 640px) {
+  .header-brand .anu-logo-flip {
+    width: 108px;
+    height: 52px;
+  }
+
+  .header-segmented-shell {
+    width: calc(100vw - 148px);
+    max-width: none;
+  }
+
+  .header-segmented-nav {
+    width: 100%;
+    overflow: hidden;
+    border-right-width: 1px;
+    border-radius: 14px;
+  }
+
+  .header-segmented-track {
+    min-height: 46px;
+    justify-content: flex-start;
+  }
+
+  .header-segmented-link {
+    min-height: 46px;
+    padding-inline: 11px;
+    font-size: 0.8rem;
+  }
+
+  .header-segmented-cta {
+    display: none;
+  }
+}
+
 .header-segmented-rail {
   position: absolute;
   right: 14px;
@@ -824,7 +835,7 @@ html[data-logo-theme="dark"] .anu-logo-flip-inner {
 
 .card:before,
 .industry-card:before {
-  content: '';
+  content: "";
   display: block;
   padding-bottom: 150%;
   width: 100%;
@@ -856,7 +867,9 @@ html[data-logo-theme="dark"] .anu-logo-flip-inner {
 }
 
 .card-grid:hover > .card:not(:hover) .card__background,
-.industry-card-grid:hover > .industry-card:not(:hover) .industry-card__background {
+.industry-card-grid:hover
+  > .industry-card:not(:hover)
+  .industry-card__background {
   filter: brightness(0.5) saturate(0.5) contrast(1.2) blur(20px);
 }
 

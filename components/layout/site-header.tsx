@@ -94,6 +94,13 @@ export function SiteHeader() {
           }
           if (headerRef.current?.contains(element)) continue
 
+          const section = element.closest<HTMLElement>("[data-header-theme]")
+          if (section?.dataset.headerTheme) {
+            nextTheme =
+              section.dataset.headerTheme === "light" ? "light" : "dark"
+            break
+          }
+
           let current: HTMLElement | null = element
 
           while (current) {
@@ -110,13 +117,6 @@ export function SiteHeader() {
           }
 
           if (nextTheme) break
-
-          const section = element.closest<HTMLElement>("[data-header-theme]")
-          if (section?.dataset.headerTheme) {
-            nextTheme =
-              section.dataset.headerTheme === "light" ? "light" : "dark"
-            break
-          }
         }
 
         nextTheme ??= "dark"
@@ -154,7 +154,9 @@ export function SiteHeader() {
       cancelAnimationFrame(frame)
 
       frame = requestAnimationFrame(() => {
-        const footer = document.querySelector<HTMLElement>("[data-motion-footer]")
+        const footer = document.querySelector<HTMLElement>(
+          "[data-motion-footer]"
+        )
         const navRect = navRef.current?.getBoundingClientRect()
         const logoRect = logoRef.current?.getBoundingClientRect()
         const footerRect = footer?.getBoundingClientRect()
@@ -195,7 +197,10 @@ export function SiteHeader() {
 
   const currentFullHref = pathname + activeHash
   const matchedRouteItem = availableItems.find(
-    (item) => item.href === currentFullHref || item.href === activeHash
+    (item) =>
+      item.href === currentFullHref ||
+      item.href === activeHash ||
+      (!item.href.includes("#") && pathname.startsWith(`${item.href}/`))
   )
   const matchedHashItem = activeHash
     ? availableItems.find((item) => item.href.endsWith(activeHash))
@@ -224,6 +229,20 @@ export function SiteHeader() {
 
       const left = activeLink.offsetLeft
       const width = activeLink.offsetWidth
+      const track = navRef.current
+      const visibleStart = track.scrollLeft
+      const visibleEnd = visibleStart + track.clientWidth
+
+      if (left < visibleStart || left + width > visibleEnd) {
+        const prefersReducedMotion = window.matchMedia(
+          "(prefers-reduced-motion: reduce)"
+        ).matches
+
+        track.scrollTo({
+          left: Math.max(0, left - (track.clientWidth - width) / 2),
+          behavior: prefersReducedMotion ? "auto" : "smooth",
+        })
+      }
 
       lineRef.current.style.width = `${Math.max(24, width - 18)}px`
       lineRef.current.style.transform = `translateX(${left + 9}px)`
@@ -288,6 +307,9 @@ export function SiteHeader() {
     <header
       ref={headerRef}
       className="pointer-events-none fixed inset-x-0 top-0 z-50 w-full pt-5 sm:pt-6"
+      style={
+        pathname === "/" ? { opacity: 0, visibility: "hidden" } : undefined
+      }
       data-intro-header
     >
       <span
@@ -320,15 +342,7 @@ export function SiteHeader() {
           )}
           style={{ gap: 0 }}
         >
-          <nav
-            className="header-segmented-nav"
-            aria-label="Primary"
-            style={{
-              borderRightWidth: 0,
-              borderTopRightRadius: 0,
-              borderBottomRightRadius: 0,
-            }}
-          >
+          <nav className="header-segmented-nav" aria-label="Primary">
             <div
               ref={navRef}
               className="header-segmented-track relative flex scrollbar-none items-stretch justify-end overflow-x-auto"
@@ -340,6 +354,7 @@ export function SiteHeader() {
                   <Link
                     key={item.title}
                     href={item.href}
+                    aria-current={isCurrent ? "page" : undefined}
                     data-nav-id={item.title}
                     onMouseEnter={() => setPreviewId(item.title)}
                     onMouseLeave={() => setPreviewId("")}
@@ -371,10 +386,6 @@ export function SiteHeader() {
           <Link
             href="/#assessment"
             className="header-segmented-cta mono-label relative shrink-0 py-3 transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-            style={{
-              borderTopLeftRadius: 0,
-              borderBottomLeftRadius: 0,
-            }}
           >
             <span>Start assessment</span>
             <ArrowUpRightIcon className="size-3.5" />

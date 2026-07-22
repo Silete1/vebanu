@@ -1,4 +1,6 @@
 import { ArrowUpRightIcon } from "lucide-react"
+import Link from "next/link"
+import { Fragment } from "react"
 
 import { HomeScrollMotion } from "@/components/home/home-scroll-motion"
 import { Container } from "@/components/layout/container"
@@ -42,20 +44,32 @@ const workStory = [
 
 const methodSteps = [
   {
+    phase: "Assess",
     title: "Assess current operations",
     text: "Map workflows, gaps, approvals, documents, reports, data sources, and decision points.",
+    controls: ["Workflow evidence", "Control gaps", "Decision points"],
+    output: "Current-state control map",
   },
   {
+    phase: "Design",
     title: "Redesign the control model",
     text: "Define roles, permissions, stages, approval logic, inventory rules, finance links, and reporting structure.",
+    controls: ["Roles and ownership", "Approval logic", "Reporting model"],
+    output: "Target operating model",
   },
   {
+    phase: "Configure",
     title: "Configure Odoo",
     text: "Implement modules, workflows, dashboards, automations, integrations, access rights, and management reports.",
+    controls: ["Odoo workflows", "Access rights", "Management reports"],
+    output: "Configured control platform",
   },
   {
+    phase: "Stabilize",
     title: "Train and stabilize",
     text: "Train key users, support go-live, monitor issues, refine configuration, and stabilize daily operation.",
+    controls: ["Key-user readiness", "Go-live controls", "Issue closure"],
+    output: "Controlled daily operation",
   },
 ]
 
@@ -87,7 +101,6 @@ export function HomeBody() {
   return (
     <>
       <HomeScrollMotion />
-      <IntroSection />
       <WorkCardsSection />
       <MethodSection />
       <PlatformSection />
@@ -116,19 +129,46 @@ function SectionLabel({
   )
 }
 
-function IntroSection() {
+function StoryLetters({ text }: { text: string }) {
+  const words = text.split(" ")
+
+  return (
+    <>
+      <span className="sr-only">{text}</span>
+      <span aria-hidden="true">
+        {words.map((word, wordIndex) => (
+          <Fragment key={`${word}-${wordIndex}`}>
+            <span className="inline-block">
+              {Array.from(word).map((letter, letterIndex) => (
+                <span
+                  key={`${letter}-${letterIndex}`}
+                  data-story-letter
+                  className="inline"
+                >
+                  {letter}
+                </span>
+              ))}
+            </span>
+            {wordIndex < words.length - 1 ? " " : ""}
+          </Fragment>
+        ))}
+      </span>
+    </>
+  )
+}
+
+export function HomeIntroSection() {
   return (
     <section
       id="work"
-      className="relative h-[250svh] bg-[var(--color-abyssal-ink)] text-white"
+      className="relative h-[250svh] text-white"
       data-motion-story
       data-header-theme="dark"
     >
       <div
-        className="hero-lab-visual sticky top-0 flex h-svh overflow-hidden"
+        className="sticky top-0 flex h-svh overflow-hidden"
         data-lab-visual
       >
-        <div className="hero-bg-motion" data-hero-bg aria-hidden="true" />
         <Container className="relative z-10 flex h-full flex-col justify-center">
           <div className="story-progress" aria-hidden="true">
             <span className="story-progress-fill" />
@@ -153,11 +193,17 @@ function IntroSection() {
               <div className="story-track">
                 {workStory.map((step) => (
                   <article key={step.counter} className="story-panel">
-                    <h2 className="max-w-4xl text-[clamp(2.4rem,4.1vw,4rem)] leading-[1.06] tracking-[-0.03em] text-white/76">
-                      {step.title}
+                    <h2
+                      data-story-highlight
+                      className="max-w-4xl text-[clamp(2.4rem,4.1vw,4rem)] leading-[1.06] tracking-[-0.03em] text-white/76"
+                    >
+                      <StoryLetters text={step.title} />
                     </h2>
-                    <p className="mt-10 max-w-3xl text-[clamp(1.1rem,1.55vw,1.45rem)] leading-[1.22] tracking-[-0.02em] text-white/88">
-                      {step.text}
+                    <p
+                      data-story-highlight
+                      className="mt-10 max-w-3xl text-[clamp(1.1rem,1.55vw,1.45rem)] leading-[1.22] tracking-[-0.02em] text-white/88"
+                    >
+                      <StoryLetters text={step.text} />
                     </p>
                   </article>
                 ))}
@@ -202,7 +248,7 @@ function MethodSection() {
   return (
     <section
       id="method"
-      className="bg-[var(--color-abyssal-ink)] py-24 text-white lg:py-32"
+      className="bg-[var(--color-abyssal-ink)] pt-24 text-white lg:pt-32"
       data-reveal-section
       data-header-theme="dark"
     >
@@ -219,7 +265,7 @@ function PlatformSection() {
   return (
     <section
       id="platform"
-      className="bg-[var(--color-bone-white)] py-24 lg:py-32 overflow-hidden"
+      className="overflow-hidden bg-[var(--color-bone-white)] py-24 lg:py-32"
       data-reveal-section
       data-header-theme="light"
     >
@@ -232,7 +278,8 @@ function PlatformSection() {
           <p className="body-copy mx-auto mt-6 max-w-2xl text-[var(--color-graphite)]">
             Sales, CRM, inventory, purchasing, accounting, manufacturing,
             projects, HR, approvals, and dashboards work as one single control
-            system when implemented around the company&apos;s real operating model.
+            system when implemented around the company&apos;s real operating
+            model.
           </p>
           <div className="mt-10 flex flex-wrap justify-center gap-2">
             {modules.map((module) => (
@@ -258,7 +305,7 @@ function IndustriesSection() {
   return (
     <section
       id="industries"
-      className="bg-[var(--color-bone-white)] py-24 lg:py-32 overflow-hidden"
+      className="overflow-hidden bg-[var(--color-bone-white)] py-24 lg:py-32"
       data-reveal-section
       data-header-theme="light"
     >
@@ -269,7 +316,9 @@ function IndustriesSection() {
             Built for companies where operational control matters.
           </h2>
           <p className="body-copy mx-auto mt-6 max-w-2xl text-[var(--color-graphite)]">
-            We scope, design, and govern Odoo implementations specifically tailored to complex operational sectors with physical inventory, multi-location execution, and strict financial compliance.
+            We scope, design, and govern Odoo implementations specifically
+            tailored to complex operational sectors with physical inventory,
+            multi-location execution, and strict financial compliance.
           </p>
         </div>
 
@@ -350,15 +399,15 @@ function InsightSection() {
               undocumented responsibility. ERP works when the business control
               model is defined before configuration starts.
             </p>
-            <a
-              href="#work"
+            <Link
+              href="/insights"
               className="mono-label mt-10 inline-flex items-center gap-3 text-[var(--color-abyssal-ink)]"
             >
               READ INSIGHT
               <span className="arrow-cta">
                 <ArrowUpRightIcon className="size-4" />
               </span>
-            </a>
+            </Link>
           </div>
         </article>
       </Container>

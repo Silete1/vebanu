@@ -3,13 +3,15 @@ import Link from "next/link"
 
 import { Container } from "@/components/layout/container"
 
+const contactHref = "/?request=contact#assessment"
+
 const footerLinks = [
   { label: "Work", href: "/#work" },
   { label: "Method", href: "/#method" },
   { label: "Platform", href: "/#platform" },
   { label: "Industries", href: "/#industries" },
-  { label: "Insights", href: "/#insights" },
-  { label: "Contact", href: "/contact" },
+  { label: "Insights", href: "/insights" },
+  { label: "Contact", href: contactHref },
 ]
 
 export function SiteFooter() {
@@ -38,13 +40,13 @@ export function SiteFooter() {
             </p>
             <div className="mt-5 flex items-center gap-2">
               <Link
-                href="/contact"
+                href={contactHref}
                 className="mono-label inline-flex h-10 items-center rounded-lg bg-[var(--color-abyssal-ink)] px-4 text-white"
               >
                 WORK WITH ANU
               </Link>
               <Link
-                href="/contact"
+                href={contactHref}
                 className="arrow-cta"
                 aria-label="Work with ANU"
               >
@@ -72,7 +74,7 @@ export function SiteFooter() {
               <p className="mono-label text-white/64">CONNECT</p>
               <div className="mt-3 grid gap-2">
                 <Link
-                  href="/contact"
+                  href={contactHref}
                   className="text-[clamp(0.95rem,1.2vw,1.15rem)] leading-none tracking-[-0.03em] text-white/78 transition-colors hover:text-white"
                 >
                   Contact

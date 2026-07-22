@@ -19,14 +19,19 @@ export function HomeScrollMotion() {
         },
         (context) => {
           const { reduceMotion, desktop } = context.conditions ?? {}
-          const introLoader = document.querySelector<HTMLElement>("[data-intro-loader]")
-          const introLoaderLine = document.querySelector<HTMLElement>("[data-intro-loader-line]")
-          const introLoaderBrand = document.querySelector<HTMLElement>("[data-intro-loader-brand]")
-          const introHeader = document.querySelector<HTMLElement>("[data-intro-header]")
-          const introVisual = document.querySelector<HTMLElement>("[data-intro-visual]")
-          const introTitle = document.querySelector<HTMLElement>("[data-intro-title]")
-          const introCopy = document.querySelector<HTMLElement>("[data-intro-copy]")
-          const introActions = document.querySelector<HTMLElement>("[data-intro-actions]")
+          const introHeader = document.querySelector<HTMLElement>(
+            "[data-intro-header]"
+          )
+          const introVisual = document.querySelector<HTMLElement>(
+            "[data-intro-visual]"
+          )
+          const introTitle =
+            document.querySelector<HTMLElement>("[data-intro-title]")
+          const introCopy =
+            document.querySelector<HTMLElement>("[data-intro-copy]")
+          const introActions = document.querySelector<HTMLElement>(
+            "[data-intro-actions]"
+          )
           const introItems = [
             introHeader,
             introVisual,
@@ -35,88 +40,142 @@ export function HomeScrollMotion() {
             introActions,
           ].filter(Boolean)
 
-          // Failsafe: ensure loader hides within 2.2s even if timeline is interrupted
+          const finalInset = desktop ? 12 : 8
+
+          // Failsafe: reveal the completed hero if the intro timeline is interrupted.
           const safetyTimer = setTimeout(() => {
-            const el = document.querySelector<HTMLElement>("[data-intro-loader]")
-            if (el) {
-              el.style.display = "none"
-              el.style.visibility = "hidden"
-              el.style.opacity = "0"
-              el.style.pointerEvents = "none"
+            if (introVisual) {
+              introVisual.style.top = `${finalInset}px`
+              introVisual.style.left = `${finalInset}px`
+              introVisual.style.width = `calc(100% - ${finalInset * 2}px)`
+              introVisual.style.height = `calc(100lvh - ${finalInset * 2}px)`
+              introVisual.style.borderRadius = "20px"
+              introVisual.style.opacity = "1"
+              introVisual.style.visibility = "visible"
+              introVisual.style.transform = "none"
+              introVisual.style.setProperty("--intro-clip-y", "0%")
+              introVisual.style.setProperty("--intro-clip-x", "0%")
+              introVisual.style.setProperty("--intro-clip-radius", "20px")
             }
-          }, 2200)
+          }, 2400)
 
           if (reduceMotion) {
             clearTimeout(safetyTimer)
-            gsap.set(introLoader, { autoAlpha: 0, display: "none" })
-            gsap.set(introItems, { autoAlpha: 1, y: 0, scale: 1, clearProps: "transform,visibility" })
+            gsap.set(introVisual, {
+              autoAlpha: 1,
+              top: finalInset,
+              left: finalInset,
+              width: `calc(100% - ${finalInset * 2}px)`,
+              height: `calc(100lvh - ${finalInset * 2}px)`,
+              borderRadius: 20,
+              "--intro-clip-y": "0%",
+              "--intro-clip-x": "0%",
+              "--intro-clip-radius": "20px",
+            })
+            gsap.set(introItems, {
+              autoAlpha: 1,
+              y: 0,
+              scale: 1,
+              clearProps: "transform,visibility",
+            })
             gsap.set(".story-track, .story-counter-track", {
               clearProps: "all",
               y: 0,
             })
             gsap.set(".story-counter", { clearProps: "all" })
             gsap.set(".story-progress-fill", { scaleX: 1 })
+            gsap.set("[data-story-letter]", { clearProps: "color" })
             return () => clearTimeout(safetyTimer)
           }
 
-          if (introLoader && introLoaderLine) {
-            gsap.set(introLoader, {
-              autoAlpha: 1,
-              clipPath: "inset(0% 0% 0% 0%)",
-            })
-            gsap.set(introLoaderLine, {
-              scaleX: 0,
-              transformOrigin: "left center",
-            })
-            gsap.set(introLoaderBrand, { autoAlpha: 0.56, y: 8 })
+          if (introVisual) {
             gsap.set(introHeader, { autoAlpha: 0, y: -16 })
             gsap.set(introVisual, {
               autoAlpha: 1,
-              scale: desktop ? 0.985 : 1,
-              transformOrigin: "center top",
+              top: finalInset,
+              left: finalInset,
+              width: `calc(100% - ${finalInset * 2}px)`,
+              height: `calc(100lvh - ${finalInset * 2}px)`,
+              borderRadius: 20,
+              "--intro-clip-y": "50%",
+              "--intro-clip-x": "50%",
+              "--intro-clip-radius": "999px",
             })
             gsap.set([introTitle, introCopy, introActions].filter(Boolean), {
               autoAlpha: 0,
               y: desktop ? 72 : 34,
+              clipPath: "inset(0% 0% 100% 0%)",
             })
 
             const introTl = gsap.timeline({
               defaults: { ease: "power4.out" },
               onComplete: () => {
                 clearTimeout(safetyTimer)
-                if (introLoader) {
-                  introLoader.style.display = "none"
-                  introLoader.style.visibility = "hidden"
-                  introLoader.style.opacity = "0"
-                  introLoader.style.pointerEvents = "none"
-                }
                 ScrollTrigger.refresh()
               },
             })
 
             introTl
-              .to(introLoaderBrand, { autoAlpha: 1, y: 0, duration: 0.38 }, 0)
-              .to(introLoaderLine, { scaleX: 1, duration: 0.72, ease: "power3.inOut" }, 0.08)
+              .addLabel("open", 0)
               .to(
-                introLoader,
+                introVisual,
                 {
-                  clipPath: "inset(0% 0% 100% 0%)",
-                  duration: 0.82,
-                  ease: "power4.inOut",
+                  "--intro-clip-y": "0%",
+                  "--intro-clip-x": "0%",
+                  "--intro-clip-radius": "20px",
+                  duration: 1.4,
+                  ease: "power2.inOut",
                 },
-                0.86
+                "open"
               )
-              .to(introVisual, { scale: 1, duration: 1.1 }, 0.78)
-              .to(introHeader, { autoAlpha: 1, y: 0, duration: 0.72 }, 1.08)
-              .to(introTitle, { autoAlpha: 1, y: 0, duration: 0.92 }, 1.12)
-              .to(introCopy, { autoAlpha: 1, y: 0, duration: 0.72 }, 1.28)
-              .to(introActions, { autoAlpha: 1, y: 0, duration: 0.72 }, 1.36)
-              .set(introLoader, { display: "none" })
+              .addLabel("reveal", "open+=1.02")
+              .to(
+                introHeader,
+                { autoAlpha: 1, y: 0, duration: 0.7 },
+                "reveal"
+              )
+              .to(
+                introTitle,
+                {
+                  autoAlpha: 1,
+                  y: 0,
+                  clipPath: "inset(0% 0% 0% 0%)",
+                  duration: 0.86,
+                },
+                "reveal+=0.08"
+              )
+              .to(
+                introCopy,
+                {
+                  autoAlpha: 1,
+                  y: 0,
+                  clipPath: "inset(0% 0% 0% 0%)",
+                  duration: 0.66,
+                },
+                "reveal+=0.2"
+              )
+              .to(
+                introActions,
+                {
+                  autoAlpha: 1,
+                  y: 0,
+                  clipPath: "inset(0% 0% 0% 0%)",
+                  duration: 0.66,
+                },
+                "reveal+=0.28"
+              )
           }
           // Border frame scroll animation — mirrors integratedbiosciences.com exactly
           // Uses ScrollTrigger.create() with onUpdate to manually set layout properties
-          const heroVisual = document.querySelector<HTMLElement>("[data-motion-hero] [data-lab-visual]")
-          if (heroVisual) {
+          const heroVisual = document.querySelector<HTMLElement>(
+            "[data-motion-hero] [data-lab-visual]"
+          )
+          const sharedVideoVisual =
+            document.querySelector<HTMLElement>("[data-shared-video-visual]")
+          const framedVisuals = [heroVisual, sharedVideoVisual].filter(
+            (visual): visual is HTMLElement => Boolean(visual)
+          )
+          if (framedVisuals.length > 0) {
             ScrollTrigger.create({
               trigger: "[data-motion-hero]",
               start: "top top",
@@ -128,16 +187,18 @@ export function HomeScrollMotion() {
                 const inset = maxInset - maxInset * progress
                 const radius = 20 - 20 * progress
 
-                heroVisual.style.top = `${inset}px`
-                heroVisual.style.left = `${inset}px`
-                heroVisual.style.width = `calc(100% - ${inset * 2}px)`
-                heroVisual.style.height = `calc(100lvh - ${inset * 2}px)`
-                heroVisual.style.borderRadius = `${radius}px`
+                framedVisuals.forEach((visual) => {
+                  visual.style.top = `${inset}px`
+                  visual.style.left = `${inset}px`
+                  visual.style.width = `calc(100% - ${inset * 2}px)`
+                  visual.style.height = `calc(100lvh - ${inset * 2}px)`
+                  visual.style.borderRadius = `${radius}px`
+                })
               },
             })
           }
 
-          gsap.to("[data-motion-story] [data-hero-bg]", {
+          gsap.to("[data-shared-video-media]", {
             scale: desktop ? 1.2 : 1.1,
             yPercent: desktop ? -5 : -2,
             transformOrigin: "50% 50%",
@@ -161,24 +222,47 @@ export function HomeScrollMotion() {
             },
           })
 
-          const story = document.querySelector<HTMLElement>("[data-motion-story]")
+          const story = document.querySelector<HTMLElement>(
+            "[data-motion-story]"
+          )
           const storyMask = story?.querySelector<HTMLElement>(".story-mask")
           const storyTrack = story?.querySelector<HTMLElement>(".story-track")
-          const counterMask = story?.querySelector<HTMLElement>(".story-counter-mask")
-          const counterTrack = story?.querySelector<HTMLElement>(".story-counter-track")
-          const progressFill = story?.querySelector<HTMLElement>(".story-progress-fill")
+          const counterMask = story?.querySelector<HTMLElement>(
+            ".story-counter-mask"
+          )
+          const counterTrack = story?.querySelector<HTMLElement>(
+            ".story-counter-track"
+          )
+          const progressFill = story?.querySelector<HTMLElement>(
+            ".story-progress-fill"
+          )
 
-          if (story && storyMask && storyTrack && counterMask && counterTrack && progressFill) {
+          if (
+            story &&
+            storyMask &&
+            storyTrack &&
+            counterMask &&
+            counterTrack &&
+            progressFill
+          ) {
             const storyPanels = gsap.utils.toArray<HTMLElement>(
               storyTrack.querySelectorAll(".story-panel")
             )
             const counters = gsap.utils.toArray<HTMLElement>(
               counterTrack.querySelectorAll(".story-counter")
             )
+            const panelLetters = storyPanels.map((panel) =>
+              gsap.utils.toArray<HTMLElement>(
+                panel.querySelectorAll("[data-story-letter]")
+              )
+            )
 
             gsap.set(storyTrack, { y: 0, force3D: true })
             gsap.set(counters, { autoAlpha: 0, y: 8 })
             gsap.set(counters[0], { autoAlpha: 1, y: 0 })
+            gsap.set(panelLetters.flat(), {
+              color: "rgba(255, 255, 255, 0.24)",
+            })
             gsap.set(progressFill, {
               scaleX: 0,
               transformOrigin: "left center",
@@ -206,16 +290,8 @@ export function HomeScrollMotion() {
                 },
                 0.24
               )
-              .to(
-                counters[0],
-                { autoAlpha: 0, y: -8, duration: 0.08 },
-                0.24
-              )
-              .to(
-                counters[1],
-                { autoAlpha: 1, y: 0, duration: 0.08 },
-                0.31
-              )
+              .to(counters[0], { autoAlpha: 0, y: -8, duration: 0.08 }, 0.24)
+              .to(counters[1], { autoAlpha: 1, y: 0, duration: 0.08 }, 0.31)
               .to(
                 storyTrack,
                 {
@@ -224,51 +300,76 @@ export function HomeScrollMotion() {
                 },
                 0.58
               )
-              .to(
-                counters[1],
-                { autoAlpha: 0, y: -8, duration: 0.08 },
-                0.58
+              .to(counters[1], { autoAlpha: 0, y: -8, duration: 0.08 }, 0.58)
+              .to(counters[2], { autoAlpha: 1, y: 0, duration: 0.08 }, 0.65)
+
+            const highlightTl = gsap.timeline({
+              defaults: { ease: "none" },
+              scrollTrigger: {
+                trigger: story,
+                start: "top top",
+                end: "bottom bottom",
+                scrub: 0.55,
+                invalidateOnRefresh: true,
+              },
+            })
+
+            ;[
+              { letters: panelLetters[0], position: 0.025, amount: 0.2 },
+              { letters: panelLetters[1], position: 0.34, amount: 0.2 },
+              { letters: panelLetters[2], position: 0.68, amount: 0.24 },
+            ].forEach(({ letters, position, amount }) => {
+              highlightTl.to(
+                letters,
+                {
+                  color: "rgba(255, 255, 255, 1)",
+                  duration: 0.012,
+                  stagger: { amount },
+                },
+                position
               )
-              .to(
-                counters[2],
-                { autoAlpha: 1, y: 0, duration: 0.08 },
-                0.65
-              )
+            })
           }
 
-          gsap.utils.toArray<HTMLElement>("[data-reveal-section]").forEach((section) => {
-            const items = gsap.utils.toArray<HTMLElement>(
-              section.querySelectorAll(
-                "h2:not([data-method-card] *), h3:not([data-method-card] *), p:not([data-method-card] *), [data-reveal-item], article:not([data-method-card]), .flat-card"
+          gsap.utils
+            .toArray<HTMLElement>("[data-reveal-section]")
+            .forEach((section) => {
+              const items = gsap.utils.toArray<HTMLElement>(
+                section.querySelectorAll(
+                  "h2:not([data-method-card] *), h3:not([data-method-card] *), p:not([data-method-card] *), [data-reveal-item], article:not([data-method-card]), .flat-card"
+                )
               )
-            )
 
-            gsap.fromTo(
-              items,
-              {
-                autoAlpha: 0,
-                y: desktop ? 68 : 34,
-                clipPath: "inset(0% 0% 24% 0%)",
-              },
-              {
-                autoAlpha: 1,
-                y: 0,
-                clipPath: "inset(0% 0% 0% 0%)",
-                duration: 1.05,
-                ease: "power4.out",
-                stagger: 0.04,
-                scrollTrigger: {
-                  trigger: section,
-                  start: "top 78%",
-                  once: true,
+              gsap.fromTo(
+                items,
+                {
+                  autoAlpha: 0,
+                  y: desktop ? 68 : 34,
+                  clipPath: "inset(0% 0% 24% 0%)",
                 },
-              }
-            )
-          })
+                {
+                  autoAlpha: 1,
+                  y: 0,
+                  clipPath: "inset(0% 0% 0% 0%)",
+                  duration: 1.05,
+                  ease: "power4.out",
+                  stagger: 0.04,
+                  scrollTrigger: {
+                    trigger: section,
+                    start: "top 78%",
+                    once: true,
+                  },
+                }
+              )
+            })
 
-          const footer = document.querySelector<HTMLElement>("[data-motion-footer]")
+          const footer = document.querySelector<HTMLElement>(
+            "[data-motion-footer]"
+          )
           const footerItems = footer
-            ? gsap.utils.toArray<HTMLElement>(footer.querySelectorAll("[data-footer-reveal]"))
+            ? gsap.utils.toArray<HTMLElement>(
+                footer.querySelectorAll("[data-footer-reveal]")
+              )
             : []
 
           if (footer) {
