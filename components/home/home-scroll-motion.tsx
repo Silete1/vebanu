@@ -165,39 +165,6 @@ export function HomeScrollMotion() {
                 "reveal+=0.28"
               )
           }
-          // Border frame scroll animation — mirrors integratedbiosciences.com exactly
-          // Uses ScrollTrigger.create() with onUpdate to manually set layout properties
-          const heroVisual = document.querySelector<HTMLElement>(
-            "[data-motion-hero] [data-lab-visual]"
-          )
-          const sharedVideoVisual =
-            document.querySelector<HTMLElement>("[data-shared-video-visual]")
-          const framedVisuals = [heroVisual, sharedVideoVisual].filter(
-            (visual): visual is HTMLElement => Boolean(visual)
-          )
-          if (framedVisuals.length > 0) {
-            ScrollTrigger.create({
-              trigger: "[data-motion-hero]",
-              start: "top top",
-              end: "bottom+=50px bottom",
-              scrub: 1,
-              onUpdate: (self) => {
-                const progress = self.progress
-                const maxInset = desktop ? 12 : 8
-                const inset = maxInset - maxInset * progress
-                const radius = 20 - 20 * progress
-
-                framedVisuals.forEach((visual) => {
-                  visual.style.top = `${inset}px`
-                  visual.style.left = `${inset}px`
-                  visual.style.width = `calc(100% - ${inset * 2}px)`
-                  visual.style.height = `calc(100lvh - ${inset * 2}px)`
-                  visual.style.borderRadius = `${radius}px`
-                })
-              },
-            })
-          }
-
           gsap.to("[data-shared-video-media]", {
             scale: desktop ? 1.2 : 1.1,
             yPercent: desktop ? -5 : -2,
@@ -208,17 +175,6 @@ export function HomeScrollMotion() {
               start: "top bottom",
               end: "bottom top",
               scrub: 1,
-            },
-          })
-
-          gsap.to("[data-intro-header]", {
-            y: desktop ? -2 : -4,
-            ease: "none",
-            scrollTrigger: {
-              trigger: "[data-motion-story]",
-              start: "top 65%",
-              end: "top top",
-              scrub: 1.2,
             },
           })
 
