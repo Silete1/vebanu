@@ -1,7 +1,8 @@
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
-import { MenuIcon } from "lucide-react"
+import { ArrowUpRightIcon, MenuIcon } from "lucide-react"
 import { usePathname } from "next/navigation"
 
 import type { NavigationItem } from "@/lib/navigation"
@@ -22,34 +23,45 @@ type MobileNavSheetProps = {
 
 export function MobileNavSheet({ items }: MobileNavSheetProps) {
   const pathname = usePathname()
+  const [open, setOpen] = useState(false)
 
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger
         render={
           <Button
             variant="secondary"
             size="icon"
-            className="lg:hidden"
+            className="size-12 rounded-[14px] border border-black/8 bg-white/94 shadow-[0_14px_30px_-24px_rgba(0,0,0,0.6)] backdrop-blur-md xl:hidden"
             aria-label="Open navigation menu"
           />
         }
       >
-        <MenuIcon />
+        <MenuIcon className="size-5" />
       </SheetTrigger>
-      <SheetContent className="w-[88vw] max-w-sm bg-[var(--color-bone-white)] px-0" side="right">
-        <SheetHeader className="border-b border-border px-5 pb-4">
-          <SheetTitle className="text-3xl tracking-[-0.02em]">
-            Navigation
+      <SheetContent
+        className="gap-0 rounded-[20px] border border-white/12 bg-[var(--color-abyssal-ink)] px-0 text-white shadow-[0_32px_90px_-32px_rgba(0,0,0,0.8)] data-[side=right]:inset-y-2 data-[side=right]:right-2 data-[side=right]:h-auto data-[side=right]:w-[calc(100%-1rem)] data-[side=right]:max-w-[420px]"
+        side="right"
+      >
+        <SheetHeader className="border-b border-white/14 px-6 py-6 pr-16">
+          <SheetTitle className="text-[2rem] leading-none tracking-[-0.025em] text-white">
+            Explore ANU
           </SheetTitle>
-          <SheetDescription>
-            ANU Software Solutions
+          <SheetDescription className="mt-2 text-white/62">
+            Business control and Odoo implementation.
           </SheetDescription>
         </SheetHeader>
-        <div className="flex flex-1 flex-col px-3 py-4">
-          <div className="flex flex-col gap-1">
+        <nav
+          aria-label="Mobile navigation"
+          className="flex flex-1 flex-col px-4 py-4"
+        >
+          <div className="flex flex-col">
             {items.map((item) => {
-              const isActive = pathname === item.href
+              const route = item.href.split("#")[0] || "/"
+              const isActive =
+                (pathname === "/" && item.href === "/#work") ||
+                (!item.href.includes("#") && pathname === route) ||
+                (route !== "/" && pathname.startsWith(`${route}/`))
 
               if (!item.available) {
                 return (
@@ -66,30 +78,35 @@ export function MobileNavSheet({ items }: MobileNavSheetProps) {
                 <Link
                   key={item.title}
                   href={item.href}
+                  onClick={() => setOpen(false)}
                   className={cn(
-                    "mono-label rounded-xl border border-transparent px-4 py-3 transition-colors hover:border-[var(--color-graphite)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-                    isActive
-                      ? "bg-[var(--color-bioluminescent-lime)] text-white"
-                      : "text-[var(--color-graphite)]"
+                    "group flex min-h-14 items-center justify-between border-b border-white/12 px-2 text-[clamp(1.45rem,5vw,1.8rem)] leading-none tracking-[-0.025em] text-white transition-colors outline-none hover:text-blue-300 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-inset",
+                    isActive ? "text-blue-300" : "text-white"
                   )}
                 >
                   {item.title}
+                  <ArrowUpRightIcon
+                    className="size-4 text-white/46 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transition-none"
+                    aria-hidden="true"
+                  />
                 </Link>
               )
             })}
           </div>
-          <div className="mt-auto px-2 pt-6">
-            <span
+          <div className="mt-auto pt-8">
+            <Link
+              href="/#assessment"
+              onClick={() => setOpen(false)}
               className={cn(
                 buttonVariants({ variant: "default", size: "lg" }),
-                "flex w-full justify-center"
+                "flex min-h-12 w-full justify-between rounded-[14px] bg-blue-600 px-5 text-white hover:bg-blue-500"
               )}
-              aria-disabled="true"
             >
-              WORK WITH ANU
-            </span>
+              Start assessment
+              <ArrowUpRightIcon className="size-4" aria-hidden="true" />
+            </Link>
           </div>
-        </div>
+        </nav>
       </SheetContent>
     </Sheet>
   )

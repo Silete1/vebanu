@@ -165,35 +165,29 @@ export function HomeScrollMotion() {
                 "reveal+=0.28"
               )
           }
-          // Border frame scroll animation — mirrors integratedbiosciences.com exactly
-          // Uses ScrollTrigger.create() with onUpdate to manually set layout properties
-          const heroVisual = document.querySelector<HTMLElement>(
-            "[data-motion-hero] [data-lab-visual]"
-          )
+          // Collapse the initial white frame as the hero gives way to the
+          // shared video story section.
           const sharedVideoVisual =
             document.querySelector<HTMLElement>("[data-shared-video-visual]")
-          const framedVisuals = [heroVisual, sharedVideoVisual].filter(
+          const framedVisuals = [sharedVideoVisual].filter(
             (visual): visual is HTMLElement => Boolean(visual)
           )
           if (framedVisuals.length > 0) {
-            ScrollTrigger.create({
-              trigger: "[data-motion-hero]",
-              start: "top top",
-              end: "bottom+=50px bottom",
-              scrub: 1,
-              onUpdate: (self) => {
-                const progress = self.progress
-                const maxInset = desktop ? 12 : 8
-                const inset = maxInset - maxInset * progress
-                const radius = 20 - 20 * progress
-
-                framedVisuals.forEach((visual) => {
-                  visual.style.top = `${inset}px`
-                  visual.style.left = `${inset}px`
-                  visual.style.width = `calc(100% - ${inset * 2}px)`
-                  visual.style.height = `calc(100lvh - ${inset * 2}px)`
-                  visual.style.borderRadius = `${radius}px`
-                })
+            gsap.to(framedVisuals, {
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100lvh",
+              borderRadius: 0,
+              "--intro-clip-radius": "0px",
+              ease: "none",
+              overwrite: "auto",
+              scrollTrigger: {
+                trigger: "[data-motion-hero]",
+                start: "top top",
+                end: "+=1",
+                scrub: 0.24,
+                invalidateOnRefresh: true,
               },
             })
           }
@@ -208,17 +202,6 @@ export function HomeScrollMotion() {
               start: "top bottom",
               end: "bottom top",
               scrub: 1,
-            },
-          })
-
-          gsap.to("[data-intro-header]", {
-            y: desktop ? -2 : -4,
-            ease: "none",
-            scrollTrigger: {
-              trigger: "[data-motion-story]",
-              start: "top 65%",
-              end: "top top",
-              scrub: 1.2,
             },
           })
 

@@ -1,5 +1,7 @@
 import { defaultLocale, type Locale } from "@/lib/i18n"
 
+export const siteUrl = "https://www.anu.ltd"
+
 export const siteContentByLocale: Record<
   Locale,
   {

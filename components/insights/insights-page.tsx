@@ -33,7 +33,6 @@ const interfaceCopy = {
   en: {
     eyebrow: "ANU / FIELD NOTES",
     title: "Insights",
-    statement: "Practical thinking on business control, operations and ERP.",
     featured: "Featured field note",
     readFeatured: "Read field note",
     browse: "Topic",
@@ -70,7 +69,6 @@ const interfaceCopy = {
   ar: {
     eyebrow: "ANU / ملاحظات ميدانية",
     title: "رؤى",
-    statement: "تفكير عملي حول ضبط الأعمال والعمليات وأنظمة ERP.",
     featured: "ملاحظة ميدانية مميزة",
     readFeatured: "اقرأ الملاحظة",
     browse: "الموضوع",
@@ -201,16 +199,13 @@ export function InsightsPage({
         (context) => {
           const { reduceMotion, desktop } = context.conditions ?? {}
           const title = rootRef.current?.querySelector("[data-insights-title]")
-          const statement = rootRef.current?.querySelector(
-            "[data-insights-statement]"
-          )
           const heroContent = rootRef.current?.querySelector(
             "[data-insights-featured]"
           )
           const heroVisual = rootRef.current?.querySelector(
             "[data-insights-hero-visual]"
           )
-          const introItems = [title, statement, heroContent, heroVisual].filter(
+          const introItems = [title, heroContent, heroVisual].filter(
             (item): item is Element => Boolean(item)
           )
 
@@ -222,20 +217,19 @@ export function InsightsPage({
             return
           }
 
-          if (title && statement && heroContent && heroVisual) {
+          if (title && heroContent && heroVisual) {
             const intro = gsap.timeline({ defaults: { ease: "power4.out" } })
             intro
               .fromTo(
                 title,
-                { opacity: 0, yPercent: 95 },
-                { opacity: 1, yPercent: 0, duration: 1 },
+                { opacity: 0, yPercent: 42, clipPath: "inset(0 0 100% 0)" },
+                {
+                  opacity: 1,
+                  yPercent: 0,
+                  clipPath: "inset(0 0 0% 0)",
+                  duration: 1,
+                },
                 0.05
-              )
-              .fromTo(
-                statement,
-                { opacity: 0, y: 36 },
-                { opacity: 1, y: 0, duration: 0.75 },
-                0.28
               )
               .fromTo(
                 heroVisual,
@@ -379,7 +373,7 @@ export function InsightsPage({
       ref={rootRef}
       lang={locale}
       dir={isRtl ? "rtl" : "ltr"}
-      className="overflow-clip bg-[var(--color-bone-white)]"
+      className="bg-[var(--color-bone-white)]"
     >
       <section
         className="pt-32 pb-24 sm:pt-36 lg:pt-40 lg:pb-28"
@@ -396,29 +390,23 @@ export function InsightsPage({
               onClick={() =>
                 setLocale((current) => (current === "en" ? "ar" : "en"))
               }
-              className="mono-label rounded-sm px-1 py-1 text-[var(--color-abyssal-ink)] underline decoration-[var(--color-bioluminescent-lime)] decoration-2 underline-offset-4 outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-bioluminescent-lime)] focus-visible:ring-offset-4"
+              className="mono-label inline-flex min-h-11 items-center rounded-sm px-2 text-[var(--color-abyssal-ink)] underline decoration-[var(--color-bioluminescent-lime)] decoration-2 underline-offset-4 outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-bioluminescent-lime)] focus-visible:ring-offset-4"
               aria-label={copy.languageLabel}
             >
               {copy.language}
             </button>
           </div>
 
-          <div className="grid gap-8 pt-7 lg:grid-cols-[minmax(0,0.72fr)_minmax(300px,0.28fr)] lg:items-end">
-            <div className="overflow-hidden pb-[0.08em]">
+          <div className="pt-7">
+            <div className="pb-[0.1em]">
               <h1
                 id="insights-title"
                 data-insights-title
-                className="text-[clamp(6rem,16.2vw,13.25rem)] leading-[0.72] tracking-[-0.07em]"
+                className="text-[clamp(5rem,12vw,6rem)] leading-[0.86] tracking-[-0.04em]"
               >
                 {copy.title}
               </h1>
             </div>
-            <p
-              data-insights-statement
-              className="max-w-md pb-1 text-[clamp(1.35rem,2.3vw,2rem)] leading-[1.08] tracking-[-0.025em] text-[var(--color-graphite)] lg:ms-auto"
-            >
-              {copy.statement}
-            </p>
           </div>
 
           <article className="mt-14 grid gap-0 border-t border-[var(--color-abyssal-ink)] pt-5 lg:mt-20 lg:grid-cols-[minmax(0,1.25fr)_minmax(390px,0.75fr)]">

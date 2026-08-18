@@ -2,6 +2,7 @@ import { ArrowUpRightIcon } from "lucide-react"
 import Link from "next/link"
 
 import { Container } from "@/components/layout/container"
+import { anuContact } from "@/lib/contact"
 
 const contactHref = "/?request=contact#assessment"
 
@@ -9,7 +10,7 @@ const footerLinks = [
   { label: "Work", href: "/#work" },
   { label: "Method", href: "/#method" },
   { label: "Platform", href: "/#platform" },
-  { label: "Industries", href: "/#industries" },
+  { label: "Industries", href: "/industries" },
   { label: "Insights", href: "/insights" },
   { label: "Contact", href: contactHref },
 ]
@@ -28,7 +29,7 @@ export function SiteFooter() {
         <span className="footer-signal footer-signal-c" />
       </div>
       <Container className="footer-content relative z-10 flex flex-col">
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(280px,0.7fr)]">
+        <div className="grid shrink-0 gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(280px,0.7fr)]">
           <div data-footer-reveal>
             <h2 className="max-w-[580px] text-[clamp(1.8rem,3.2vw,3.2rem)] leading-[1.06] tracking-[-0.03em]">
               Redesign the operation before implementing the system.
@@ -43,12 +44,12 @@ export function SiteFooter() {
                 href={contactHref}
                 className="mono-label inline-flex h-10 items-center rounded-lg bg-[var(--color-abyssal-ink)] px-4 text-white"
               >
-                WORK WITH ANU
+                START ASSESSMENT
               </Link>
               <Link
                 href={contactHref}
                 className="arrow-cta"
-                aria-label="Work with ANU"
+                aria-label="Start assessment"
               >
                 <ArrowUpRightIcon className="size-4" />
               </Link>
@@ -74,25 +75,65 @@ export function SiteFooter() {
               <p className="mono-label text-white/64">CONNECT</p>
               <div className="mt-3 grid gap-2">
                 <Link
-                  href={contactHref}
+                  href={anuContact.whatsappHref}
+                  target="_blank"
+                  rel="noreferrer"
                   className="text-[clamp(0.95rem,1.2vw,1.15rem)] leading-none tracking-[-0.03em] text-white/78 transition-colors hover:text-white"
                 >
-                  Contact
+                  WhatsApp
                 </Link>
                 <Link
-                  href="/#assessment"
+                  href={anuContact.phoneHref}
                   className="text-[clamp(0.95rem,1.2vw,1.15rem)] leading-none tracking-[-0.03em] text-white/78 transition-colors hover:text-white"
                 >
-                  Assessment
+                  {anuContact.phoneDisplay}
+                </Link>
+                <Link
+                  href={anuContact.emailHref}
+                  className="text-[clamp(0.95rem,1.2vw,1.15rem)] leading-none tracking-[-0.03em] text-white/78 transition-colors hover:text-white"
+                >
+                  {anuContact.email}
+                </Link>
+                <Link
+                  href={anuContact.instagramHref}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-[clamp(0.95rem,1.2vw,1.15rem)] leading-none tracking-[-0.03em] text-white/78 transition-colors hover:text-white"
+                >
+                  Instagram
+                </Link>
+                <Link
+                  href={anuContact.facebookHref}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-[clamp(0.95rem,1.2vw,1.15rem)] leading-none tracking-[-0.03em] text-white/78 transition-colors hover:text-white"
+                >
+                  Facebook
+                </Link>
+                <Link
+                  href={anuContact.linkedinHref}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-[clamp(0.95rem,1.2vw,1.15rem)] leading-none tracking-[-0.03em] text-white/78 transition-colors hover:text-white"
+                >
+                  LinkedIn
+                </Link>
+                <Link
+                  href={anuContact.odooPartnerHref}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-[clamp(0.95rem,1.2vw,1.15rem)] leading-none tracking-[-0.03em] text-white/78 transition-colors hover:text-white"
+                >
+                  Odoo partner profile
                 </Link>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="footer-wordmark-wrap flex flex-col items-center text-center">
+        <div className="footer-wordmark-wrap flex shrink-0 flex-col items-center text-center">
           <p
-            className="footer-wordmark text-[clamp(4rem,14vw,12rem)] leading-[0.78] tracking-[-0.065em] whitespace-nowrap"
+            className="footer-wordmark text-[clamp(4rem,14vw,12rem)] leading-[0.82] tracking-[-0.04em] whitespace-nowrap"
             data-footer-wordmark
           >
             ANU

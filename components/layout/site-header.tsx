@@ -9,6 +9,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { ArrowUpRightIcon } from "lucide-react"
 
 import { AnuLogo } from "@/components/brand/anu-logo"
+import { MobileNavSheet } from "@/components/navigation/mobile-nav-sheet"
 import { navigationItems } from "@/lib/navigation"
 import { cn } from "@/lib/utils"
 
@@ -324,21 +325,15 @@ export function SiteHeader() {
         <div
           ref={logoRef}
           className={cn(
-            "pointer-events-auto transition-transform duration-300",
-            isCompact && "translate-y-[-1px] scale-[0.985]"
+            "pointer-events-auto transition-transform duration-300"
           )}
         >
-          <AnuLogo
-            theme={headerTheme}
-            compact={isCompact}
-            className="header-brand"
-          />
+          <AnuLogo theme={headerTheme} className="header-brand" />
         </div>
 
         <div
           className={cn(
-            "header-segmented-shell header-segmented-static pointer-events-auto",
-            isCompact && "header-segmented-shell-compact"
+            "header-segmented-shell header-segmented-static pointer-events-auto hidden xl:flex"
           )}
           style={{ gap: 0 }}
         >
@@ -390,6 +385,9 @@ export function SiteHeader() {
             <span>Start assessment</span>
             <ArrowUpRightIcon className="size-3.5" />
           </Link>
+        </div>
+        <div className="pointer-events-auto xl:hidden">
+          <MobileNavSheet items={availableItems} />
         </div>
       </div>
     </header>

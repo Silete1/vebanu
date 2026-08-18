@@ -2,12 +2,20 @@ import { ArrowUpRightIcon } from "lucide-react"
 import Link from "next/link"
 import { Fragment } from "react"
 
+import { AssessmentCtaSection } from "@/components/home/assessment-cta-section"
 import { HomeScrollMotion } from "@/components/home/home-scroll-motion"
+import { InsightVisual } from "@/components/insights/insight-visual"
 import { Container } from "@/components/layout/container"
 import { MethodCardStack } from "@/components/method/method-card-stack"
 import { PlatformMacbookShowcase } from "@/components/platform/platform-macbook-showcase"
 import { IndustriesAccordionShowcase } from "@/components/industries/industries-accordion-showcase"
-import { Button } from "@/components/ui/button"
+import { insights } from "@/lib/content/insights"
+
+const featuredInsight =
+  insights.find((insight) => insight.featured) ?? insights[0]!
+const supportingInsights = insights
+  .filter((insight) => insight.slug !== featuredInsight.slug)
+  .slice(0, 2)
 
 const workCards = [
   {
@@ -88,15 +96,6 @@ const modules = [
   "INTEGRATIONS",
 ]
 
-const assessmentPoints = [
-  "Workflow and approval review",
-  "Inventory and warehouse control review",
-  "Sales, purchasing, and collections review",
-  "Finance and reporting visibility review",
-  "Data quality and access-rights review",
-  "Odoo readiness and implementation roadmap",
-]
-
 export function HomeBody() {
   return (
     <>
@@ -105,8 +104,8 @@ export function HomeBody() {
       <MethodSection />
       <PlatformSection />
       <IndustriesSection />
-      <AssessmentSection />
       <InsightSection />
+      <AssessmentCtaSection />
     </>
   )
 }
@@ -165,10 +164,7 @@ export function HomeIntroSection() {
       data-motion-story
       data-header-theme="dark"
     >
-      <div
-        className="sticky top-0 flex h-svh overflow-hidden"
-        data-lab-visual
-      >
+      <div className="sticky top-0 flex h-svh overflow-hidden" data-lab-visual>
         <Container className="relative z-10 flex h-full flex-col justify-center">
           <div className="story-progress" aria-hidden="true">
             <span className="story-progress-fill" />
@@ -265,7 +261,7 @@ function PlatformSection() {
   return (
     <section
       id="platform"
-      className="overflow-hidden bg-[var(--color-bone-white)] py-24 lg:py-32"
+      className="overflow-hidden bg-[var(--color-bone-white)] py-16 sm:py-20 lg:py-32"
       data-reveal-section
       data-header-theme="light"
     >
@@ -305,70 +301,38 @@ function IndustriesSection() {
   return (
     <section
       id="industries"
-      className="overflow-hidden bg-[var(--color-bone-white)] py-24 lg:py-32"
+      className="overflow-hidden bg-[var(--color-bone-white)] py-16 sm:py-20 lg:py-32"
       data-reveal-section
       data-header-theme="light"
     >
       <Container>
-        <div className="mx-auto max-w-4xl text-center">
+        <div className="mx-auto max-w-4xl text-left sm:text-center">
           <SectionLabel>04 / INDUSTRIES</SectionLabel>
-          <h2 className="section-headline mt-6">
+          <h2 className="mt-5 max-w-[12ch] text-[clamp(2.5rem,11vw,3.625rem)] leading-[1.02] tracking-[-0.025em] text-balance sm:mx-auto sm:mt-6 sm:leading-[1.1] sm:tracking-[-0.006em]">
             Built for companies where operational control matters.
           </h2>
-          <p className="body-copy mx-auto mt-6 max-w-2xl text-[var(--color-graphite)]">
-            We scope, design, and govern Odoo implementations specifically
-            tailored to complex operational sectors with physical inventory,
-            multi-location execution, and strict financial compliance.
+          <p className="body-copy mt-5 max-w-[34ch] text-[var(--color-graphite)] sm:mx-auto sm:mt-6 sm:max-w-2xl">
+            See how ANU structures operational control and Odoo around the work
+            that matters in each industry.
           </p>
         </div>
 
-        <IndustriesAccordionShowcase />
-      </Container>
-    </section>
-  )
-}
+        <IndustriesAccordionShowcase
+          compactMobile
+          className="mt-10 sm:mt-12 lg:mt-14"
+        />
 
-function AssessmentSection() {
-  return (
-    <section
-      id="assessment"
-      className="bg-[var(--color-tissue)] py-24 lg:py-32"
-      data-reveal-section
-      data-header-theme="light"
-    >
-      <Container>
-        <div className="rounded-[40px] border border-[var(--color-lichen)] bg-white p-8 md:p-12">
-          <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_420px]">
-            <div>
-              <SectionLabel>05 / ASSESSMENT</SectionLabel>
-              <h2 className="section-headline mt-10 max-w-3xl">
-                Before implementation, we identify where control breaks.
-              </h2>
-              <p className="body-copy mt-8 max-w-3xl text-[var(--color-graphite)]">
-                ANU starts with a Business Control Assessment. The assessment
-                reviews how work moves through the company, where approvals
-                fail, where stock becomes unclear, where finance loses
-                visibility, and where management depends on manual follow-up
-                instead of system evidence.
-              </p>
-              <Button className="mt-10" size="lg">
-                START ASSESSMENT
-              </Button>
-            </div>
-            <div className="grid gap-3">
-              {assessmentPoints.map((point, index) => (
-                <div
-                  key={point}
-                  className="flex items-center gap-4 rounded-xl border border-[var(--color-lichen)] px-4 py-4"
-                >
-                  <span className="mono-label text-[var(--color-graphite)]">
-                    0{index + 1}
-                  </span>
-                  <p className="text-lg leading-6">{point}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+        <div className="mt-6 flex justify-center sm:mt-8">
+          <Link
+            href="/industries"
+            className="mono-label group inline-flex min-h-11 items-center gap-3 rounded-lg px-3 text-[var(--color-abyssal-ink)] transition-colors outline-none hover:text-blue-700 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--color-bone-white)]"
+          >
+            View all industries
+            <ArrowUpRightIcon
+              className="size-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transition-none"
+              aria-hidden="true"
+            />
+          </Link>
         </div>
       </Container>
     </section>
@@ -379,62 +343,95 @@ function InsightSection() {
   return (
     <section
       id="insights"
-      className="bg-[var(--color-bone-white)] py-24 lg:py-32"
-      data-reveal-section
+      className="bg-[var(--color-bone-white)] py-12 sm:py-14 lg:py-16"
       data-header-theme="light"
+      aria-labelledby="home-insights-title"
     >
       <Container>
-        <article className="flat-card grid gap-8 rounded-[40px] p-6 md:grid-cols-[0.95fr_1.05fr] md:p-10">
-          <InsightDiagram />
-          <div className="flex flex-col justify-center py-4">
-            <p className="mono-label tag-dot flex items-center gap-2 text-[var(--color-graphite)]">
-              OPERATING MODEL / 2026
-            </p>
-            <h2 className="section-headline mt-10 max-w-3xl">
-              Your ERP fails when the process is not designed first.
-            </h2>
-            <p className="body-copy mt-8 text-[var(--color-graphite)]">
-              Software does not fix unclear approvals, weak inventory
-              discipline, disconnected accounting, manual reporting, or
-              undocumented responsibility. ERP works when the business control
-              model is defined before configuration starts.
-            </p>
+        <header className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+          <h2
+            id="home-insights-title"
+            className="max-w-[15ch] text-[clamp(2.75rem,4.2vw,4rem)] leading-[0.96] tracking-[-0.035em]"
+          >
+            Insights for better control.
+          </h2>
+          <Link
+            href="/insights"
+            className="mono-label inline-flex w-fit items-center gap-3 rounded-sm text-[var(--color-abyssal-ink)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-bioluminescent-lime)] focus-visible:ring-offset-4"
+          >
+            View all insights
+            <span className="arrow-cta">
+              <ArrowUpRightIcon className="size-4" />
+            </span>
+          </Link>
+        </header>
+
+        <div className="mt-8 grid border-y border-[var(--color-abyssal-ink)] lg:h-[470px] lg:grid-cols-[7fr_5fr]">
+          <article className="border-b border-[var(--color-abyssal-ink)] lg:border-r lg:border-b-0">
             <Link
-              href="/insights"
-              className="mono-label mt-10 inline-flex items-center gap-3 text-[var(--color-abyssal-ink)]"
+              href={`/insights/${featuredInsight.slug}`}
+              className="group flex h-full flex-col py-6 outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-bioluminescent-lime)] focus-visible:ring-inset lg:pr-8"
             >
-              READ INSIGHT
-              <span className="arrow-cta">
-                <ArrowUpRightIcon className="size-4" />
-              </span>
+              <div className="h-52 overflow-hidden lg:h-56" data-insight-image>
+                <InsightVisual
+                  variant={featuredInsight.visual}
+                  alt={featuredInsight.visualAlt.en}
+                  dark
+                  className="h-full min-h-0 border-0 transition-transform duration-700 ease-out group-hover:scale-[1.012] motion-reduce:transform-none motion-reduce:transition-none [&>span]:hidden"
+                />
+              </div>
+
+              <div className="mt-5 grid grid-cols-[minmax(0,1fr)_2.75rem] items-end gap-5">
+                <div>
+                  <p className="mono-label text-[var(--color-graphite)]">
+                    {featuredInsight.category} / {featuredInsight.readingTime}{" "}
+                    min read
+                  </p>
+                  <h3 className="mt-3 max-w-[19ch] text-[clamp(2rem,3vw,3.25rem)] leading-[1] tracking-[-0.03em] transition-colors group-hover:text-blue-700">
+                    {featuredInsight.title.en}
+                  </h3>
+                </div>
+                <span className="arrow-cta transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none">
+                  <ArrowUpRightIcon className="size-4" aria-hidden="true" />
+                </span>
+              </div>
             </Link>
+          </article>
+
+          <div className="grid lg:grid-rows-2">
+            {supportingInsights.map((insight, index) => (
+              <article
+                key={insight.slug}
+                className={
+                  index === 0
+                    ? "border-b border-[var(--color-abyssal-ink)]"
+                    : undefined
+                }
+              >
+                <Link
+                  href={`/insights/${insight.slug}`}
+                  className="group grid h-full min-h-40 grid-cols-[minmax(0,1fr)_2.75rem] items-end gap-5 py-6 outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-bioluminescent-lime)] focus-visible:ring-inset lg:px-8"
+                >
+                  <div>
+                    <p className="mono-label text-[var(--color-graphite)]">
+                      {insight.category} / {insight.readingTime} min read
+                    </p>
+                    <h3 className="mt-3 max-w-[23ch] text-[clamp(1.55rem,2vw,2.15rem)] leading-[1.04] tracking-[-0.025em] transition-colors group-hover:text-blue-700">
+                      {insight.title.en}
+                    </h3>
+                  </div>
+                  <span className="grid size-11 place-items-center text-[var(--color-graphite)] transition-colors group-hover:text-blue-700">
+                    <ArrowUpRightIcon
+                      className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transform-none motion-reduce:transition-none"
+                      aria-hidden="true"
+                    />
+                  </span>
+                </Link>
+              </article>
+            ))}
           </div>
-        </article>
+        </div>
       </Container>
     </section>
-  )
-}
-
-function InsightDiagram() {
-  return (
-    <div
-      className="min-h-[420px] rounded-2xl border border-[var(--color-graphite)] bg-[var(--color-abyssal-ink)] p-5"
-      data-insight-image
-    >
-      <div className="grid h-full grid-cols-6 grid-rows-6 gap-3">
-        {Array.from({ length: 36 }).map((_, index) => (
-          <span
-            key={index}
-            className={`rounded-md border border-[var(--color-graphite)] ${
-              [7, 8, 14, 21, 27, 28].includes(index)
-                ? "bg-[var(--color-bioluminescent-lime)]"
-                : [2, 12, 18, 25, 32].includes(index)
-                  ? "bg-white/10"
-                  : "bg-transparent"
-            }`}
-          />
-        ))}
-      </div>
-    </div>
   )
 }

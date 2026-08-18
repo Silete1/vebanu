@@ -139,7 +139,7 @@ export function MethodCardStack({
 
               <div className="grid min-h-[390px] sm:grid-cols-[96px_minmax(0,1fr)]">
                 <div className="hidden border-e border-slate-300 sm:flex sm:flex-col sm:justify-between sm:p-5">
-                  <span className="font-mono text-[2.75rem] leading-none font-medium tracking-[-0.08em] text-slate-300">
+                  <span className="font-mono text-[2.75rem] leading-none font-medium tracking-[-0.04em] text-slate-300">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   <div aria-hidden="true" className="flex flex-col gap-2">

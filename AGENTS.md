@@ -54,10 +54,11 @@ Read this file first. Do not begin each task with a full repository scan. Use th
   - Hero: [`components/home/home-hero.tsx`](/C:/Users/Lenovo/Documents/vebanu/components/home/home-hero.tsx)
   - Body sections: [`components/home/home-body.tsx`](/C:/Users/Lenovo/Documents/vebanu/components/home/home-body.tsx)
   - Scroll/page motion orchestration: [`components/home/home-scroll-motion.tsx`](/C:/Users/Lenovo/Documents/vebanu/components/home/home-scroll-motion.tsx)
+  - Assessment/contact experience: [`components/home/assessment-cta-section.tsx`](/C:/Users/Lenovo/Documents/vebanu/components/home/assessment-cta-section.tsx), [`components/home/assessment-form.tsx`](/C:/Users/Lenovo/Documents/vebanu/components/home/assessment-form.tsx)
 
 ## Component Inventory
 
-- `components/ui`: Base UI wrappers such as `button`, `sheet`, `tabs`, `card`, `badge`, `separator`.
+- `components/ui`: Base UI wrappers such as `button`, `sheet`, `tabs`, `card`, `badge`, `separator`, `field`, and `input`.
 - `components/layout`: shared structural shell pieces.
 - `components/motion`: lightweight wrappers such as `PageTransition` and `Reveal`.
 - `components/brand`: ANU logo component and embedded logo image.
@@ -114,8 +115,10 @@ Read this file first. Do not begin each task with a full repository scan. Use th
   - GSAP for motion
   - Lucide for icons
 - No API route handlers were verified under `app/api`.
-- No `process.env` usage was verified in `app`, `components`, or `lib`.
-- No forms, submission handlers, CMS clients, database clients, email services, or external service SDK integrations were verified in application source.
+- Assessment lead delivery uses a Next.js Server Action in [`app/actions/submit-assessment.ts`](/C:/Users/Lenovo/Documents/vebanu/app/actions/submit-assessment.ts) and calls the Resend HTTP API when configured.
+- Public ANU phone, WhatsApp, and email links are centralized in [`lib/contact.ts`](/C:/Users/Lenovo/Documents/vebanu/lib/contact.ts).
+- Assessment email delivery reads `RESEND_API_KEY`, `ASSESSMENT_FROM_EMAIL`, and optional `ASSESSMENT_TO_EMAIL`; see [`.env.example`](/C:/Users/Lenovo/Documents/vebanu/.env.example).
+- No CMS write clients or database clients were verified in application source.
 
 ## Environment and Config Files
 

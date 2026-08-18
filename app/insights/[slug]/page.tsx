@@ -81,10 +81,10 @@ export default async function InsightArticlePage({
                 {isRtl ? "العودة إلى الرؤى" : "Back to insights"}
               </Link>
 
-              <div className="mt-14 grid gap-10 lg:grid-cols-[0.72fr_0.28fr] lg:items-end">
-                <div>
+              <div className="mt-14 grid min-w-0 gap-10 lg:grid-cols-[0.72fr_0.28fr] lg:items-end">
+                <div className="min-w-0">
                   <InsightMetadata insight={insight} locale={locale} inverse />
-                  <h1 className="mt-7 max-w-[15ch] text-[clamp(3.3rem,7vw,7.7rem)] leading-[0.92] tracking-[-0.045em]">
+                  <h1 className="mt-7 max-w-[15ch] text-[clamp(2.75rem,7vw,6rem)] leading-[0.97] tracking-[-0.035em]">
                     {insight.title[locale]}
                   </h1>
                 </div>
