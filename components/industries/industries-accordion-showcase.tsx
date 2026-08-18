@@ -7,7 +7,9 @@ import { ArrowUpRight, Truck, Cpu, Store, Shield, Heart } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 
-import { industries, type IndustrySlug } from "@/lib/content/industries"
+import { getIndustries, type IndustrySlug } from "@/lib/content/industries"
+import { industriesPageCopy } from "@/lib/content/site-copy"
+import { type Locale, localizedPath } from "@/lib/i18n"
 import { cn } from "@/lib/utils"
 
 function getIndustryIcon(slug: IndustrySlug) {
@@ -28,13 +30,17 @@ function getIndustryIcon(slug: IndustrySlug) {
 type IndustriesAccordionShowcaseProps = {
   className?: string
   compactMobile?: boolean
+  locale: Locale
 }
 
 export function IndustriesAccordionShowcase({
   className,
   compactMobile = false,
-}: IndustriesAccordionShowcaseProps = {}) {
+  locale,
+}: IndustriesAccordionShowcaseProps) {
   const containerRef = useRef<HTMLDivElement>(null)
+  const industries = getIndustries(locale)
+  const copy = industriesPageCopy[locale]
 
   useGSAP(
     () => {
@@ -61,7 +67,7 @@ export function IndustriesAccordionShowcase({
       className={cn("mt-14 w-full", className)}
       ref={containerRef}
       data-industries-showcase
-      aria-label="Industries ANU serves"
+      aria-label={copy.showcaseLabel}
     >
       <div
         className={cn(
@@ -72,7 +78,7 @@ export function IndustriesAccordionShowcase({
         {industries.map((industry) => (
           <Link
             key={industry.slug}
-            href={industry.href}
+            href={localizedPath(locale, industry.href)}
             className="card industry-card rounded-[24px] outline-none select-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--color-bone-white)]"
           >
             <div className="card__background industry-card__background">

@@ -1,13 +1,19 @@
-const whatsappMessage =
-  "Hello ANU, I would like to discuss improving control in my business."
+import type { Locale } from "@/lib/i18n"
+
+const whatsappMessages: Record<Locale, string> = {
+  en: "Hello ANU, I would like to discuss improving control in my business.",
+  ar: "مرحباً ANU، أود مناقشة تحسين الرقابة في شركتي.",
+}
+
+export function getWhatsappHref(locale: Locale) {
+  return `https://wa.me/9647867007030?text=${encodeURIComponent(whatsappMessages[locale])}`
+}
 
 export const anuContact = {
   email: "info@anu.ltd",
   phoneDisplay: "+964 786 700 7030",
   phoneInternational: "+9647867007030",
   location: "Baghdad, Iraq",
-  whatsappMessage,
-  whatsappHref: `https://wa.me/9647867007030?text=${encodeURIComponent(whatsappMessage)}`,
   phoneHref: "tel:+9647867007030",
   emailHref: "mailto:info@anu.ltd",
   instagramHref: "https://www.instagram.com/anu.erp/",

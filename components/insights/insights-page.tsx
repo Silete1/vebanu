@@ -22,7 +22,7 @@ import {
   insightCategories,
   type Insight,
 } from "@/lib/content/insights"
-import type { Locale } from "@/lib/i18n"
+import { type Locale, localizedPath } from "@/lib/i18n"
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
 
@@ -63,8 +63,6 @@ const interfaceCopy = {
     closingBody:
       "A concise editorial note for leaders working through process, reporting and implementation decisions.",
     subscribe: "Discuss insights with ANU",
-    language: "العربية",
-    languageLabel: "Read Insights in Arabic",
   },
   ar: {
     eyebrow: "ANU / ملاحظات ميدانية",
@@ -97,21 +95,15 @@ const interfaceCopy = {
     closingBody:
       "موجز تحريري لقادة الأعمال الذين يعملون على قرارات العمليات والتقارير والتطبيق.",
     subscribe: "ناقش الرؤى مع ANU",
-    language: "English",
-    languageLabel: "Read Insights in English",
   },
 } as const
 
 type InsightsPageProps = {
   initialInsights: Insight[]
-  initialLocale?: Locale
+  locale: Locale
 }
 
-export function InsightsPage({
-  initialInsights,
-  initialLocale = "en",
-}: InsightsPageProps) {
-  const [locale, setLocale] = useState<Locale>(initialLocale)
+export function InsightsPage({ initialInsights, locale }: InsightsPageProps) {
   const [activeCategory, setActiveCategory] =
     useState<InsightFilterCategory>("All")
   const [activeSlug, setActiveSlug] = useState<string | null>(null)
@@ -381,20 +373,10 @@ export function InsightsPage({
         aria-labelledby="insights-title"
       >
         <Container>
-          <div className="flex items-center justify-between gap-6 border-b border-[var(--color-abyssal-ink)] pb-4">
+          <div className="flex items-center border-b border-[var(--color-abyssal-ink)] pb-4">
             <p className="mono-label tag-dot flex items-center gap-2 text-[var(--color-graphite)]">
               {copy.eyebrow}
             </p>
-            <button
-              type="button"
-              onClick={() =>
-                setLocale((current) => (current === "en" ? "ar" : "en"))
-              }
-              className="mono-label inline-flex min-h-11 items-center rounded-sm px-2 text-[var(--color-abyssal-ink)] underline decoration-[var(--color-bioluminescent-lime)] decoration-2 underline-offset-4 outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-bioluminescent-lime)] focus-visible:ring-offset-4"
-              aria-label={copy.languageLabel}
-            >
-              {copy.language}
-            </button>
           </div>
 
           <div className="pt-7">
@@ -414,6 +396,7 @@ export function InsightsPage({
               <InsightVisual
                 variant={featuredInsight.visual}
                 alt={featuredInsight.visualAlt[locale]}
+                locale={locale}
                 dark
                 className="min-h-[430px] border-[var(--color-abyssal-ink)] lg:min-h-[560px]"
               />
@@ -437,7 +420,10 @@ export function InsightsPage({
                 {featuredInsight.summary[locale]}
               </p>
               <Link
-                href={`/insights/${featuredInsight.slug}${isRtl ? "?locale=ar" : ""}`}
+                href={localizedPath(
+                  locale,
+                  `/insights/${featuredInsight.slug}`
+                )}
                 className="mono-label mt-9 inline-flex w-fit items-center gap-3 rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-bioluminescent-lime)] focus-visible:ring-offset-4 lg:mt-auto"
               >
                 {copy.readFeatured}
@@ -529,6 +515,7 @@ export function InsightsPage({
                             <InsightVisual
                               variant={activePreview.visual}
                               alt={activePreview.visualAlt[locale]}
+                              locale={locale}
                               className="aspect-[4/5] min-h-[520px]"
                             />
                             <div className="border-x border-b border-[var(--color-lichen)] bg-white p-6">
@@ -648,7 +635,7 @@ export function InsightsPage({
                 {copy.closingBody}
               </p>
               <Link
-                href="/?request=insights#assessment"
+                href={`${localizedPath(locale)}?request=insights#assessment`}
                 className="mono-label mt-8 inline-flex h-11 items-center gap-3 bg-[var(--color-abyssal-ink)] px-4 text-white transition-colors outline-none hover:bg-[var(--color-graphite)] focus-visible:ring-2 focus-visible:ring-[var(--color-bioluminescent-lime)] focus-visible:ring-offset-4"
               >
                 {copy.subscribe}

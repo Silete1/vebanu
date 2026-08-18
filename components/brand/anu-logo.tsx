@@ -5,19 +5,23 @@ import logoImg from "./anu_logo.png"
 import { cn } from "@/lib/utils"
 
 type AnuLogoProps = {
+  align?: "left" | "right"
   className?: string
   compact?: boolean
+  href?: string
   theme?: "dark" | "light"
 }
 
 export function AnuLogo({
+  align = "left",
   className,
   compact = false,
+  href = "/",
   theme = "light",
 }: AnuLogoProps) {
   return (
     <Link
-      href="/"
+      href={href}
       className={cn(
         "pointer-events-auto flex items-center outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
         className
@@ -38,7 +42,10 @@ export function AnuLogo({
             alt="ANU Software Solutions"
             width={160}
             height={48}
-            className="anu-logo-face anu-logo-face-front absolute inset-0 h-full w-full object-contain object-left"
+            className={cn(
+              "anu-logo-face anu-logo-face-front absolute inset-0 h-full w-full object-contain",
+              align === "right" ? "object-right" : "object-left"
+            )}
             priority
           />
           <Image
@@ -47,7 +54,10 @@ export function AnuLogo({
             aria-hidden="true"
             width={160}
             height={48}
-            className="anu-logo-monochrome anu-logo-face anu-logo-face-back absolute inset-0 h-full w-full object-contain object-left"
+            className={cn(
+              "anu-logo-monochrome anu-logo-face anu-logo-face-back absolute inset-0 h-full w-full object-contain",
+              align === "right" ? "object-right" : "object-left"
+            )}
             priority
           />
         </span>

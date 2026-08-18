@@ -3,8 +3,12 @@ import Link from "next/link"
 
 import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { homePageCopy } from "@/lib/content/site-copy"
+import { type Locale, localizedPath } from "@/lib/i18n"
 
-export function HomeHero() {
+export function HomeHero({ locale }: { locale: Locale }) {
+  const copy = homePageCopy[locale].hero
+
   return (
     <section
       className="relative h-svh w-full overflow-hidden"
@@ -29,39 +33,31 @@ export function HomeHero() {
             data-intro-title
           >
             <span className="home-hero-title-line home-hero-title-line-primary">
-              Business control,
+              {copy.titlePrimary}
             </span>
-            <span className="home-hero-title-line">implemented.</span>
+            <span className="home-hero-title-line">{copy.titleSecondary}</span>
           </h1>
 
-          <div className="home-hero-bottom mt-auto grid gap-5 lg:grid-cols-[minmax(0,620px)_auto] lg:items-end lg:justify-between lg:gap-6">
-            <p
-              className="home-hero-copy text-white"
-              style={{ opacity: 0, visibility: "hidden" }}
-              data-intro-copy
-            >
-              ANU redesigns your operations and implements Odoo to keep work
-              controlled and visible.
-            </p>
+          <div className="home-hero-bottom mt-auto flex justify-end">
             <div
-              className="home-hero-actions flex flex-wrap items-center gap-2 lg:justify-end"
+              className="home-hero-actions flex flex-wrap items-center gap-2"
               style={{ opacity: 0, visibility: "hidden" }}
               data-intro-actions
             >
               <Link
-                href="#assessment"
+                href={localizedPath(locale, "/#assessment")}
                 className={buttonVariants({ variant: "secondary", size: "lg" })}
               >
-                START ASSESSMENT
+                {copy.primaryCta}
               </Link>
               <Link
-                href="#method"
+                href={localizedPath(locale, "/#method")}
                 className={cn(
                   buttonVariants({ variant: "default", size: "lg" }),
                   "bg-[var(--color-abyssal-ink)] text-white"
                 )}
               >
-                DISCOVER THE METHOD
+                {copy.secondaryCta}
               </Link>
               <span className="arrow-cta" aria-hidden="true">
                 <ArrowUpRightIcon className="size-4" />

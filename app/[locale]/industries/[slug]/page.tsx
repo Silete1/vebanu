@@ -5,11 +5,8 @@ import { IndustryDetailPage } from "@/components/industries/industry-detail-page
 import { PageShell } from "@/components/layout/page-shell"
 import { JsonLd } from "@/components/seo/json-ld"
 import { getIndustry, industrySlugs } from "@/lib/content/industries"
+import { isLocale, localizedAlternates, localizedPath } from "@/lib/i18n"
 import { siteUrl } from "@/lib/site"
-
-type IndustryPageProps = {
-  params: Promise<{ slug: string }>
-}
 
 export const dynamicParams = false
 
@@ -19,12 +16,13 @@ export function generateStaticParams() {
 
 export async function generateMetadata({
   params,
-}: IndustryPageProps): Promise<Metadata> {
-  const { slug } = await params
-  const industry = getIndustry(slug)
-
+}: PageProps<"/[locale]/industries/[slug]">): Promise<Metadata> {
+  const { locale, slug } = await params
+  if (!isLocale(locale)) return {}
+  const industry = getIndustry(slug, locale)
   if (!industry) return {}
 
+  const path = `/industries/${industry.slug}`
   return {
     title: industry.metadata.title,
     description: industry.metadata.description,
@@ -33,19 +31,15 @@ export async function generateMetadata({
       ...industry.metadata.secondaryKeywords,
     ],
     alternates: {
-      canonical: industry.metadata.canonicalPath,
+      canonical: localizedPath(locale, path),
+      languages: localizedAlternates(path),
     },
     openGraph: {
       type: "website",
-      url: industry.metadata.canonicalPath,
+      url: localizedPath(locale, path),
       title: industry.metadata.title,
       description: industry.metadata.description,
-      images: [
-        {
-          url: industry.visual.imageUrl,
-          alt: industry.visual.alt,
-        },
-      ],
+      images: [{ url: industry.visual.imageUrl, alt: industry.visual.alt }],
     },
     twitter: {
       card: "summary_large_image",
@@ -56,28 +50,30 @@ export async function generateMetadata({
   }
 }
 
-export default async function IndustryPage({ params }: IndustryPageProps) {
-  const { slug } = await params
-  const industry = getIndustry(slug)
-
+export default async function IndustryRoute({
+  params,
+}: PageProps<"/[locale]/industries/[slug]">) {
+  const { locale, slug } = await params
+  if (!isLocale(locale)) notFound()
+  const industry = getIndustry(slug, locale)
   if (!industry) notFound()
 
+  const url = `${siteUrl}${localizedPath(locale, industry.href)}`
   const schemas = [
     {
       "@context": "https://schema.org",
       "@type": "Service",
-      "@id": `${siteUrl}${industry.href}#service`,
+      "@id": `${url}#service`,
       name: industry.metadata.title.replace(" | ANU", ""),
       serviceType: industry.metadata.primaryKeyword,
       description: industry.metadata.description,
-      url: `${siteUrl}${industry.href}`,
+      url,
+      inLanguage: locale === "ar" ? "ar-IQ" : "en-IQ",
       areaServed: {
         "@type": "Country",
-        name: "Iraq",
+        name: locale === "ar" ? "العراق" : "Iraq",
       },
-      provider: {
-        "@id": `${siteUrl}/#organization`,
-      },
+      provider: { "@id": `${siteUrl}/#organization` },
     },
     {
       "@context": "https://schema.org",
@@ -86,41 +82,39 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
         {
           "@type": "ListItem",
           position: 1,
-          name: "Home",
-          item: siteUrl,
+          name: locale === "ar" ? "الرئيسية" : "Home",
+          item: `${siteUrl}/${locale}`,
         },
         {
           "@type": "ListItem",
           position: 2,
-          name: "Industries",
-          item: `${siteUrl}/industries`,
+          name: locale === "ar" ? "القطاعات" : "Industries",
+          item: `${siteUrl}/${locale}/industries`,
         },
         {
           "@type": "ListItem",
           position: 3,
           name: industry.name,
-          item: `${siteUrl}${industry.href}`,
+          item: url,
         },
       ],
     },
     {
       "@context": "https://schema.org",
       "@type": "FAQPage",
+      inLanguage: locale === "ar" ? "ar-IQ" : "en-IQ",
       mainEntity: industry.buyerQuestions.map((item) => ({
         "@type": "Question",
         name: item.question,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: item.answer,
-        },
+        acceptedAnswer: { "@type": "Answer", text: item.answer },
       })),
     },
   ]
 
   return (
-    <PageShell>
+    <PageShell locale={locale}>
       <JsonLd data={schemas} />
-      <IndustryDetailPage industry={industry} />
+      <IndustryDetailPage industry={industry} locale={locale} />
     </PageShell>
   )
 }

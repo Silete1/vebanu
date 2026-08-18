@@ -9,7 +9,9 @@ import { Container } from "@/components/layout/container"
 import { MethodCardStack } from "@/components/method/method-card-stack"
 import { PlatformMacbookShowcase } from "@/components/platform/platform-macbook-showcase"
 import { IndustriesAccordionShowcase } from "@/components/industries/industries-accordion-showcase"
-import { insights } from "@/lib/content/insights"
+import { categoryLabels, insights } from "@/lib/content/insights"
+import { homePageCopy } from "@/lib/content/site-copy"
+import { type Locale, localizedPath } from "@/lib/i18n"
 
 const featuredInsight =
   insights.find((insight) => insight.featured) ?? insights[0]!
@@ -17,95 +19,16 @@ const supportingInsights = insights
   .filter((insight) => insight.slug !== featuredInsight.slug)
   .slice(0, 2)
 
-const workCards = [
-  {
-    title: "Process redesign",
-    text: "Map workflows, approvals, roles, documents, handoffs, data gaps, and operational bottlenecks.",
-  },
-  {
-    title: "Odoo implementation",
-    text: "Configure the required Odoo modules, permissions, automations, dashboards, reports, and integrations.",
-  },
-  {
-    title: "Control dashboards",
-    text: "Give owners and managers visibility over inventory, sales, purchasing, finance, collections, and execution.",
-  },
-]
-
-const workStory = [
-  {
-    counter: "01 / 03",
-    title: "We do not sell modules. We rebuild operating control.",
-    text: "Every implementation starts with how the company actually works: who requests, who approves, who receives, who sells, who collects, who reports, and where control breaks.",
-  },
-  {
-    counter: "02 / 03",
-    title: "The operating model is redesigned before Odoo is configured.",
-    text: "ANU defines roles, permissions, approval logic, inventory rules, finance links, reporting structure, and owner visibility before system setup begins.",
-  },
-  {
-    counter: "03 / 03",
-    title: "Odoo becomes the control platform for governed execution.",
-    text: "Modules, dashboards, integrations, automations, reports, and training are configured around how the business needs to run every day.",
-  },
-]
-
-const methodSteps = [
-  {
-    phase: "Assess",
-    title: "Assess current operations",
-    text: "Map workflows, gaps, approvals, documents, reports, data sources, and decision points.",
-    controls: ["Workflow evidence", "Control gaps", "Decision points"],
-    output: "Current-state control map",
-  },
-  {
-    phase: "Design",
-    title: "Redesign the control model",
-    text: "Define roles, permissions, stages, approval logic, inventory rules, finance links, and reporting structure.",
-    controls: ["Roles and ownership", "Approval logic", "Reporting model"],
-    output: "Target operating model",
-  },
-  {
-    phase: "Configure",
-    title: "Configure Odoo",
-    text: "Implement modules, workflows, dashboards, automations, integrations, access rights, and management reports.",
-    controls: ["Odoo workflows", "Access rights", "Management reports"],
-    output: "Configured control platform",
-  },
-  {
-    phase: "Stabilize",
-    title: "Train and stabilize",
-    text: "Train key users, support go-live, monitor issues, refine configuration, and stabilize daily operation.",
-    controls: ["Key-user readiness", "Go-live controls", "Issue closure"],
-    output: "Controlled daily operation",
-  },
-]
-
-const modules = [
-  "SALES",
-  "CRM",
-  "INVENTORY",
-  "PURCHASE",
-  "FINANCE",
-  "APPROVALS",
-  "REPORTING",
-  "MANUFACTURING",
-  "PROJECTS",
-  "HR",
-  "DASHBOARDS",
-  "INTEGRATIONS",
-]
-
-export function HomeBody() {
+export function HomeBody({ locale }: { locale: Locale }) {
   return (
     <>
       <HomeScrollMotion />
-      <WorkCardsSection />
-      <MethodSection />
-      <PlatformSection />
-      <IndustriesSection />
-      <InsightSection />
-      <AssessmentCtaSection />
+      <WorkCardsSection locale={locale} />
+      <MethodSection locale={locale} />
+      <PlatformSection locale={locale} />
+      <IndustriesSection locale={locale} />
+      <InsightSection locale={locale} />
+      <AssessmentCtaSection locale={locale} />
     </>
   )
 }
@@ -128,7 +51,15 @@ function SectionLabel({
   )
 }
 
-function StoryLetters({ text }: { text: string }) {
+function StoryLetters({ text, locale }: { text: string; locale: Locale }) {
+  if (locale === "ar") {
+    return (
+      <span data-story-letter className="inline">
+        {text}
+      </span>
+    )
+  }
+
   const words = text.split(" ")
 
   return (
@@ -156,7 +87,9 @@ function StoryLetters({ text }: { text: string }) {
   )
 }
 
-export function HomeIntroSection() {
+export function HomeIntroSection({ locale }: { locale: Locale }) {
+  const copy = homePageCopy[locale]
+
   return (
     <section
       id="work"
@@ -171,10 +104,10 @@ export function HomeIntroSection() {
           </div>
           <div className="grid gap-12 pt-10 lg:grid-cols-[0.34fr_0.66fr]">
             <div className="space-y-20">
-              <SectionLabel dark>WHAT WE DO</SectionLabel>
+              <SectionLabel dark>{copy.workLabel}</SectionLabel>
               <div className="story-counter-mask">
                 <div className="story-counter-track">
-                  {workStory.map((step) => (
+                  {copy.workStory.map((step) => (
                     <span
                       key={step.counter}
                       className="mono-label story-counter inline-flex rounded-full border border-[var(--color-graphite)] px-5 py-3 text-white/76"
@@ -187,19 +120,19 @@ export function HomeIntroSection() {
             </div>
             <div className="story-mask">
               <div className="story-track">
-                {workStory.map((step) => (
+                {copy.workStory.map((step) => (
                   <article key={step.counter} className="story-panel">
                     <h2
                       data-story-highlight
                       className="max-w-4xl text-[clamp(2.4rem,4.1vw,4rem)] leading-[1.06] tracking-[-0.03em] text-white/76"
                     >
-                      <StoryLetters text={step.title} />
+                      <StoryLetters text={step.title} locale={locale} />
                     </h2>
                     <p
                       data-story-highlight
                       className="mt-10 max-w-3xl text-[clamp(1.1rem,1.55vw,1.45rem)] leading-[1.22] tracking-[-0.02em] text-white/88"
                     >
-                      <StoryLetters text={step.text} />
+                      <StoryLetters text={step.text} locale={locale} />
                     </p>
                   </article>
                 ))}
@@ -212,7 +145,9 @@ export function HomeIntroSection() {
   )
 }
 
-function WorkCardsSection() {
+function WorkCardsSection({ locale }: { locale: Locale }) {
+  const workCards = homePageCopy[locale].workCards
+
   return (
     <section
       className="bg-[var(--color-abyssal-ink)] pb-28 text-white lg:pb-40"
@@ -224,7 +159,7 @@ function WorkCardsSection() {
           {workCards.map((card) => (
             <article
               key={card.title}
-              className="border-b border-[var(--color-graphite)] py-10 md:border-r md:border-b-0 md:pr-10 md:last:border-r-0 md:[&+article]:pl-10"
+              className="border-b border-[var(--color-graphite)] py-10 md:border-e md:border-b-0 md:pe-10 md:last:border-e-0 md:[&+article]:ps-10"
             >
               <h3 className="text-[24px] leading-[1.2] tracking-[-0.006em] text-white">
                 {card.title}
@@ -240,7 +175,9 @@ function WorkCardsSection() {
   )
 }
 
-function MethodSection() {
+function MethodSection({ locale }: { locale: Locale }) {
+  const copy = homePageCopy[locale].method
+
   return (
     <section
       id="method"
@@ -249,15 +186,22 @@ function MethodSection() {
       data-header-theme="dark"
     >
       <MethodCardStack
-        label="02 / METHOD"
-        headline="From scattered work to governed execution."
-        steps={methodSteps}
+        label={copy.label}
+        headline={copy.headline}
+        description={copy.description}
+        methodName={copy.methodName}
+        objectiveLabel={copy.objective}
+        checkpointsLabel={copy.checkpoints}
+        handoffLabel={copy.handoff}
+        steps={copy.steps}
       />
     </section>
   )
 }
 
-function PlatformSection() {
+function PlatformSection({ locale }: { locale: Locale }) {
+  const copy = homePageCopy[locale].platform
+
   return (
     <section
       id="platform"
@@ -267,18 +211,13 @@ function PlatformSection() {
     >
       <Container>
         <div className="mx-auto max-w-4xl text-center">
-          <SectionLabel>03 / PLATFORM</SectionLabel>
-          <h2 className="section-headline mt-6">
-            Odoo becomes the operating layer.
-          </h2>
+          <SectionLabel>{copy.label}</SectionLabel>
+          <h2 className="section-headline mt-6">{copy.headline}</h2>
           <p className="body-copy mx-auto mt-6 max-w-2xl text-[var(--color-graphite)]">
-            Sales, CRM, inventory, purchasing, accounting, manufacturing,
-            projects, HR, approvals, and dashboards work as one single control
-            system when implemented around the company&apos;s real operating
-            model.
+            {copy.description}
           </p>
           <div className="mt-10 flex flex-wrap justify-center gap-2">
-            {modules.map((module) => (
+            {copy.modules.map((module) => (
               <span
                 key={module}
                 className="mono-label rounded-xl border border-[var(--color-lichen)] bg-white px-3.5 py-2 text-[11px] text-[var(--color-graphite)] shadow-2xs"
@@ -290,14 +229,16 @@ function PlatformSection() {
         </div>
 
         <div className="mt-16">
-          <PlatformMacbookShowcase />
+          <PlatformMacbookShowcase locale={locale} />
         </div>
       </Container>
     </section>
   )
 }
 
-function IndustriesSection() {
+function IndustriesSection({ locale }: { locale: Locale }) {
+  const copy = homePageCopy[locale].industries
+
   return (
     <section
       id="industries"
@@ -307,27 +248,27 @@ function IndustriesSection() {
     >
       <Container>
         <div className="mx-auto max-w-4xl text-left sm:text-center">
-          <SectionLabel>04 / INDUSTRIES</SectionLabel>
+          <SectionLabel>{copy.label}</SectionLabel>
           <h2 className="mt-5 max-w-[12ch] text-[clamp(2.5rem,11vw,3.625rem)] leading-[1.02] tracking-[-0.025em] text-balance sm:mx-auto sm:mt-6 sm:leading-[1.1] sm:tracking-[-0.006em]">
-            Built for companies where operational control matters.
+            {copy.headline}
           </h2>
           <p className="body-copy mt-5 max-w-[34ch] text-[var(--color-graphite)] sm:mx-auto sm:mt-6 sm:max-w-2xl">
-            See how ANU structures operational control and Odoo around the work
-            that matters in each industry.
+            {copy.description}
           </p>
         </div>
 
         <IndustriesAccordionShowcase
           compactMobile
+          locale={locale}
           className="mt-10 sm:mt-12 lg:mt-14"
         />
 
         <div className="mt-6 flex justify-center sm:mt-8">
           <Link
-            href="/industries"
+            href={localizedPath(locale, "/industries")}
             className="mono-label group inline-flex min-h-11 items-center gap-3 rounded-lg px-3 text-[var(--color-abyssal-ink)] transition-colors outline-none hover:text-blue-700 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--color-bone-white)]"
           >
-            View all industries
+            {copy.viewAll}
             <ArrowUpRightIcon
               className="size-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transition-none"
               aria-hidden="true"
@@ -339,7 +280,8 @@ function IndustriesSection() {
   )
 }
 
-function InsightSection() {
+function InsightSection({ locale }: { locale: Locale }) {
+  const copy = homePageCopy[locale].insights
   return (
     <section
       id="insights"
@@ -353,13 +295,13 @@ function InsightSection() {
             id="home-insights-title"
             className="max-w-[15ch] text-[clamp(2.75rem,4.2vw,4rem)] leading-[0.96] tracking-[-0.035em]"
           >
-            Insights for better control.
+            {copy.headline}
           </h2>
           <Link
-            href="/insights"
+            href={localizedPath(locale, "/insights")}
             className="mono-label inline-flex w-fit items-center gap-3 rounded-sm text-[var(--color-abyssal-ink)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-bioluminescent-lime)] focus-visible:ring-offset-4"
           >
-            View all insights
+            {copy.viewAll}
             <span className="arrow-cta">
               <ArrowUpRightIcon className="size-4" />
             </span>
@@ -367,15 +309,16 @@ function InsightSection() {
         </header>
 
         <div className="mt-8 grid border-y border-[var(--color-abyssal-ink)] lg:h-[470px] lg:grid-cols-[7fr_5fr]">
-          <article className="border-b border-[var(--color-abyssal-ink)] lg:border-r lg:border-b-0">
+          <article className="border-b border-[var(--color-abyssal-ink)] lg:border-e lg:border-b-0">
             <Link
-              href={`/insights/${featuredInsight.slug}`}
-              className="group flex h-full flex-col py-6 outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-bioluminescent-lime)] focus-visible:ring-inset lg:pr-8"
+              href={localizedPath(locale, `/insights/${featuredInsight.slug}`)}
+              className="group flex h-full flex-col py-6 outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-bioluminescent-lime)] focus-visible:ring-inset lg:pe-8"
             >
               <div className="h-52 overflow-hidden lg:h-56" data-insight-image>
                 <InsightVisual
                   variant={featuredInsight.visual}
-                  alt={featuredInsight.visualAlt.en}
+                  alt={featuredInsight.visualAlt[locale]}
+                  locale={locale}
                   dark
                   className="h-full min-h-0 border-0 transition-transform duration-700 ease-out group-hover:scale-[1.012] motion-reduce:transform-none motion-reduce:transition-none [&>span]:hidden"
                 />
@@ -384,11 +327,11 @@ function InsightSection() {
               <div className="mt-5 grid grid-cols-[minmax(0,1fr)_2.75rem] items-end gap-5">
                 <div>
                   <p className="mono-label text-[var(--color-graphite)]">
-                    {featuredInsight.category} / {featuredInsight.readingTime}{" "}
-                    min read
+                    {categoryLabels[featuredInsight.category][locale]} /{" "}
+                    {featuredInsight.readingTime} {copy.minRead}
                   </p>
                   <h3 className="mt-3 max-w-[19ch] text-[clamp(2rem,3vw,3.25rem)] leading-[1] tracking-[-0.03em] transition-colors group-hover:text-blue-700">
-                    {featuredInsight.title.en}
+                    {featuredInsight.title[locale]}
                   </h3>
                 </div>
                 <span className="arrow-cta transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none">
@@ -409,15 +352,16 @@ function InsightSection() {
                 }
               >
                 <Link
-                  href={`/insights/${insight.slug}`}
+                  href={localizedPath(locale, `/insights/${insight.slug}`)}
                   className="group grid h-full min-h-40 grid-cols-[minmax(0,1fr)_2.75rem] items-end gap-5 py-6 outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-bioluminescent-lime)] focus-visible:ring-inset lg:px-8"
                 >
                   <div>
                     <p className="mono-label text-[var(--color-graphite)]">
-                      {insight.category} / {insight.readingTime} min read
+                      {categoryLabels[insight.category][locale]} /{" "}
+                      {insight.readingTime} {copy.minRead}
                     </p>
                     <h3 className="mt-3 max-w-[23ch] text-[clamp(1.55rem,2vw,2.15rem)] leading-[1.04] tracking-[-0.025em] transition-colors group-hover:text-blue-700">
-                      {insight.title.en}
+                      {insight.title[locale]}
                     </h3>
                   </div>
                   <span className="grid size-11 place-items-center text-[var(--color-graphite)] transition-colors group-hover:text-blue-700">

@@ -5,13 +5,20 @@ import { ArrowLeftIcon, ArrowUpRightIcon } from "lucide-react"
 import { AssessmentCtaSection } from "@/components/home/assessment-cta-section"
 import { Container } from "@/components/layout/container"
 import type { Industry } from "@/lib/content/industries"
-import { getInsightBySlug } from "@/lib/content/insights"
+import { categoryLabels, getInsightBySlug } from "@/lib/content/insights"
+import { industriesPageCopy } from "@/lib/content/site-copy"
+import { type Locale, localizedPath } from "@/lib/i18n"
 
 type IndustryDetailPageProps = {
   industry: Industry
+  locale: Locale
 }
 
-export function IndustryDetailPage({ industry }: IndustryDetailPageProps) {
+export function IndustryDetailPage({
+  industry,
+  locale,
+}: IndustryDetailPageProps) {
+  const copy = industriesPageCopy[locale]
   const relatedInsights = industry.relatedInsightSlugs
     .map((slug) => getInsightBySlug(slug))
     .filter((insight) => insight !== undefined)
@@ -23,15 +30,15 @@ export function IndustryDetailPage({ industry }: IndustryDetailPageProps) {
         data-header-theme="dark"
       >
         <Container>
-          <nav aria-label="Breadcrumb">
+          <nav aria-label={copy.breadcrumbLabel}>
             <ol className="mono-label flex flex-wrap items-center gap-2 text-white/58">
               <li>
                 <Link
-                  href="/industries"
+                  href={localizedPath(locale, "/industries")}
                   className="inline-flex min-h-11 items-center gap-2 rounded-lg transition-colors outline-none hover:text-white focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--color-abyssal-ink)]"
                 >
                   <ArrowLeftIcon className="size-4" aria-hidden="true" />
-                  Industries
+                  {copy.breadcrumb}
                 </Link>
               </li>
               <li aria-hidden="true">/</li>
@@ -53,10 +60,10 @@ export function IndustryDetailPage({ industry }: IndustryDetailPageProps) {
                 {industry.hero.description}
               </p>
               <Link
-                href={`/?request=${industry.slug}#assessment`}
+                href={`${localizedPath(locale)}?request=${industry.slug}#assessment`}
                 className="mono-label mt-8 inline-flex min-h-11 items-center gap-3 rounded-lg bg-blue-600 px-4 text-white transition-colors outline-none hover:bg-blue-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--color-abyssal-ink)]"
               >
-                Start assessment
+                {copy.startAssessment}
                 <ArrowUpRightIcon className="size-4" aria-hidden="true" />
               </Link>
             </div>
@@ -87,7 +94,7 @@ export function IndustryDetailPage({ industry }: IndustryDetailPageProps) {
           <Container>
             <div className="grid gap-8 lg:grid-cols-[0.28fr_0.72fr] lg:gap-14">
               <p className="mono-label pt-1 text-[var(--color-graphite)]">
-                What ANU changes
+                {copy.changesLabel}
               </p>
               <p className="max-w-4xl text-[clamp(1.45rem,2.35vw,2.35rem)] leading-[1.24] tracking-[-0.025em]">
                 {industry.directAnswer}
@@ -105,13 +112,13 @@ export function IndustryDetailPage({ industry }: IndustryDetailPageProps) {
               id="control-breaks-title"
               className="max-w-[12ch] text-[clamp(2.7rem,5.5vw,5.4rem)] leading-[0.98] tracking-[-0.04em]"
             >
-              Where operational control breaks.
+              {copy.problemsTitle}
             </h2>
             <div className="mt-12 grid border-t border-[var(--color-abyssal-ink)] md:grid-cols-2">
               {industry.problems.map((problem, index) => (
                 <article
                   key={problem.title}
-                  className="border-b border-[var(--color-lichen)] py-7 md:px-7 md:odd:border-r md:odd:pl-0 md:even:pr-0"
+                  className="border-b border-[var(--color-lichen)] py-7 md:px-7 md:odd:border-e md:odd:ps-0 md:even:pe-0"
                 >
                   <p className="mono-label text-blue-700">
                     {String(index + 1).padStart(2, "0")}
@@ -143,7 +150,7 @@ export function IndustryDetailPage({ industry }: IndustryDetailPageProps) {
               {industry.workflow.stages.map((stage, index) => (
                 <li
                   key={stage.name}
-                  className="grid grid-cols-[44px_1fr] gap-4 border-b border-[var(--color-lichen)] py-7 md:px-7 md:odd:border-r md:odd:pl-0 md:even:pr-0"
+                  className="grid grid-cols-[44px_1fr] gap-4 border-b border-[var(--color-lichen)] py-7 md:px-7 md:odd:border-e md:odd:ps-0 md:even:pe-0"
                 >
                   <span
                     className="mono-label pt-1 text-blue-700"
@@ -172,18 +179,15 @@ export function IndustryDetailPage({ industry }: IndustryDetailPageProps) {
           <Container>
             <div className="grid gap-10 lg:grid-cols-[0.34fr_0.66fr] lg:gap-16">
               <div>
-                <p className="mono-label text-blue-700">
-                  Odoo implementation map
-                </p>
+                <p className="mono-label text-blue-700">{copy.odooLabel}</p>
                 <h2
                   id="odoo-map-title"
                   className="mt-5 text-[clamp(2.7rem,4.5vw,4.6rem)] leading-[0.98] tracking-[-0.04em]"
                 >
-                  Configure the platform around the work.
+                  {copy.odooTitle}
                 </h2>
                 <p className="mt-6 max-w-md text-base leading-7 text-[var(--color-graphite)]">
-                  Modules support the operating model. They do not replace the
-                  decisions, ownership and evidence the process requires.
+                  {copy.odooDescription}
                 </p>
               </div>
 
@@ -214,13 +218,13 @@ export function IndustryDetailPage({ industry }: IndustryDetailPageProps) {
         <section className="bg-white py-16 sm:py-20 lg:py-24">
           <Container>
             <h2 className="max-w-[12ch] text-[clamp(2.7rem,5vw,5rem)] leading-[0.98] tracking-[-0.04em]">
-              Questions to settle before implementation.
+              {copy.questionsTitle}
             </h2>
             <div className="mt-12 grid border-t border-[var(--color-abyssal-ink)] md:grid-cols-2">
               {industry.buyerQuestions.map((item) => (
                 <article
                   key={item.question}
-                  className="border-b border-[var(--color-lichen)] py-7 md:px-7 md:odd:border-r md:odd:pl-0 md:even:pr-0"
+                  className="border-b border-[var(--color-lichen)] py-7 md:px-7 md:odd:border-e md:odd:ps-0 md:even:pe-0"
                 >
                   <h3 className="text-[clamp(1.45rem,2.2vw,2rem)] leading-[1.1] tracking-[-0.025em]">
                     {item.question}
@@ -244,13 +248,13 @@ export function IndustryDetailPage({ industry }: IndustryDetailPageProps) {
                 id="related-insights-title"
                 className="text-[clamp(2.7rem,5vw,5rem)] leading-none tracking-[-0.04em]"
               >
-                Related insights
+                {copy.relatedTitle}
               </h2>
               <Link
-                href="/insights"
+                href={localizedPath(locale, "/insights")}
                 className="mono-label inline-flex min-h-11 items-center gap-2 self-start rounded-lg px-2 outline-none hover:text-blue-700 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-4"
               >
-                View all insights
+                {copy.viewInsights}
                 <ArrowUpRightIcon className="size-4" aria-hidden="true" />
               </Link>
             </div>
@@ -258,17 +262,17 @@ export function IndustryDetailPage({ industry }: IndustryDetailPageProps) {
               {relatedInsights.map((insight) => (
                 <Link
                   key={insight.slug}
-                  href={`/insights/${insight.slug}`}
-                  className="group border-b border-[var(--color-lichen)] py-7 outline-none focus-visible:bg-white md:border-r md:px-6 md:first:pl-0 md:last:border-r-0 md:last:pr-0"
+                  href={localizedPath(locale, `/insights/${insight.slug}`)}
+                  className="group border-b border-[var(--color-lichen)] py-7 outline-none focus-visible:bg-white md:border-e md:px-6 md:first:ps-0 md:last:border-e-0 md:last:pe-0"
                 >
                   <p className="mono-label text-[var(--color-graphite)]">
-                    {insight.category}
+                    {categoryLabels[insight.category][locale]}
                   </p>
                   <h3 className="mt-5 text-[clamp(1.55rem,2.4vw,2.2rem)] leading-[1.08] tracking-[-0.025em]">
-                    {insight.title.en}
+                    {insight.title[locale]}
                   </h3>
                   <span className="mono-label mt-7 inline-flex items-center gap-2 text-blue-700">
-                    Read insight
+                    {copy.readInsight}
                     <ArrowUpRightIcon
                       className="size-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transition-none"
                       aria-hidden="true"
@@ -281,7 +285,7 @@ export function IndustryDetailPage({ industry }: IndustryDetailPageProps) {
         </section>
       </div>
 
-      <AssessmentCtaSection />
+      <AssessmentCtaSection locale={locale} />
     </div>
   )
 }

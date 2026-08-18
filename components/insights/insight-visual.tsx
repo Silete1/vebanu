@@ -1,11 +1,13 @@
 import { cn } from "@/lib/utils"
 import type { InsightVisual as InsightVisualName } from "@/lib/content/insights"
+import type { Locale } from "@/lib/i18n"
 
 type InsightVisualProps = {
   variant: InsightVisualName
   alt: string
   className?: string
   dark?: boolean
+  locale?: Locale
 }
 
 const cells = Array.from({ length: 24 })
@@ -15,6 +17,7 @@ export function InsightVisual({
   alt,
   className,
   dark = false,
+  locale = "en",
 }: InsightVisualProps) {
   return (
     <div
@@ -39,13 +42,13 @@ export function InsightVisual({
         }}
       />
       <span className="mono-label absolute start-5 top-5 z-10 opacity-55">
-        ANU / FIELD NOTE
+        {locale === "ar" ? "ANU / رؤية" : "ANU / FIELD NOTE"}
       </span>
       <span className="mono-label absolute end-5 bottom-5 z-10 opacity-55">
-        {visualCode[variant]}
+        {locale === "ar" ? visualCodeAr[variant] : visualCode[variant]}
       </span>
 
-      <VisualComposition variant={variant} dark={dark} />
+      <VisualComposition variant={variant} dark={dark} locale={locale} />
     </div>
   )
 }
@@ -61,12 +64,25 @@ const visualCode: Record<InsightVisualName, string> = {
   "ownership-model": "OWNERSHIP",
 }
 
+const visualCodeAr: Record<InsightVisualName, string> = {
+  "control-loop": "رقابة",
+  "inventory-ledger": "مخزون",
+  "management-dashboard": "إدارة",
+  "approval-flow": "موافقة",
+  "module-map": "وحدات",
+  "process-map": "عملية",
+  "single-source": "مصدر واحد",
+  "ownership-model": "مسؤولية",
+}
+
 function VisualComposition({
   variant,
   dark,
+  locale,
 }: {
   variant: InsightVisualName
   dark: boolean
+  locale: Locale
 }) {
   const line = dark ? "bg-white/28" : "bg-[var(--color-graphite)]/35"
   const panel = dark
@@ -151,7 +167,9 @@ function VisualComposition({
               panel
             )}
           >
-            <span className="mono-label text-[9px]">EXCEPTION</span>
+            <span className="mono-label text-[9px]">
+              {locale === "ar" ? "استثناء" : "EXCEPTION"}
+            </span>
           </span>
         ) : null}
       </div>
@@ -214,7 +232,10 @@ function VisualComposition({
       >
         <span className={cn("absolute top-0 left-1/2 h-full w-px", line)} />
         <span className={cn("absolute inset-x-0 top-1/2 h-px", line)} />
-        {["LEADER", "PROCESS", "PLATFORM"].map((label, index) => (
+        {(locale === "ar"
+          ? ["الإدارة", "العملية", "المنصة"]
+          : ["LEADER", "PROCESS", "PLATFORM"]
+        ).map((label, index) => (
           <span
             key={label}
             className={cn(
@@ -254,7 +275,9 @@ function VisualComposition({
         )}
       />
       <span className="absolute top-1/2 left-1/2 grid size-14 -translate-x-1/2 -translate-y-1/2 place-items-center bg-[var(--color-bioluminescent-lime)] text-white">
-        <span className="mono-label text-[9px]">CONTROL</span>
+        <span className="mono-label text-[9px]">
+          {locale === "ar" ? "رقابة" : "CONTROL"}
+        </span>
       </span>
       {[0, 90, 180, 270].map((rotation) => (
         <span

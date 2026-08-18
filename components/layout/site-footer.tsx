@@ -2,20 +2,24 @@ import { ArrowUpRightIcon } from "lucide-react"
 import Link from "next/link"
 
 import { Container } from "@/components/layout/container"
-import { anuContact } from "@/lib/contact"
+import { anuContact, getWhatsappHref } from "@/lib/contact"
+import { siteCopy } from "@/lib/content/site-copy"
+import { type Locale, localizedPath } from "@/lib/i18n"
 
-const contactHref = "/?request=contact#assessment"
-
-const footerLinks = [
-  { label: "Work", href: "/#work" },
-  { label: "Method", href: "/#method" },
-  { label: "Platform", href: "/#platform" },
-  { label: "Industries", href: "/industries" },
-  { label: "Insights", href: "/insights" },
-  { label: "Contact", href: contactHref },
-]
-
-export function SiteFooter() {
+export function SiteFooter({ locale }: { locale: Locale }) {
+  const copy = siteCopy[locale]
+  const contactHref = `${localizedPath(locale)}?request=contact#assessment`
+  const footerLinks = [
+    { label: copy.links.work, href: localizedPath(locale, "/#work") },
+    { label: copy.links.method, href: localizedPath(locale, "/#method") },
+    { label: copy.links.platform, href: localizedPath(locale, "/#platform") },
+    {
+      label: copy.links.industries,
+      href: localizedPath(locale, "/industries"),
+    },
+    { label: copy.links.insights, href: localizedPath(locale, "/insights") },
+    { label: copy.links.contact, href: contactHref },
+  ]
   return (
     <footer
       className="footer-reference text-white"
@@ -32,24 +36,22 @@ export function SiteFooter() {
         <div className="grid shrink-0 gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(280px,0.7fr)]">
           <div data-footer-reveal>
             <h2 className="max-w-[580px] text-[clamp(1.8rem,3.2vw,3.2rem)] leading-[1.06] tracking-[-0.03em]">
-              Redesign the operation before implementing the system.
+              {copy.footerTitle}
             </h2>
             <p className="mt-4 max-w-[480px] text-[clamp(0.95rem,1.1vw,1.15rem)] leading-[1.25] tracking-[-0.02em] text-white/70">
-              ANU works with Iraqi businesses that need clearer approvals,
-              cleaner data, stronger reporting, and more control over daily
-              execution.
+              {copy.footerDescription}
             </p>
             <div className="mt-5 flex items-center gap-2">
               <Link
                 href={contactHref}
                 className="mono-label inline-flex h-10 items-center rounded-lg bg-[var(--color-abyssal-ink)] px-4 text-white"
               >
-                START ASSESSMENT
+                {copy.startAssessment}
               </Link>
               <Link
                 href={contactHref}
                 className="arrow-cta"
-                aria-label="Start assessment"
+                aria-label={copy.startAssessment}
               >
                 <ArrowUpRightIcon className="size-4" />
               </Link>
@@ -57,9 +59,12 @@ export function SiteFooter() {
           </div>
 
           <div className="grid gap-6 sm:grid-cols-2" data-footer-reveal>
-            <div className="border-l border-white/18 pl-5">
-              <p className="mono-label text-white/64">NAVIGATE</p>
-              <nav className="mt-3 grid gap-2" aria-label="Footer">
+            <div className="border-s border-white/18 ps-5">
+              <p className="mono-label text-white/64">{copy.navigate}</p>
+              <nav
+                className="mt-3 grid gap-2"
+                aria-label={copy.footerNavigation}
+              >
                 {footerLinks.map((link) => (
                   <Link
                     key={link.label}
@@ -71,16 +76,16 @@ export function SiteFooter() {
                 ))}
               </nav>
             </div>
-            <div className="border-l border-white/18 pl-5">
-              <p className="mono-label text-white/64">CONNECT</p>
+            <div className="border-s border-white/18 ps-5">
+              <p className="mono-label text-white/64">{copy.connect}</p>
               <div className="mt-3 grid gap-2">
                 <Link
-                  href={anuContact.whatsappHref}
+                  href={getWhatsappHref(locale)}
                   target="_blank"
                   rel="noreferrer"
                   className="text-[clamp(0.95rem,1.2vw,1.15rem)] leading-none tracking-[-0.03em] text-white/78 transition-colors hover:text-white"
                 >
-                  WhatsApp
+                  {copy.links.whatsapp}
                 </Link>
                 <Link
                   href={anuContact.phoneHref}
@@ -100,7 +105,7 @@ export function SiteFooter() {
                   rel="noreferrer"
                   className="text-[clamp(0.95rem,1.2vw,1.15rem)] leading-none tracking-[-0.03em] text-white/78 transition-colors hover:text-white"
                 >
-                  Instagram
+                  {copy.links.instagram}
                 </Link>
                 <Link
                   href={anuContact.facebookHref}
@@ -108,7 +113,7 @@ export function SiteFooter() {
                   rel="noreferrer"
                   className="text-[clamp(0.95rem,1.2vw,1.15rem)] leading-none tracking-[-0.03em] text-white/78 transition-colors hover:text-white"
                 >
-                  Facebook
+                  {copy.links.facebook}
                 </Link>
                 <Link
                   href={anuContact.linkedinHref}
@@ -116,7 +121,7 @@ export function SiteFooter() {
                   rel="noreferrer"
                   className="text-[clamp(0.95rem,1.2vw,1.15rem)] leading-none tracking-[-0.03em] text-white/78 transition-colors hover:text-white"
                 >
-                  LinkedIn
+                  {copy.links.linkedin}
                 </Link>
                 <Link
                   href={anuContact.odooPartnerHref}
@@ -124,7 +129,7 @@ export function SiteFooter() {
                   rel="noreferrer"
                   className="text-[clamp(0.95rem,1.2vw,1.15rem)] leading-none tracking-[-0.03em] text-white/78 transition-colors hover:text-white"
                 >
-                  Odoo partner profile
+                  {copy.links.odooPartner}
                 </Link>
               </div>
             </div>
@@ -139,7 +144,7 @@ export function SiteFooter() {
             ANU
           </p>
           <p className="mono-label mt-2 pb-3 text-white/70">
-            ANU - Business Control & Odoo ERP Implementation.
+            {copy.footerNote}
           </p>
         </div>
       </Container>

@@ -8,14 +8,11 @@ import { InsightMetadata } from "@/components/insights/insight-metadata"
 import { InsightVisual } from "@/components/insights/insight-visual"
 import { Container } from "@/components/layout/container"
 import { PageShell } from "@/components/layout/page-shell"
+import { JsonLd } from "@/components/seo/json-ld"
 import { getInsightBySlug, getInsights } from "@/lib/cms/insights"
 import { categoryLabels, insights } from "@/lib/content/insights"
-import type { Locale } from "@/lib/i18n"
-
-type InsightArticlePageProps = {
-  params: Promise<{ slug: string }>
-  searchParams: Promise<{ locale?: string }>
-}
+import { isLocale, localizedAlternates, localizedPath } from "@/lib/i18n"
+import { siteUrl } from "@/lib/site"
 
 export function generateStaticParams() {
   return insights.map((insight) => ({ slug: insight.slug }))
@@ -23,31 +20,41 @@ export function generateStaticParams() {
 
 export async function generateMetadata({
   params,
-}: Pick<InsightArticlePageProps, "params">): Promise<Metadata> {
-  const { slug } = await params
+}: PageProps<"/[locale]/insights/[slug]">): Promise<Metadata> {
+  const { locale, slug } = await params
+  if (!isLocale(locale)) return {}
   const insight = await getInsightBySlug(slug)
-
   if (!insight) return {}
 
+  const path = `/insights/${slug}`
+  const title = `${insight.title[locale]} | ${locale === "ar" ? "رؤى ANU" : "ANU Insights"}`
   return {
-    title: `${insight.title.en} | ANU Insights`,
-    description: insight.summary.en,
+    title,
+    description: insight.summary[locale],
+    alternates: {
+      canonical: localizedPath(locale, path),
+      languages: localizedAlternates(path),
+    },
+    openGraph: {
+      type: "article",
+      url: localizedPath(locale, path),
+      title,
+      description: insight.summary[locale],
+    },
   }
 }
 
 export default async function InsightArticlePage({
   params,
-  searchParams,
-}: InsightArticlePageProps) {
-  const [{ slug }, query] = await Promise.all([params, searchParams])
+}: PageProps<"/[locale]/insights/[slug]">) {
+  const { locale, slug } = await params
+  if (!isLocale(locale)) notFound()
   const [insight, allInsights] = await Promise.all([
     getInsightBySlug(slug),
     getInsights(),
   ])
-
   if (!insight) notFound()
 
-  const locale: Locale = query.locale === "ar" ? "ar" : "en"
   const isRtl = locale === "ar"
   const related = allInsights
     .filter((candidate) => candidate.slug !== insight.slug)
@@ -58,14 +65,28 @@ export default async function InsightArticlePage({
         collection.findIndex((item) => item.slug === candidate.slug) === index
     )
     .slice(0, 3)
+  const articleUrl = `${siteUrl}${localizedPath(locale, `/insights/${slug}`)}`
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "@id": `${articleUrl}#article`,
+    headline: insight.title[locale],
+    description: insight.summary[locale],
+    datePublished: insight.date,
+    dateModified: insight.date,
+    inLanguage: isRtl ? "ar-IQ" : "en-IQ",
+    mainEntityOfPage: articleUrl,
+    author: {
+      "@type": "Organization",
+      name: insight.author?.[locale] ?? "ANU Software Solutions",
+    },
+    publisher: { "@id": `${siteUrl}/#organization` },
+  }
 
   return (
-    <PageShell>
-      <div
-        lang={locale}
-        dir={isRtl ? "rtl" : "ltr"}
-        className="bg-[var(--color-bone-white)]"
-      >
+    <PageShell locale={locale}>
+      <JsonLd data={articleSchema} />
+      <div className="bg-[var(--color-bone-white)]">
         <ArticleReadingProgress />
         <article>
           <header
@@ -74,7 +95,7 @@ export default async function InsightArticlePage({
           >
             <Container>
               <Link
-                href={`/insights${isRtl ? "?locale=ar" : ""}`}
+                href={localizedPath(locale, "/insights")}
                 className="mono-label inline-flex items-center gap-2 rounded-sm text-white/64 transition-colors outline-none hover:text-white focus-visible:ring-2 focus-visible:ring-[var(--color-bioluminescent-lime)] focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--color-abyssal-ink)]"
               >
                 <ArrowLeftIcon className="size-4 rtl:-scale-x-100" />
@@ -107,6 +128,7 @@ export default async function InsightArticlePage({
               <InsightVisual
                 variant={insight.visual}
                 alt={insight.visualAlt[locale]}
+                locale={locale}
                 className="min-h-[430px] lg:min-h-[680px]"
               />
             </Container>
@@ -165,7 +187,7 @@ export default async function InsightArticlePage({
 
                   <div className="mt-10 flex flex-wrap gap-2 border-t border-[var(--color-abyssal-ink)] pt-7">
                     <Link
-                      href="/?request=insight#assessment"
+                      href={`${localizedPath(locale)}?request=insight#assessment`}
                       className="mono-label inline-flex h-11 items-center gap-3 bg-[var(--color-abyssal-ink)] px-4 text-white outline-none hover:bg-[var(--color-graphite)] focus-visible:ring-2 focus-visible:ring-[var(--color-bioluminescent-lime)] focus-visible:ring-offset-4"
                     >
                       {isRtl ? "ناقش الموضوع مع ANU" : "Discuss with ANU"}
@@ -200,7 +222,7 @@ export default async function InsightArticlePage({
               {related.map((item) => (
                 <Link
                   key={item.slug}
-                  href={`/insights/${item.slug}${isRtl ? "?locale=ar" : ""}`}
+                  href={localizedPath(locale, `/insights/${item.slug}`)}
                   className="group border-b border-[var(--color-lichen)] py-8 outline-none focus-visible:bg-white md:border-e md:px-6 md:first:ps-0 md:last:border-e-0 md:last:pe-0"
                 >
                   <p className="mono-label text-[var(--color-graphite)]">

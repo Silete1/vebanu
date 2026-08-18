@@ -19,6 +19,11 @@ type MethodCardStackProps = {
   steps: MethodStep[]
   label?: string
   headline?: string
+  description?: string
+  methodName?: string
+  objectiveLabel?: string
+  checkpointsLabel?: string
+  handoffLabel?: string
 }
 
 const CARD_STICKY_TOP = 112
@@ -29,6 +34,11 @@ export function MethodCardStack({
   steps,
   label = "02 / METHOD",
   headline = "From scattered work to governed execution.",
+  description = "Each phase builds physical and operational depth across the organization, ensuring controls are locked before software goes live.",
+  methodName = "ANU / Operating control method",
+  objectiveLabel = "Phase objective",
+  checkpointsLabel = "Control checkpoints",
+  handoffLabel = "Phase handoff",
 }: MethodCardStackProps) {
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -102,9 +112,7 @@ export function MethodCardStack({
           </p>
           <h2 className="section-headline mt-6 max-w-4xl">{headline}</h2>
           <p className="mt-6 max-w-md text-lg leading-7 text-white/60">
-            Each phase builds physical and operational depth across the
-            organization, ensuring controls are locked before software goes
-            live.
+            {description}
           </p>
         </div>
 
@@ -129,7 +137,7 @@ export function MethodCardStack({
                   {step.phase}
                 </div>
                 <p className="mono-label truncate px-4 text-[11px] text-slate-500 sm:px-5">
-                  ANU / Operating control method
+                  {methodName}
                 </p>
                 <p className="mono-label border-s border-slate-300 px-4 py-4 text-[11px] text-slate-500 sm:px-5">
                   {String(index + 1).padStart(2, "0")} /{" "}
@@ -159,7 +167,7 @@ export function MethodCardStack({
                 <div className="flex min-w-0 flex-col p-6 sm:p-8 lg:p-9">
                   <div className="max-w-xl">
                     <p className="mono-label text-[var(--color-bioluminescent-lime)]">
-                      Phase objective
+                      {objectiveLabel}
                     </p>
                     <h3 className="mt-4 text-[clamp(1.8rem,3vw,2.65rem)] leading-[1.03] font-semibold tracking-[-0.035em] text-balance">
                       {step.title}
@@ -172,11 +180,11 @@ export function MethodCardStack({
                   <div className="mt-auto grid gap-6 border-t border-slate-300 pt-6 sm:grid-cols-[1fr_0.9fr] sm:gap-8">
                     <div>
                       <p className="mono-label text-[11px] text-slate-500">
-                        Control checkpoints
+                        {checkpointsLabel}
                       </p>
                       <ul
                         className="mt-3 space-y-2"
-                        aria-label={`${step.title} control checkpoints`}
+                        aria-label={`${step.title} — ${checkpointsLabel}`}
                       >
                         {step.controls.map((control) => (
                           <li
@@ -195,7 +203,7 @@ export function MethodCardStack({
 
                     <div className="border-s-2 border-[var(--color-bioluminescent-lime)] ps-4">
                       <p className="mono-label text-[11px] text-slate-500">
-                        Phase handoff
+                        {handoffLabel}
                       </p>
                       <p className="mt-3 text-base leading-6 font-semibold text-[var(--color-abyssal-ink)]">
                         {step.output}

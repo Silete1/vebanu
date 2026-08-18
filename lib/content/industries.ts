@@ -819,10 +819,34 @@ export const industries: readonly Industry[] = [
   },
 ]
 
-export function getIndustry(slug: string): Industry | undefined {
-  return industries.find((industry) => industry.slug === slug)
+function localizeIndustry(industry: Industry, locale: Locale): Industry {
+  if (locale === "en") return industry
+
+  const translation = industriesAr[industry.slug]
+  return {
+    ...industry,
+    ...translation,
+    metadata: {
+      ...industry.metadata,
+      ...translation.metadata,
+    },
+    visual: {
+      ...industry.visual,
+      ...translation.visual,
+    },
+  }
 }
 
-export function getIndustries(): readonly Industry[] {
-  return industries
+export function getIndustry(
+  slug: string,
+  locale: Locale = "en"
+): Industry | undefined {
+  const industry = industries.find((item) => item.slug === slug)
+  return industry ? localizeIndustry(industry, locale) : undefined
 }
+
+export function getIndustries(locale: Locale = "en"): readonly Industry[] {
+  return industries.map((industry) => localizeIndustry(industry, locale))
+}
+import { industriesAr } from "@/lib/content/industries-ar"
+import type { Locale } from "@/lib/i18n"

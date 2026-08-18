@@ -35,16 +35,18 @@ Read this file first. Do not begin each task with a full repository scan. Use th
 
 ## Entry Points and Routing
 
-- Root layout: [`app/layout.tsx`](/C:/Users/Lenovo/Documents/vebanu/app/layout.tsx)
-- Home route: [`app/page.tsx`](/C:/Users/Lenovo/Documents/vebanu/app/page.tsx)
-- Services route: [`app/services/page.tsx`](/C:/Users/Lenovo/Documents/vebanu/app/services/page.tsx)
-- Verified route files under `app/`: `/` and `/services` only.
+- Locale layout: [`app/[locale]/layout.tsx`](/C:/Users/Lenovo/Documents/vebanu/app/[locale]/layout.tsx)
+- Localized routes live under `/en` and `/ar`; unprefixed legacy routes redirect to English in [`next.config.ts`](/C:/Users/Lenovo/Documents/vebanu/next.config.ts).
+- Home route: [`app/[locale]/page.tsx`](/C:/Users/Lenovo/Documents/vebanu/app/[locale]/page.tsx)
+- Services route: [`app/[locale]/services/page.tsx`](/C:/Users/Lenovo/Documents/vebanu/app/[locale]/services/page.tsx)
+- Industry routes: [`app/[locale]/industries`](/C:/Users/Lenovo/Documents/vebanu/app/[locale]/industries)
+- Insight routes: [`app/[locale]/insights`](/C:/Users/Lenovo/Documents/vebanu/app/[locale]/insights)
 - Shared page shell: [`components/layout/page-shell.tsx`](/C:/Users/Lenovo/Documents/vebanu/components/layout/page-shell.tsx)
 - Primary navigation item source: [`lib/navigation.ts`](/C:/Users/Lenovo/Documents/vebanu/lib/navigation.ts)
 
 ## Main Page and Layout Locations
 
-- Root HTML/body, font setup, and `lang`/`dir`: [`app/layout.tsx`](/C:/Users/Lenovo/Documents/vebanu/app/layout.tsx)
+- Root HTML/body, font setup, and route-level `lang`/`dir`: [`app/[locale]/layout.tsx`](/C:/Users/Lenovo/Documents/vebanu/app/[locale]/layout.tsx)
 - Global shell with header/footer/main transition: [`components/layout/page-shell.tsx`](/C:/Users/Lenovo/Documents/vebanu/components/layout/page-shell.tsx)
 - Header: [`components/layout/site-header.tsx`](/C:/Users/Lenovo/Documents/vebanu/components/layout/site-header.tsx)
 - Footer: [`components/layout/site-footer.tsx`](/C:/Users/Lenovo/Documents/vebanu/components/layout/site-footer.tsx)
@@ -92,21 +94,21 @@ Read this file first. Do not begin each task with a full repository scan. Use th
 
 - Brand image used by the logo component: [`components/brand/anu_logo.png`](/C:/Users/Lenovo/Documents/vebanu/components/brand/anu_logo.png)
 - Odoo screenshots used at runtime by the platform showcase: [`public/odoo-snapshot`](/C:/Users/Lenovo/Documents/vebanu/public/odoo-snapshot)
-- Demo static HTML in `public`: [`public/demo-industries.html`](/C:/Users/Lenovo/Documents/vebanu/public/demo-industries.html), [`public/demo-platform-laptop.html`](/C:/Users/Lenovo/Documents/vebanu/public/demo-platform-laptop.html)
+- Demo static HTML: [`docs/demos/demo-industries.html`](/C:/Users/Lenovo/Documents/vebanu/docs/demos/demo-industries.html), [`docs/demos/demo-platform-laptop.html`](/C:/Users/Lenovo/Documents/vebanu/docs/demos/demo-platform-laptop.html)
 - Reference screenshots in [`docs/reference-screenshots`](/C:/Users/Lenovo/Documents/vebanu/docs/reference-screenshots) are documentation assets, not runtime app assets.
-- The industries showcase currently uses hardcoded remote Unsplash image URLs inside [`components/industries/industries-accordion-showcase.tsx`](/C:/Users/Lenovo/Documents/vebanu/components/industries/industries-accordion-showcase.tsx).
+- Industry content and image URLs are centralized in [`lib/content/industries.ts`](/C:/Users/Lenovo/Documents/vebanu/lib/content/industries.ts); Arabic industry content lives in [`lib/content/industries-ar.ts`](/C:/Users/Lenovo/Documents/vebanu/lib/content/industries-ar.ts).
 
 ## Content and Localization
 
 - Locale helpers: [`lib/i18n.ts`](/C:/Users/Lenovo/Documents/vebanu/lib/i18n.ts)
 - Site-level localized strings: [`lib/site.ts`](/C:/Users/Lenovo/Documents/vebanu/lib/site.ts)
+- Shared active-interface copy: [`lib/content/site-copy.ts`](/C:/Users/Lenovo/Documents/vebanu/lib/content/site-copy.ts)
 - Structured bilingual home content: [`lib/content/home.ts`](/C:/Users/Lenovo/Documents/vebanu/lib/content/home.ts)
 - Supported locales in code: `en`, `ar`.
 - Default locale: `en`.
-- `app/layout.tsx` applies `lang` and `dir` from `defaultLocale`.
-- Arabic font variable and `[lang="ar"]` CSS styling are present.
-- No locale segment routing or middleware-based locale routing was verified under `app/`.
-- Important distinction: some current page content is hardcoded directly in `components/home/*`, while `lib/content/home.ts` primarily feeds the alternate section-based component layer.
+- `app/[locale]/layout.tsx` validates the locale and applies language-specific `lang`, `dir`, metadata, canonicals, and alternates.
+- Arabic font variables and `[lang^="ar"]` CSS styling are present.
+- The shared language switcher is in the desktop header and mobile navigation sheet.
 
 ## Integrations
 
@@ -159,8 +161,8 @@ Read this file first. Do not begin each task with a full repository scan. Use th
 ## RTL/LTR and Responsive Behavior
 
 - Locale metadata in [`lib/i18n.ts`](/C:/Users/Lenovo/Documents/vebanu/lib/i18n.ts) defines `dir` for `en` and `ar`.
-- Root layout applies `dir` on the `<html>` element based on `defaultLocale`.
-- `components.json` has `rtl: false`; there is no verified route-level RTL switcher in the current app.
+- The locale layout applies `dir` and regional language tags (`en-IQ`, `ar-IQ`) on `<html>`.
+- Prefer logical Tailwind properties (`s`/`e`, `ps`/`pe`, `border-s`/`border-e`) for shared LTR/RTL components.
 - Responsive implementation is primarily Tailwind breakpoint classes (`sm`, `md`, `lg`) plus custom CSS media queries in [`app/globals.css`](/C:/Users/Lenovo/Documents/vebanu/app/globals.css).
 - Motion code also uses GSAP `matchMedia()` for desktop/mobile and reduced-motion handling.
 

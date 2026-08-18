@@ -6,10 +6,11 @@ import { useGSAP } from "@gsap/react"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import Image from "next/image"
+import type { Locale } from "@/lib/i18n"
 
 type OdooTabId = "sales" | "inventory" | "accounting" | "manufacturing"
 
-const tabs: Array<{
+type OdooTab = {
   id: OdooTabId
   label: string
   shortLabel: string
@@ -18,56 +19,108 @@ const tabs: Array<{
   compactLabel: string
   compactImage: string
   compactAlt: string
-}> = [
-  {
-    id: "sales",
-    label: "Sales & CRM",
-    shortLabel: "Sales",
-    image: "/odoo-snapshot/odoo19-desktop-sales.png",
-    alt: "Odoo 19 Enterprise desktop Sales quotations list",
-    compactLabel: "Sales",
-    compactImage: "/odoo-snapshot/odoo19-mobile-sales.png",
-    compactAlt: "Odoo 19 mobile sales quotations",
-  },
-  {
-    id: "inventory",
-    label: "Inventory & PO",
-    shortLabel: "Inventory",
-    image: "/odoo-snapshot/odoo19-desktop-inventory.png",
-    alt: "Odoo 19 Enterprise desktop Inventory overview",
-    compactLabel: "Inventory",
-    compactImage: "/odoo-snapshot/odoo19-mobile-inventory.png",
-    compactAlt: "Odoo 19 mobile inventory overview",
-  },
-  {
-    id: "accounting",
-    label: "Accounting & P&L",
-    shortLabel: "Accounting",
-    image: "/odoo-snapshot/odoo19-desktop-accounting.png",
-    alt: "Odoo 19 Enterprise desktop Accounting dashboard",
-    compactLabel: "Accounting",
-    compactImage: "/odoo-snapshot/odoo19-mobile-accounting.png",
-    compactAlt: "Odoo 19 mobile accounting dashboard",
-  },
-  {
-    id: "manufacturing",
-    label: "Manufacturing & MRP",
-    shortLabel: "Manufacturing",
-    image: "/odoo-snapshot/odoo19-desktop-manufacturing.png",
-    alt: "Odoo 19 Enterprise desktop Manufacturing work centers overview",
-    compactLabel: "Manufacturing",
-    compactImage: "/odoo-snapshot/odoo19-mobile-manufacturing.png",
-    compactAlt: "Odoo 19 mobile manufacturing work centers overview",
-  },
-]
+}
+
+const tabsByLocale: Record<Locale, OdooTab[]> = {
+  en: [
+    {
+      id: "sales",
+      label: "Sales & CRM",
+      shortLabel: "Sales",
+      image: "/odoo-snapshot/odoo19-desktop-sales.png",
+      alt: "Odoo 19 Enterprise desktop Sales quotations list",
+      compactLabel: "Sales",
+      compactImage: "/odoo-snapshot/odoo19-mobile-sales.png",
+      compactAlt: "Odoo 19 mobile sales quotations",
+    },
+    {
+      id: "inventory",
+      label: "Inventory & PO",
+      shortLabel: "Inventory",
+      image: "/odoo-snapshot/odoo19-desktop-inventory.png",
+      alt: "Odoo 19 Enterprise desktop Inventory overview",
+      compactLabel: "Inventory",
+      compactImage: "/odoo-snapshot/odoo19-mobile-inventory.png",
+      compactAlt: "Odoo 19 mobile inventory overview",
+    },
+    {
+      id: "accounting",
+      label: "Accounting & P&L",
+      shortLabel: "Accounting",
+      image: "/odoo-snapshot/odoo19-desktop-accounting.png",
+      alt: "Odoo 19 Enterprise desktop Accounting dashboard",
+      compactLabel: "Accounting",
+      compactImage: "/odoo-snapshot/odoo19-mobile-accounting.png",
+      compactAlt: "Odoo 19 mobile accounting dashboard",
+    },
+    {
+      id: "manufacturing",
+      label: "Manufacturing & MRP",
+      shortLabel: "Manufacturing",
+      image: "/odoo-snapshot/odoo19-desktop-manufacturing.png",
+      alt: "Odoo 19 Enterprise desktop Manufacturing work centers overview",
+      compactLabel: "Manufacturing",
+      compactImage: "/odoo-snapshot/odoo19-mobile-manufacturing.png",
+      compactAlt: "Odoo 19 mobile manufacturing work centers overview",
+    },
+  ],
+  ar: [
+    {
+      id: "sales",
+      label: "المبيعات وإدارة العملاء",
+      shortLabel: "المبيعات",
+      image: "/odoo-snapshot/odoo19-desktop-sales.png",
+      alt: "قائمة عروض أسعار المبيعات في Odoo 19 Enterprise على الحاسوب",
+      compactLabel: "المبيعات",
+      compactImage: "/odoo-snapshot/odoo19-mobile-sales.png",
+      compactAlt: "عروض أسعار المبيعات في Odoo 19 على الهاتف",
+    },
+    {
+      id: "inventory",
+      label: "المخزون والمشتريات",
+      shortLabel: "المخزون",
+      image: "/odoo-snapshot/odoo19-desktop-inventory.png",
+      alt: "نظرة عامة على المخزون في Odoo 19 Enterprise على الحاسوب",
+      compactLabel: "المخزون",
+      compactImage: "/odoo-snapshot/odoo19-mobile-inventory.png",
+      compactAlt: "نظرة عامة على المخزون في Odoo 19 على الهاتف",
+    },
+    {
+      id: "accounting",
+      label: "المحاسبة والأرباح",
+      shortLabel: "المحاسبة",
+      image: "/odoo-snapshot/odoo19-desktop-accounting.png",
+      alt: "لوحة المحاسبة في Odoo 19 Enterprise على الحاسوب",
+      compactLabel: "المحاسبة",
+      compactImage: "/odoo-snapshot/odoo19-mobile-accounting.png",
+      compactAlt: "لوحة المحاسبة في Odoo 19 على الهاتف",
+    },
+    {
+      id: "manufacturing",
+      label: "التصنيع وتخطيط الموارد",
+      shortLabel: "التصنيع",
+      image: "/odoo-snapshot/odoo19-desktop-manufacturing.png",
+      alt: "نظرة عامة على مراكز العمل التصنيعية في Odoo 19 Enterprise",
+      compactLabel: "التصنيع",
+      compactImage: "/odoo-snapshot/odoo19-mobile-manufacturing.png",
+      compactAlt: "مراكز العمل التصنيعية في Odoo 19 على الهاتف",
+    },
+  ],
+}
 
 type ScreenStackProps = {
+  tabs: OdooTab[]
   activeId: OdooTabId
   sizes: string
   compact?: boolean
 }
 
-function ScreenStack({ activeId, sizes, compact = false }: ScreenStackProps) {
+function ScreenStack({
+  tabs,
+  activeId,
+  sizes,
+  compact = false,
+}: ScreenStackProps) {
   return tabs.map((tab) => (
     <Image
       key={tab.id}
@@ -85,15 +138,19 @@ function ScreenStack({ activeId, sizes, compact = false }: ScreenStackProps) {
 }
 
 type ModuleSwitcherProps = {
+  tabs: OdooTab[]
   activeId: OdooTabId
   onSelect: (id: OdooTabId) => void
   compact?: boolean
+  accessibleLabel: string
 }
 
 function ModuleSwitcher({
+  tabs,
   activeId,
   onSelect,
   compact = false,
+  accessibleLabel,
 }: ModuleSwitcherProps) {
   const activeIndex = tabs.findIndex((tab) => tab.id === activeId)
 
@@ -101,7 +158,7 @@ function ModuleSwitcher({
     return (
       <div
         className="mx-auto mt-7 grid w-full max-w-[430px] grid-cols-2 gap-2 sm:grid-cols-4"
-        aria-label="Choose an Odoo module preview"
+        aria-label={accessibleLabel}
       >
         {tabs.map((tab) => {
           const isActive = tab.id === activeId
@@ -133,7 +190,7 @@ function ModuleSwitcher({
         style={{
           gridTemplateColumns: `repeat(${tabs.length}, minmax(0, 1fr))`,
         }}
-        aria-label="Choose an Odoo module preview"
+        aria-label={accessibleLabel}
       >
         {tabs.map((tab, index) => {
           const isActive = tab.id === activeId
@@ -185,7 +242,10 @@ function ModuleSwitcher({
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
-export function PlatformMacbookShowcase() {
+export function PlatformMacbookShowcase({ locale }: { locale: Locale }) {
+  const tabs = tabsByLocale[locale]
+  const accessibleLabel =
+    locale === "ar" ? "اختر معاينة لوحدة Odoo" : "Choose an Odoo module preview"
   const [activeTab, setActiveTab] = useState<OdooTabId>("sales")
   const sectionRef = useRef<HTMLDivElement>(null)
   const macbookRef = useRef<HTMLDivElement>(null)
@@ -236,7 +296,7 @@ export function PlatformMacbookShowcase() {
       compact.removeEventListener("change", syncAutoRotation)
       reduceMotion.removeEventListener("change", syncAutoRotation)
     }
-  }, [])
+  }, [tabs])
 
   useGSAP(
     () => {
@@ -301,6 +361,7 @@ export function PlatformMacbookShowcase() {
               className="relative aspect-[6/13] w-full overflow-hidden rounded-[35px] bg-[#603552]"
             >
               <ScreenStack
+                tabs={tabs}
                 activeId={activeScreen.id}
                 sizes="(max-width: 1279px) 300px, 0px"
                 compact
@@ -310,9 +371,11 @@ export function PlatformMacbookShowcase() {
         </div>
 
         <ModuleSwitcher
+          tabs={tabs}
           activeId={activeScreen.id}
           onSelect={selectTab}
           compact
+          accessibleLabel={accessibleLabel}
         />
       </div>
 
@@ -331,6 +394,7 @@ export function PlatformMacbookShowcase() {
                 className="relative h-[460px] overflow-hidden rounded-[10px] border border-black/20 bg-[#f8f9fa] sm:h-[540px]"
               >
                 <ScreenStack
+                  tabs={tabs}
                   activeId={activeScreen.id}
                   sizes="(min-width: 1280px) 1030px, 0px"
                 />
@@ -342,7 +406,12 @@ export function PlatformMacbookShowcase() {
             </div>
           </div>
 
-          <ModuleSwitcher activeId={activeScreen.id} onSelect={selectTab} />
+          <ModuleSwitcher
+            tabs={tabs}
+            activeId={activeScreen.id}
+            onSelect={selectTab}
+            accessibleLabel={accessibleLabel}
+          />
         </div>
       </div>
     </div>

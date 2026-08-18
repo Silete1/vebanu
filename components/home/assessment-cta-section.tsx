@@ -3,7 +3,9 @@ import { ArrowUpRightIcon, MessageCircleIcon, PhoneIcon } from "lucide-react"
 
 import { AssessmentForm } from "@/components/home/assessment-form"
 import { Container } from "@/components/layout/container"
-import { anuContact } from "@/lib/contact"
+import { anuContact, getWhatsappHref } from "@/lib/contact"
+import { assessmentCopy } from "@/lib/content/site-copy"
+import type { Locale } from "@/lib/i18n"
 
 type ContactChoiceProps = {
   href: string
@@ -42,7 +44,9 @@ function ContactChoice({
   )
 }
 
-export function AssessmentCtaSection() {
+export function AssessmentCtaSection({ locale }: { locale: Locale }) {
+  const copy = assessmentCopy[locale]
+
   return (
     <section
       id="assessment"
@@ -56,7 +60,7 @@ export function AssessmentCtaSection() {
             id="assessment-title"
             className="text-[clamp(3rem,6vw,5.5rem)] leading-[0.94] tracking-[-0.04em]"
           >
-            Start your assessment.
+            {copy.title}
           </h2>
         </header>
 
@@ -65,42 +69,42 @@ export function AssessmentCtaSection() {
             className="bg-white p-6 sm:p-8 lg:p-10"
             data-assessment-contact-panel
           >
-            <div className="mb-7 text-center">
+            <div className="mb-7">
               <h3 className="text-[clamp(1.75rem,3vw,2.5rem)] tracking-[-0.03em]">
-                Start with ANU
+                {copy.formTitle}
               </h3>
             </div>
-            <AssessmentForm />
+            <AssessmentForm locale={locale} />
           </div>
 
-          <aside className="border-t border-[var(--color-lichen)] bg-white p-6 sm:p-8 lg:border-t-0 lg:border-l lg:p-10">
+          <aside className="border-t border-[var(--color-lichen)] bg-white p-6 sm:p-8 lg:border-s lg:border-t-0 lg:p-10">
             <div>
               <h3 className="text-[clamp(1.75rem,3vw,2.5rem)] tracking-[-0.03em]">
-                Talk now
+                {copy.talkTitle}
               </h3>
             </div>
 
             <nav
               className="mt-7 divide-y divide-[var(--color-lichen)] border-y border-[var(--color-lichen)]"
-              aria-label="Direct assessment contact options"
+              aria-label={copy.directOptions}
             >
               <ContactChoice
-                href={anuContact.whatsappHref}
+                href={getWhatsappHref(locale)}
                 icon={MessageCircleIcon}
-                label="Start on WhatsApp"
-                detail="Open a message"
+                label={copy.whatsapp}
+                detail={copy.whatsappDetail}
                 external
               />
               <ContactChoice
                 href={anuContact.phoneHref}
                 icon={PhoneIcon}
-                label="Call ANU"
+                label={copy.call}
                 detail={anuContact.phoneDisplay}
               />
             </nav>
 
             <p className="mt-7 max-w-sm text-sm leading-6 text-slate-600">
-              Start with the operational challenge that matters most.
+              {copy.note}
             </p>
           </aside>
         </div>

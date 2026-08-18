@@ -4,7 +4,7 @@ import { ArrowUpRightIcon, PlayIcon } from "lucide-react"
 import { InsightMetadata } from "@/components/insights/insight-metadata"
 import { InsightVisual } from "@/components/insights/insight-visual"
 import type { Insight } from "@/lib/content/insights"
-import type { Locale } from "@/lib/i18n"
+import { type Locale, localizedPath } from "@/lib/i18n"
 import { cn } from "@/lib/utils"
 
 type InsightCardProps = {
@@ -23,7 +23,7 @@ export function InsightCard({
   visualAlignment = "start",
 }: InsightCardProps) {
   const isVideo = insight.contentType === "Video Insight"
-  const href = `/insights/${insight.slug}${locale === "ar" ? "?locale=ar" : ""}`
+  const href = localizedPath(locale, `/insights/${insight.slug}`)
   const readLabel =
     locale === "ar"
       ? isVideo
@@ -93,6 +93,7 @@ export function InsightCard({
           <InsightVisual
             variant={insight.visual}
             alt={insight.visualAlt[locale]}
+            locale={locale}
             className="aspect-[4/3] min-h-0 transition-transform duration-700 ease-out group-hover:scale-[1.015]"
           />
           {isVideo ? (

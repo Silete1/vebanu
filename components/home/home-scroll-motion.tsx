@@ -144,7 +144,9 @@ export function HomeScrollMotion() {
                 },
                 "reveal+=0.08"
               )
-              .to(
+
+            if (introCopy) {
+              introTl.to(
                 introCopy,
                 {
                   autoAlpha: 1,
@@ -154,16 +156,18 @@ export function HomeScrollMotion() {
                 },
                 "reveal+=0.2"
               )
-              .to(
-                introActions,
-                {
-                  autoAlpha: 1,
-                  y: 0,
-                  clipPath: "inset(0% 0% 0% 0%)",
-                  duration: 0.66,
-                },
-                "reveal+=0.28"
-              )
+            }
+
+            introTl.to(
+              introActions,
+              {
+                autoAlpha: 1,
+                y: 0,
+                clipPath: "inset(0% 0% 0% 0%)",
+                duration: 0.66,
+              },
+              "reveal+=0.28"
+            )
           }
           // Collapse the initial white frame as the hero gives way to the
           // shared video story section.

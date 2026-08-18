@@ -3,7 +3,7 @@ import { ArrowUpRightIcon, PlayIcon } from "lucide-react"
 
 import { InsightMetadata } from "@/components/insights/insight-metadata"
 import type { Insight } from "@/lib/content/insights"
-import type { Locale } from "@/lib/i18n"
+import { type Locale, localizedPath } from "@/lib/i18n"
 
 type InsightIndexRowProps = {
   insight: Insight
@@ -12,7 +12,7 @@ type InsightIndexRowProps = {
 
 export function InsightIndexRow({ insight, locale }: InsightIndexRowProps) {
   const isVideo = insight.contentType === "Video Insight"
-  const href = `/insights/${insight.slug}${locale === "ar" ? "?locale=ar" : ""}`
+  const href = localizedPath(locale, `/insights/${insight.slug}`)
 
   return (
     <article

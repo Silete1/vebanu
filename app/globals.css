@@ -132,14 +132,24 @@
     text-wrap: balance;
   }
 
-  [lang="ar"] {
+  [lang^="ar"] {
+    --font-aspekta: var(--font-arabic), "Inter Tight", sans-serif;
+    --font-heading: var(--font-arabic), "Inter Tight", sans-serif;
+    --font-sans: var(--font-arabic), "Inter Tight", sans-serif;
+    --font-body: var(--font-arabic), "Inter Tight", sans-serif;
     font-family: var(--font-arabic), var(--font-aspekta), sans-serif;
   }
 
-  [lang="ar"] h1,
-  [lang="ar"] h2,
-  [lang="ar"] h3,
-  [lang="ar"] h4 {
+  [lang^="ar"] body {
+    font-family: var(--font-arabic), var(--font-aspekta), sans-serif;
+  }
+
+  [lang^="ar"] h1,
+  [lang^="ar"] h2,
+  [lang^="ar"] h3,
+  [lang^="ar"] h4,
+  [lang^="ar"] [data-heading="display"] {
+    font-family: var(--font-arabic), var(--font-aspekta), sans-serif;
     letter-spacing: 0;
   }
 
@@ -177,7 +187,7 @@
     text-transform: uppercase;
   }
 
-  [lang="ar"] .mono-label {
+  [lang^="ar"] .mono-label {
     font-family: var(--font-arabic), var(--font-aspekta), sans-serif;
     letter-spacing: 0;
     text-transform: none;
@@ -672,7 +682,13 @@ html[data-logo-theme="dark"] .anu-logo-flip-inner {
   gap: 0;
   width: fit-content;
   max-width: min(100%, 920px);
-  margin-left: auto;
+  overflow: hidden;
+  border: 1px solid var(--header-shell-border);
+  border-radius: 16px;
+  background: var(--header-shell-bg);
+  box-shadow: 0 18px 40px -26px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   transition:
     transform 260ms ease,
     opacity 260ms ease;
@@ -690,13 +706,6 @@ html[data-logo-theme="dark"] .anu-logo-flip-inner {
 
 .header-segmented-nav {
   position: relative;
-  border: 1px solid var(--header-shell-border);
-  border-right: 0;
-  border-radius: 16px 0 0 16px;
-  background: var(--header-shell-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  box-shadow: 0 18px 40px -26px rgba(0, 0, 0, 0.45);
 }
 
 .header-segmented-track {
@@ -704,6 +713,7 @@ html[data-logo-theme="dark"] .anu-logo-flip-inner {
 }
 
 .header-segmented-link,
+.header-language-switch,
 .header-segmented-cta {
   display: inline-flex;
   align-items: center;
@@ -717,16 +727,40 @@ html[data-logo-theme="dark"] .anu-logo-flip-inner {
   z-index: 2;
 }
 
+.header-language-switch {
+  position: relative;
+  z-index: 2;
+  gap: 8px;
+  min-width: 108px;
+  background: rgba(226, 232, 240, 0.46);
+}
+
+.header-language-switch:hover {
+  background: rgba(219, 234, 254, 0.72);
+}
+
+.header-language-switch[lang^="en"] {
+  font-family: var(--font-utility);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.header-language-switch[lang^="ar"] {
+  font-family: var(--font-arabic), var(--font-aspekta), sans-serif;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
 .header-segmented-cta {
   position: relative;
   z-index: 2;
   gap: 8px;
   min-width: clamp(198px, 15vw, 214px);
-  min-height: 54px;
+  min-height: 52px;
   padding-inline: 18px 16px;
   color: var(--header-cta-text);
   background: var(--header-cta-bg);
-  border-radius: 0 15px 15px 0;
+  border-radius: 0;
   box-shadow: 0 12px 22px -22px rgba(37, 99, 235, 0.75);
 }
 
@@ -1127,5 +1161,45 @@ html[data-logo-theme="dark"] .anu-logo-flip-inner {
   .home-hero-actions {
     max-width: 22rem;
     justify-content: flex-end;
+  }
+}
+
+/* Arabic needs more vertical room than the Latin display face. Keeping these
+   rules at the end prevents tight component utilities from clipping glyphs. */
+[lang^="ar"] :is(h1, h2, h3, h4) {
+  line-height: 1.16;
+  letter-spacing: 0;
+}
+
+[lang^="ar"] .home-hero-title {
+  max-width: 13ch;
+  font-size: clamp(2.65rem, 11vw, 4.25rem);
+  line-height: 1.12;
+}
+
+[lang^="ar"] .home-hero-title-line,
+[lang^="ar"] .home-hero-title-line-primary {
+  white-space: normal;
+}
+
+[lang^="ar"] .home-hero-copy {
+  line-height: 1.55;
+  letter-spacing: 0;
+}
+
+[lang^="ar"] .story-panel :is(h2, p) {
+  line-height: 1.5;
+  letter-spacing: 0;
+}
+
+@media (min-width: 640px) {
+  [lang^="ar"] .home-hero-title {
+    font-size: clamp(4rem, 8.5vw, 6.5rem);
+  }
+}
+
+@media (min-width: 1024px) {
+  [lang^="ar"] .home-hero-title {
+    font-size: clamp(5.4rem, 6.5vw, 7.5rem);
   }
 }
