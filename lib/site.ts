@@ -1,5 +1,7 @@
 import { defaultLocale, type Locale } from "@/lib/i18n"
 
+export const siteUrl = "https://www.anu.ltd"
+
 export const siteContentByLocale: Record<
   Locale,
   {
@@ -15,14 +17,14 @@ export const siteContentByLocale: Record<
     description:
       "ANU Software Solutions redesigns how companies run, then implements Odoo as the control platform for operations, finance, inventory, sales, and reporting.",
     footerNote:
-      "ANU Software Solutions. ERP implementation and process improvement.",
+      "© 2026 ANU Software Solutions. All rights reserved.",
   },
   ar: {
-    name: "ANU Software Solutions",
+    name: "ANU للحلول البرمجية",
     shortName: "ANU",
     description:
-      "ANU Software Solutions تعيد تصميم طريقة عمل الشركات، ثم تطبّق Odoo كمنصة سيطرة للعمليات، المالية، المخزون، المبيعات، والتقارير.",
-    footerNote: "ANU Software Solutions. تنفيذ ERP وتحسين العمليات.",
+      "تعيد ANU للحلول البرمجية تصميم طريقة عمل الشركات، ثم تطبّق Odoo كمنصة سيطرة للعمليات، المالية، المخزون، المبيعات، والتقارير.",
+    footerNote: "© 2026 ANU للحلول البرمجية. جميع الحقوق محفوظة.",
   },
 }
 

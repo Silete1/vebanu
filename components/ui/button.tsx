@@ -10,6 +10,8 @@ const buttonVariants = cva(
       variant: {
         default:
           "rounded-lg bg-[var(--color-abyssal-ink)] text-white hover:bg-[var(--color-graphite)]",
+        accent:
+          "rounded-lg bg-accent text-accent-foreground hover:bg-accent/90",
         outline:
           "rounded-lg border border-[var(--color-graphite)] bg-transparent text-[var(--color-abyssal-ink)] hover:bg-[var(--color-frost)] aria-expanded:bg-muted aria-expanded:text-foreground",
         secondary:
@@ -29,8 +31,7 @@ const buttonVariants = cva(
         icon: "size-10 rounded-lg",
         "icon-xs":
           "size-6 rounded-md in-data-[slot=button-group]:rounded-md [&_svg:not([class*='size-'])]:size-3",
-        "icon-sm":
-          "size-9 rounded-lg in-data-[slot=button-group]:rounded-lg",
+        "icon-sm": "size-9 rounded-lg in-data-[slot=button-group]:rounded-lg",
         "icon-lg": "size-10 rounded-lg",
       },
     },

@@ -3,71 +3,50 @@
 import { useRef } from "react"
 import { useGSAP } from "@gsap/react"
 import gsap from "gsap"
-import { Truck, Cpu, Store, Shield, Heart } from "lucide-react"
+import { ArrowUpRight, Truck, Cpu, Store, Shield, Heart } from "lucide-react"
+import Image from "next/image"
+import Link from "next/link"
 
-export interface IndustryItem {
-  id: string
-  title: string
-  imageUrl: string
-  href: string
-}
+import { getIndustries, type IndustrySlug } from "@/lib/content/industries"
+import { industriesPageCopy } from "@/lib/content/site-copy"
+import { type Locale, localizedPath } from "@/lib/i18n"
+import { cn } from "@/lib/utils"
 
-const industryItems: IndustryItem[] = [
-  {
-    id: "distribution",
-    title: "Distribution & wholesale",
-    imageUrl: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80",
-    href: "/industries/distribution",
-  },
-  {
-    id: "manufacturing",
-    title: "Light manufacturing",
-    imageUrl: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1200&q=80",
-    href: "/industries/manufacturing",
-  },
-  {
-    id: "retail",
-    title: "Multi-branch retail",
-    imageUrl: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80",
-    href: "/industries/retail",
-  },
-  {
-    id: "logistics",
-    title: "Logistics & service ops",
-    imageUrl: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=1200&q=80",
-    href: "/industries/logistics",
-  },
-  {
-    id: "healthcare",
-    title: "Healthcare service groups",
-    imageUrl: "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=1200&q=80",
-    href: "/industries/healthcare",
-  },
-]
-
-function getIndustryIcon(index: number) {
-  switch (index) {
-    case 0:
+function getIndustryIcon(slug: IndustrySlug) {
+  switch (slug) {
+    case "distribution":
       return <Truck className="h-6 w-6 text-white/90 drop-shadow-md" />
-    case 1:
+    case "manufacturing":
       return <Cpu className="h-6 w-6 text-white/90 drop-shadow-md" />
-    case 2:
+    case "retail":
       return <Store className="h-6 w-6 text-white/90 drop-shadow-md" />
-    case 3:
+    case "logistics":
       return <Shield className="h-6 w-6 text-white/90 drop-shadow-md" />
-    case 4:
+    case "healthcare":
       return <Heart className="h-6 w-6 text-white/90 drop-shadow-md" />
-    default:
-      return <Truck className="h-6 w-6 text-white/90 drop-shadow-md" />
   }
 }
 
-export function IndustriesAccordionShowcase() {
+type IndustriesAccordionShowcaseProps = {
+  className?: string
+  compactMobile?: boolean
+  locale: Locale
+}
+
+export function IndustriesAccordionShowcase({
+  className,
+  compactMobile = false,
+  locale,
+}: IndustriesAccordionShowcaseProps) {
   const containerRef = useRef<HTMLDivElement>(null)
+  const industries = getIndustries(locale)
+  const copy = industriesPageCopy[locale]
 
   useGSAP(
     () => {
       if (!containerRef.current) return
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
+
       gsap.fromTo(
         containerRef.current.querySelectorAll(".card"),
         { opacity: 0, y: 28 },
@@ -84,30 +63,50 @@ export function IndustriesAccordionShowcase() {
   )
 
   return (
-    <section className="mt-14 w-full" ref={containerRef} data-industries-showcase>
-      <div className="card-grid industry-card-grid">
-        {industryItems.map((item, index) => (
-          <a
-            key={item.id}
-            href={item.href}
-            className="card industry-card select-none"
+    <section
+      className={cn("mt-14 w-full", className)}
+      ref={containerRef}
+      data-industries-showcase
+      aria-label={copy.showcaseLabel}
+    >
+      <div
+        className={cn(
+          "card-grid industry-card-grid",
+          compactMobile && "industry-card-grid-home"
+        )}
+      >
+        {industries.map((industry) => (
+          <Link
+            key={industry.slug}
+            href={localizedPath(locale, industry.href)}
+            className="card industry-card rounded-[24px] outline-none select-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--color-bone-white)]"
           >
-            {/* Exact Template Background with zero whitewashed overlay */}
-            <div
-              className="card__background industry-card__background"
-              style={{ backgroundImage: `url(${item.imageUrl})` }}
-            />
+            <div className="card__background industry-card__background">
+              <Image
+                src={industry.visual.imageUrl}
+                alt=""
+                fill
+                sizes="(min-width: 960px) 20vw, (min-width: 540px) 50vw, 100vw"
+                className="object-cover"
+              />
+            </div>
 
             {/* Content Layer: ONLY the icon and the industry name */}
             <div className="card__content industry-card__content">
               <div className="card__category industry-card__category">
-                {getIndustryIcon(index)}
+                {getIndustryIcon(industry.slug)}
               </div>
               <h3 className="card__heading industry-card__heading font-sans">
-                {item.title}
+                {industry.shortName}
               </h3>
+              {compactMobile ? (
+                <span className="industry-card__arrow" aria-hidden="true">
+                  <ArrowUpRight className="size-4" />
+                </span>
+              ) : null}
+              <span className="sr-only">{industry.cardDescription}</span>
             </div>
-          </a>
+          </Link>
         ))}
       </div>
     </section>

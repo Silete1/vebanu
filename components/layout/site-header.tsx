@@ -6,17 +6,18 @@ import { usePathname } from "next/navigation"
 import { useGSAP } from "@gsap/react"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
-import { ArrowUpRightIcon } from "lucide-react"
+import { ArrowUpRightIcon, LanguagesIcon } from "lucide-react"
 
 import { AnuLogo } from "@/components/brand/anu-logo"
-import { navigationItems } from "@/lib/navigation"
+import { MobileNavSheet } from "@/components/navigation/mobile-nav-sheet"
+import { getNavigationItems } from "@/lib/navigation"
+import { siteCopy } from "@/lib/content/site-copy"
+import { type Locale, localizedPath, switchLocalePath } from "@/lib/i18n"
 import { cn } from "@/lib/utils"
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
 
 type HeaderTheme = "dark" | "light"
-
-const availableItems = navigationItems.filter((item) => item.available)
 
 function themeFromBackgroundColor(backgroundColor: string): HeaderTheme | null {
   const match = backgroundColor.match(
@@ -38,8 +39,13 @@ function themeFromBackgroundColor(backgroundColor: string): HeaderTheme | null {
   return luminance > 0.58 ? "light" : "dark"
 }
 
-export function SiteHeader() {
+export function SiteHeader({ locale }: { locale: Locale }) {
   const pathname = usePathname()
+  const copy = siteCopy[locale]
+  const availableItems = getNavigationItems(locale).filter(
+    (item) => item.available
+  )
+  const targetLocale: Locale = locale === "ar" ? "en" : "ar"
   const [activeHash, setActiveHash] = useState("")
   const [scrollActiveId, setScrollActiveId] = useState("")
   const [previewId, setPreviewId] = useState("")
@@ -94,6 +100,13 @@ export function SiteHeader() {
           }
           if (headerRef.current?.contains(element)) continue
 
+          const section = element.closest<HTMLElement>("[data-header-theme]")
+          if (section?.dataset.headerTheme) {
+            nextTheme =
+              section.dataset.headerTheme === "light" ? "light" : "dark"
+            break
+          }
+
           let current: HTMLElement | null = element
 
           while (current) {
@@ -110,13 +123,6 @@ export function SiteHeader() {
           }
 
           if (nextTheme) break
-
-          const section = element.closest<HTMLElement>("[data-header-theme]")
-          if (section?.dataset.headerTheme) {
-            nextTheme =
-              section.dataset.headerTheme === "light" ? "light" : "dark"
-            break
-          }
         }
 
         nextTheme ??= "dark"
@@ -154,7 +160,9 @@ export function SiteHeader() {
       cancelAnimationFrame(frame)
 
       frame = requestAnimationFrame(() => {
-        const footer = document.querySelector<HTMLElement>("[data-motion-footer]")
+        const footer = document.querySelector<HTMLElement>(
+          "[data-motion-footer]"
+        )
         const navRect = navRef.current?.getBoundingClientRect()
         const logoRect = logoRef.current?.getBoundingClientRect()
         const footerRect = footer?.getBoundingClientRect()
@@ -195,7 +203,10 @@ export function SiteHeader() {
 
   const currentFullHref = pathname + activeHash
   const matchedRouteItem = availableItems.find(
-    (item) => item.href === currentFullHref || item.href === activeHash
+    (item) =>
+      item.href === currentFullHref ||
+      item.href === activeHash ||
+      (!item.href.includes("#") && pathname.startsWith(`${item.href}/`))
   )
   const matchedHashItem = activeHash
     ? availableItems.find((item) => item.href.endsWith(activeHash))
@@ -206,7 +217,7 @@ export function SiteHeader() {
     availableItems[0]?.title ??
     ""
   const activeId =
-    pathname === "/" ? scrollActiveId || routeActiveId : routeActiveId
+    pathname === `/${locale}` ? scrollActiveId || routeActiveId : routeActiveId
   const displayId = previewId || activeId
 
   useEffect(() => {
@@ -224,6 +235,20 @@ export function SiteHeader() {
 
       const left = activeLink.offsetLeft
       const width = activeLink.offsetWidth
+      const track = navRef.current
+      const visibleStart = track.scrollLeft
+      const visibleEnd = visibleStart + track.clientWidth
+
+      if (left < visibleStart || left + width > visibleEnd) {
+        const prefersReducedMotion = window.matchMedia(
+          "(prefers-reduced-motion: reduce)"
+        ).matches
+
+        track.scrollTo({
+          left: Math.max(0, left - (track.clientWidth - width) / 2),
+          behavior: prefersReducedMotion ? "auto" : "smooth",
+        })
+      }
 
       lineRef.current.style.width = `${Math.max(24, width - 18)}px`
       lineRef.current.style.transform = `translateX(${left + 9}px)`
@@ -238,8 +263,8 @@ export function SiteHeader() {
   useGSAP(
     () => {
       availableItems.forEach((item) => {
-        const id = item.href.replace("/#", "")
-        if (!id || !item.href.startsWith("/#")) return
+        const id = item.href.split("#")[1]
+        if (!id) return
 
         const section = document.getElementById(id)
         if (!section) return
@@ -249,10 +274,10 @@ export function SiteHeader() {
           start: "top top+=140",
           end: "bottom top+=140",
           onEnter: () => {
-            if (pathname === "/") setScrollActiveId(item.title)
+            if (pathname === `/${locale}`) setScrollActiveId(item.title)
           },
           onEnterBack: () => {
-            if (pathname === "/") setScrollActiveId(item.title)
+            if (pathname === `/${locale}`) setScrollActiveId(item.title)
           },
         })
       })
@@ -265,9 +290,9 @@ export function SiteHeader() {
       })
 
       const currentActiveSection = availableItems.find((item) => {
-        if (!item.href.startsWith("/#")) return false
+        if (!item.href.includes("#")) return false
 
-        const id = item.href.replace("/#", "")
+        const id = item.href.split("#")[1]
         const element = document.getElementById(id)
         if (!element) return false
 
@@ -275,19 +300,24 @@ export function SiteHeader() {
         return rect.top <= 140 && rect.bottom >= 140
       })
 
-      if (pathname === "/" && currentActiveSection) {
+      if (pathname === `/${locale}` && currentActiveSection) {
         setScrollActiveId(currentActiveSection.title)
       }
 
       ScrollTrigger.refresh()
     },
-    { scope: headerRef, dependencies: [pathname] }
+    { scope: headerRef, dependencies: [locale, pathname] }
   )
 
   return (
     <header
       ref={headerRef}
       className="pointer-events-none fixed inset-x-0 top-0 z-50 w-full pt-5 sm:pt-6"
+      style={
+        pathname === `/${locale}`
+          ? { opacity: 0, visibility: "hidden" }
+          : undefined
+      }
       data-intro-header
     >
       <span
@@ -302,32 +332,26 @@ export function SiteHeader() {
         <div
           ref={logoRef}
           className={cn(
-            "pointer-events-auto transition-transform duration-300",
-            isCompact && "translate-y-[-1px] scale-[0.985]"
+            "pointer-events-auto transition-transform duration-300"
           )}
         >
           <AnuLogo
+            align={locale === "ar" ? "right" : "left"}
+            href={localizedPath(locale)}
             theme={headerTheme}
-            compact={isCompact}
             className="header-brand"
           />
         </div>
 
         <div
           className={cn(
-            "header-segmented-shell header-segmented-static pointer-events-auto",
-            isCompact && "header-segmented-shell-compact"
+            "header-segmented-shell header-segmented-static pointer-events-auto hidden xl:flex"
           )}
           style={{ gap: 0 }}
         >
           <nav
             className="header-segmented-nav"
-            aria-label="Primary"
-            style={{
-              borderRightWidth: 0,
-              borderTopRightRadius: 0,
-              borderBottomRightRadius: 0,
-            }}
+            aria-label={copy.primaryNavigation}
           >
             <div
               ref={navRef}
@@ -340,6 +364,7 @@ export function SiteHeader() {
                   <Link
                     key={item.title}
                     href={item.href}
+                    aria-current={isCurrent ? "page" : undefined}
                     data-nav-id={item.title}
                     onMouseEnter={() => setPreviewId(item.title)}
                     onMouseLeave={() => setPreviewId("")}
@@ -348,7 +373,7 @@ export function SiteHeader() {
                     className={cn(
                       "header-segmented-link relative shrink-0 px-4 py-3 text-[0.92rem] transition-colors duration-300 outline-none",
                       index !== 0 &&
-                        "border-l border-[var(--header-segment-border)]",
+                        "border-s border-[var(--header-segment-border)]",
                       "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                       isCurrent
                         ? "text-[var(--header-link-active)]"
@@ -369,16 +394,26 @@ export function SiteHeader() {
             </div>
           </nav>
           <Link
-            href="/#assessment"
-            className="header-segmented-cta mono-label relative shrink-0 py-3 transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-            style={{
-              borderTopLeftRadius: 0,
-              borderBottomLeftRadius: 0,
-            }}
+            href={`${switchLocalePath(pathname, targetLocale)}${activeHash}`}
+            hrefLang={targetLocale}
+            lang={targetLocale === "ar" ? "ar-IQ" : "en-IQ"}
+            dir={targetLocale === "ar" ? "rtl" : "ltr"}
+            className="header-language-switch mono-label shrink-0 border-s border-[var(--header-segment-border)] px-5 py-3 text-[var(--header-link)] transition-colors outline-none hover:text-[var(--header-link-active)] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            aria-label={copy.languageLabel}
           >
-            <span>Start assessment</span>
+            <LanguagesIcon className="size-3.5" aria-hidden="true" />
+            {copy.languageName}
+          </Link>
+          <Link
+            href={localizedPath(locale, "/#assessment")}
+            className="header-segmented-cta mono-label relative shrink-0 border-s border-[var(--header-segment-border)] py-3 transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          >
+            <span>{copy.startAssessment}</span>
             <ArrowUpRightIcon className="size-3.5" />
           </Link>
+        </div>
+        <div className="pointer-events-auto xl:hidden">
+          <MobileNavSheet items={availableItems} locale={locale} />
         </div>
       </div>
     </header>
