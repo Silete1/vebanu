@@ -14,11 +14,11 @@ export async function generateMetadata({
 
   const title =
     locale === "ar"
-      ? "الرؤى | ANU للحلول البرمجية"
+      ? "الرؤى | أنو للحلول البرمجية"
       : "Insights | ANU Software Solutions"
   const description =
     locale === "ar"
-      ? "رؤى عملية من ANU حول الرقابة التشغيلية والمالية والمخزون وتطبيق Odoo ERP والتحول الرقمي."
+      ? "رؤى عملية من أنو حول الرقابة التشغيلية والمالية والمخزون وتطبيق Odoo ERP والتحول الرقمي."
       : "Practical thinking from ANU on business control, operations, finance, inventory, Odoo ERP and digital transformation."
 
   return {

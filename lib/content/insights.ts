@@ -90,7 +90,7 @@ export const insights: Insight[] = [
       "مخطط حلقة ضبط يربط العملية بالأدلة والموافقة ورؤية الإدارة"
     ),
     featured: true,
-    author: localize("ANU Advisory", "فريق ANU الاستشاري"),
+    author: localize("ANU Advisory", "فريق أنو الاستشاري"),
     body: [
       {
         heading: localize(
@@ -133,7 +133,7 @@ export const insights: Insight[] = [
       "An inventory ledger visual showing controlled stock movements and exceptions",
       "تصور لسجل مخزون يوضح الحركات المنضبطة والاستثناءات"
     ),
-    author: localize("ANU Operations Practice", "فريق العمليات في ANU"),
+    author: localize("ANU Operations Practice", "فريق العمليات في أنو"),
     body: [
       {
         heading: localize(

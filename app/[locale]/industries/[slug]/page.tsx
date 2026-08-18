@@ -64,7 +64,7 @@ export default async function IndustryRoute({
       "@context": "https://schema.org",
       "@type": "Service",
       "@id": `${url}#service`,
-      name: industry.metadata.title.replace(" | ANU", ""),
+      name: industry.metadata.title.replace(locale === "ar" ? " | أنو" : " | ANU", ""),
       serviceType: industry.metadata.primaryKeyword,
       description: industry.metadata.description,
       url,

@@ -162,10 +162,10 @@ export async function submitAssessment(
     ar: {
       received: "تم استلام بياناتك.",
       check: "راجع الحقول المحددة وحاول مرة أخرى.",
-      rateLimited: `تم إرسال عدد كبير من الطلبات. يرجى الانتظار بضع دقائق أو التواصل مع ANU عبر واتساب أو الاتصال على ${anuContact.phoneDisplay}.`,
-      unavailable: `الطلبات الإلكترونية غير متاحة مؤقتاً. راسل ANU عبر واتساب أو اتصل على ${anuContact.phoneDisplay}.`,
-      failed: `تعذر إرسال طلبك. راسل ANU عبر واتساب أو اتصل على ${anuContact.phoneDisplay}.`,
-      success: "تم استلام بياناتك. ستتواصل معك ANU قريباً.",
+      rateLimited: `تم إرسال عدد كبير من الطلبات. يرجى الانتظار بضع دقائق أو التواصل مع أنو عبر واتساب أو الاتصال على ${anuContact.phoneDisplay}.`,
+      unavailable: `الطلبات الإلكترونية غير متاحة مؤقتاً. راسل أنو عبر واتساب أو اتصل على ${anuContact.phoneDisplay}.`,
+      failed: `تعذر إرسال طلبك. راسل أنو عبر واتساب أو اتصل على ${anuContact.phoneDisplay}.`,
+      success: "تم استلام بياناتك. ستتواصل معك أنو قريباً.",
     },
   }[locale]
 

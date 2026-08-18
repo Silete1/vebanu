@@ -42,7 +42,7 @@ export function InsightVisual({
         }}
       />
       <span className="mono-label absolute start-5 top-5 z-10 opacity-55">
-        {locale === "ar" ? "ANU / رؤية" : "ANU / FIELD NOTE"}
+        {locale === "ar" ? "أنو / رؤية" : "ANU / FIELD NOTE"}
       </span>
       <span className="mono-label absolute end-5 bottom-5 z-10 opacity-55">
         {locale === "ar" ? visualCodeAr[variant] : visualCode[variant]}

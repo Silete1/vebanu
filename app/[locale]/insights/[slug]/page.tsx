@@ -27,7 +27,7 @@ export async function generateMetadata({
   if (!insight) return {}
 
   const path = `/insights/${slug}`
-  const title = `${insight.title[locale]} | ${locale === "ar" ? "رؤى ANU" : "ANU Insights"}`
+  const title = `${insight.title[locale]} | ${locale === "ar" ? "رؤى أنو" : "ANU Insights"}`
   return {
     title,
     description: insight.summary[locale],
@@ -78,7 +78,9 @@ export default async function InsightArticlePage({
     mainEntityOfPage: articleUrl,
     author: {
       "@type": "Organization",
-      name: insight.author?.[locale] ?? "ANU Software Solutions",
+      name:
+        insight.author?.[locale] ??
+        (isRtl ? "أنو للحلول البرمجية" : "ANU Software Solutions"),
     },
     publisher: { "@id": `${siteUrl}/#organization` },
   }
@@ -190,7 +192,7 @@ export default async function InsightArticlePage({
                       href={`${localizedPath(locale)}?request=insight#assessment`}
                       className="mono-label inline-flex h-11 items-center gap-3 bg-[var(--color-abyssal-ink)] px-4 text-white outline-none hover:bg-[var(--color-graphite)] focus-visible:ring-2 focus-visible:ring-[var(--color-bioluminescent-lime)] focus-visible:ring-offset-4"
                     >
-                      {isRtl ? "ناقش الموضوع مع ANU" : "Discuss with ANU"}
+                      {isRtl ? "ناقش الموضوع مع أنو" : "Discuss with ANU"}
                       <ArrowUpRightIcon className="size-4 rtl:-scale-x-100" />
                     </Link>
                   </div>

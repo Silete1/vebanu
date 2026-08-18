@@ -141,7 +141,7 @@ export function SiteFooter({ locale }: { locale: Locale }) {
             className="footer-wordmark text-[clamp(4rem,14vw,12rem)] leading-[0.82] tracking-[-0.04em] whitespace-nowrap"
             data-footer-wordmark
           >
-            ANU
+            {locale === "ar" ? "أنو" : "ANU"}
           </p>
           <p className="mono-label mt-2 pb-3 text-white/70">
             {copy.footerNote}

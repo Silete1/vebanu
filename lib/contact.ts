@@ -2,7 +2,7 @@ import type { Locale } from "@/lib/i18n"
 
 const whatsappMessages: Record<Locale, string> = {
   en: "Hello ANU, I would like to discuss improving control in my business.",
-  ar: "مرحباً ANU، أود مناقشة تحسين الرقابة في شركتي.",
+  ar: "مرحباً أنو، أود مناقشة تحسين الرقابة في شركتي.",
 }
 
 export function getWhatsappHref(locale: Locale) {

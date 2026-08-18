@@ -44,7 +44,7 @@ export async function generateMetadata({
 
   const site = getSiteContent(locale)
   const defaultTitle =
-    locale === "ar" ? "ANU للحلول البرمجية" : "ANU Software Solutions"
+    locale === "ar" ? "أنو للحلول البرمجية" : "ANU Software Solutions"
 
   return {
     metadataBase: new URL(siteUrl),
@@ -52,7 +52,7 @@ export async function generateMetadata({
       default: defaultTitle,
       template:
         locale === "ar"
-          ? "%s | ANU للحلول البرمجية"
+          ? "%s | أنو للحلول البرمجية"
           : "%s | ANU Software Solutions",
     },
     description: site.description,
@@ -70,7 +70,7 @@ export async function generateMetadata({
       locale: localeMeta[locale].ogLocale,
       alternateLocale: localeMeta[locale === "ar" ? "en" : "ar"].ogLocale,
       siteName:
-        locale === "ar" ? "ANU للحلول البرمجية" : "ANU Software Solutions",
+        locale === "ar" ? "أنو للحلول البرمجية" : "ANU Software Solutions",
       title: defaultTitle,
       description: site.description,
       images: [{ url: "/anulogopng-.png", alt: defaultTitle }],
@@ -98,8 +98,8 @@ export default async function LocaleLayout({
       "@context": "https://schema.org",
       "@type": "Organization",
       "@id": `${siteUrl}/#organization`,
-      name: locale === "ar" ? "ANU للحلول البرمجية" : "ANU Software Solutions",
-      alternateName: "ANU",
+      name: locale === "ar" ? "أنو للحلول البرمجية" : "ANU Software Solutions",
+      alternateName: locale === "ar" ? "أنو" : "ANU",
       url: siteUrl,
       logo: `${siteUrl}/anulogopng-.png`,
       description: site.description,
@@ -136,7 +136,7 @@ export default async function LocaleLayout({
       "@type": "WebSite",
       "@id": `${siteUrl}/#website-${locale}`,
       url: `${siteUrl}/${locale}`,
-      name: locale === "ar" ? "ANU للحلول البرمجية" : "ANU Software Solutions",
+      name: locale === "ar" ? "أنو للحلول البرمجية" : "ANU Software Solutions",
       description: site.description,
       publisher: { "@id": `${siteUrl}/#organization` },
       inLanguage: localeMeta[locale].htmlLang,

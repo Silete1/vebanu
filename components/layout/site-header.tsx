@@ -338,6 +338,7 @@ export function SiteHeader({ locale }: { locale: Locale }) {
           <AnuLogo
             align={locale === "ar" ? "right" : "left"}
             href={localizedPath(locale)}
+            label={locale === "ar" ? "أنو للحلول البرمجية" : undefined}
             theme={headerTheme}
             className="header-brand"
           />

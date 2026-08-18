@@ -16,7 +16,7 @@ export async function generateMetadata({
 
   const title =
     locale === "ar"
-      ? "القطاعات | ANU للحلول البرمجية"
+      ? "القطاعات | أنو للحلول البرمجية"
       : "Industries | ANU Software Solutions"
   const description =
     locale === "ar"
@@ -53,7 +53,7 @@ export default async function IndustriesRoute({
       "@id": `${siteUrl}/${locale}/industries#page`,
       name:
         locale === "ar"
-          ? "القطاعات التي تخدمها ANU للحلول البرمجية"
+          ? "القطاعات التي تخدمها أنو للحلول البرمجية"
           : "Industries served by ANU Software Solutions",
       url: `${siteUrl}/${locale}/industries`,
       inLanguage: locale === "ar" ? "ar-IQ" : "en-IQ",

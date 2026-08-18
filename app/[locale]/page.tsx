@@ -14,10 +14,10 @@ export async function generateMetadata({
   if (!isLocale(locale)) return {}
 
   const title =
-    locale === "ar" ? "ANU للحلول البرمجية" : "ANU Software Solutions"
+    locale === "ar" ? "أنو للحلول البرمجية" : "ANU Software Solutions"
   const description =
     locale === "ar"
-      ? "تعيد ANU تصميم عمليات الشركات وتطبّق نظام Odoo ERP للمخزون والمالية والموافقات والتقارير والرقابة الإدارية في العراق."
+      ? "تعيد أنو تصميم عمليات الشركات وتطبّق نظام Odoo ERP للمخزون والمالية والموافقات والتقارير والرقابة الإدارية في العراق."
       : "ANU redesigns business processes and implements Odoo ERP for operations, inventory, finance, approvals, and management reporting in Iraq."
 
   return {

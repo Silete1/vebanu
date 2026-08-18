@@ -65,7 +65,7 @@ const interfaceCopy = {
     subscribe: "Discuss insights with ANU",
   },
   ar: {
-    eyebrow: "ANU / ملاحظات ميدانية",
+    eyebrow: "أنو / ملاحظات ميدانية",
     title: "رؤى",
     featured: "ملاحظة ميدانية مميزة",
     readFeatured: "اقرأ الملاحظة",
@@ -90,11 +90,11 @@ const interfaceCopy = {
     shown: "ملاحظات ميدانية",
     shownSingle: "ملاحظة ميدانية",
     empty: "لم تُنشر ملاحظات ميدانية في هذا الموضوع بعد.",
-    closingLabel: "رؤى ANU / مباشرة",
+    closingLabel: "رؤى أنو / مباشرة",
     closing: "استلم رؤى عملية حول العمليات وضبط الأعمال وتطبيق أنظمة ERP.",
     closingBody:
       "موجز تحريري لقادة الأعمال الذين يعملون على قرارات العمليات والتقارير والتطبيق.",
-    subscribe: "ناقش الرؤى مع ANU",
+    subscribe: "ناقش الرؤى مع أنو",
   },
 } as const
 

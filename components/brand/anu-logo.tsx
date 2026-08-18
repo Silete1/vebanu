@@ -9,6 +9,7 @@ type AnuLogoProps = {
   className?: string
   compact?: boolean
   href?: string
+  label?: string
   theme?: "dark" | "light"
 }
 
@@ -17,6 +18,7 @@ export function AnuLogo({
   className,
   compact = false,
   href = "/",
+  label = "ANU Software Solutions",
   theme = "light",
 }: AnuLogoProps) {
   return (
@@ -39,7 +41,7 @@ export function AnuLogo({
         <span className="anu-logo-flip-inner">
           <Image
             src={logoImg}
-            alt="ANU Software Solutions"
+            alt={label}
             width={160}
             height={48}
             className={cn(
