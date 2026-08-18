@@ -12,6 +12,7 @@ type ContactChoiceProps = {
   icon: typeof MessageCircleIcon
   label: string
   detail: string
+  detailDirection?: "ltr"
   external?: boolean
 }
 
@@ -20,6 +21,7 @@ function ContactChoice({
   icon: Icon,
   label,
   detail,
+  detailDirection,
   external = false,
 }: ContactChoiceProps) {
   return (
@@ -34,7 +36,9 @@ function ContactChoice({
       </span>
       <span className="flex min-w-0 flex-1 flex-col gap-1">
         <span className="text-lg tracking-[-0.02em]">{label}</span>
-        <span className="text-sm text-slate-600">{detail}</span>
+        <span className="text-sm text-slate-600" dir={detailDirection}>
+          {detail}
+        </span>
       </span>
       <ArrowUpRightIcon
         className="size-4 shrink-0 text-slate-500 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-blue-700 motion-reduce:transform-none motion-reduce:transition-none"
@@ -100,6 +104,7 @@ export function AssessmentCtaSection({ locale }: { locale: Locale }) {
                 icon={PhoneIcon}
                 label={copy.call}
                 detail={anuContact.phoneDisplay}
+                detailDirection="ltr"
               />
             </nav>
 

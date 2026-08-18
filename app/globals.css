@@ -1187,6 +1187,12 @@ html[data-logo-theme="dark"] .anu-logo-flip-inner {
   letter-spacing: 0;
 }
 
+[lang^="ar"] .footer-wordmark {
+  font-size: clamp(3.75rem, 12vw, 10rem);
+  line-height: 1.08;
+  letter-spacing: 0;
+}
+
 [lang^="ar"] .story-panel :is(h2, p) {
   line-height: 1.5;
   letter-spacing: 0;

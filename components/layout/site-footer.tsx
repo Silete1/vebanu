@@ -91,7 +91,7 @@ export function SiteFooter({ locale }: { locale: Locale }) {
                   href={anuContact.phoneHref}
                   className="text-[clamp(0.95rem,1.2vw,1.15rem)] leading-none tracking-[-0.03em] text-white/78 transition-colors hover:text-white"
                 >
-                  {anuContact.phoneDisplay}
+                  <bdi dir="ltr">{anuContact.phoneDisplay}</bdi>
                 </Link>
                 <Link
                   href={anuContact.emailHref}

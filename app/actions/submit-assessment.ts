@@ -150,6 +150,7 @@ export async function submitAssessment(
   const honeypot = formValue(formData, "website")
   const requestedLocale = formValue(formData, "locale")
   const locale: Locale = isLocale(requestedLocale) ? requestedLocale : "en"
+  const arabicPhoneDisplay = `\u2066${anuContact.phoneDisplay}\u2069`
   const messages = {
     en: {
       received: "Your details have been received.",
@@ -162,9 +163,9 @@ export async function submitAssessment(
     ar: {
       received: "تم استلام بياناتك.",
       check: "راجع الحقول المحددة وحاول مرة أخرى.",
-      rateLimited: `تم إرسال عدد كبير من الطلبات. يرجى الانتظار بضع دقائق أو التواصل مع أنو عبر واتساب أو الاتصال على ${anuContact.phoneDisplay}.`,
-      unavailable: `الطلبات الإلكترونية غير متاحة مؤقتاً. راسل أنو عبر واتساب أو اتصل على ${anuContact.phoneDisplay}.`,
-      failed: `تعذر إرسال طلبك. راسل أنو عبر واتساب أو اتصل على ${anuContact.phoneDisplay}.`,
+      rateLimited: `تم إرسال عدد كبير من الطلبات. يرجى الانتظار بضع دقائق أو التواصل مع أنو عبر واتساب أو الاتصال على ${arabicPhoneDisplay}.`,
+      unavailable: `الطلبات الإلكترونية غير متاحة مؤقتاً. راسل أنو عبر واتساب أو اتصل على ${arabicPhoneDisplay}.`,
+      failed: `تعذر إرسال طلبك. راسل أنو عبر واتساب أو اتصل على ${arabicPhoneDisplay}.`,
       success: "تم استلام بياناتك. ستتواصل معك أنو قريباً.",
     },
   }[locale]
