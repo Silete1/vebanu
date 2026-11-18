@@ -122,6 +122,14 @@ Read this file first. Do not begin each task with a full repository scan. Use th
 - Assessment email delivery reads `RESEND_API_KEY`, `ASSESSMENT_FROM_EMAIL`, and optional `ASSESSMENT_TO_EMAIL`; see [`.env.example`](/C:/Users/Lenovo/Documents/vebanu/.env.example).
 - No CMS write clients or database clients were verified in application source.
 
+## Hosting and Deploy
+
+- Production today: Vercel (anu.ltd → www.anu.ltd). Moving to ANU's Hetzner server `anu-cloud-01` (65.21.246.142), owner request 18 Nov 2026.
+- Self-hosting lives in [`deploy/`](/C:/Users/Lenovo/Documents/vebanu/deploy): Docker image (Next.js `output: "standalone"`), compose project `anu-website` behind Coolify's Traefik, host rule in `deploy/hosts`. Runbook, secrets and the DNS switch: [`deploy/README.md`](/C:/Users/Lenovo/Documents/vebanu/deploy/README.md).
+- Deploy: `bash deploy/deploy.sh` from Git Bash (committed HEAD only, one SSH connection). Staging: https://site.brain.anu.ltd/en.
+- Secrets are only on the server in `~/anu-website/site.env`, never in git.
+- Remotes: `origin` = Forgejo `git.brain.anu.ltd` (VPN-only web UI), `github` = GitHub `Silete1/vebanu` (Vercel builds from it).
+
 ## Environment and Config Files
 
 - [`package.json`](/C:/Users/Lenovo/Documents/vebanu/package.json)

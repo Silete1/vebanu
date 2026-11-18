@@ -57,4 +57,4 @@ Rollback: point the two DNS records back at Vercel (`76.76.21.21`, and `cname.ve
 On the server, to undo a bad release: `cd ~/anu-website/src/deploy && RELEASE=<older tag> SITE_HOSTS="$(cat hosts)" docker compose up -d web`
 (`docker images anu-website` lists the 3 kept tags).
 
-Ports, memory: the container is capped at 512 MB; it uses ~80 MB idle.
+Memory: the container is capped at 512 MB.
