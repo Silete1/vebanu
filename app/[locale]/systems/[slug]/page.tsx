@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 
+import { LiveStage } from "@/components/live/live-stage"
 import { JsonLd } from "@/components/seo/json-ld"
 import { Chapter, ChapterRail, Story } from "@/components/story/chapter"
 import { CtaBand } from "@/components/story/cta-band"
@@ -103,6 +104,8 @@ export default async function SystemPage({ params }: PageProps<"/[locale]/system
       <section className="anu-paper anu-summary">
         <p className="anu-wrap anu-summary__text anu-reveal">{story.summary}</p>
       </section>
+
+      <LiveStage slug={system.slug} locale={locale} {...copy.live} />
 
       <Story chapters={chapters}>
         <ChapterRail label={copy.chapters.problem} chapters={chapters} />

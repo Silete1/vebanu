@@ -30,6 +30,31 @@
       100% 100%;
   }
 
+  /* the sky is alive: the far layer drifts with the reader's scroll, the near
+     stars breathe on their own. Transform and opacity only (compositor), so a
+     weak phone does not repaint a frame. */
+  .anu-sky::after {
+    inset: -12% 0 -30% 0;
+  }
+
+  .anu-sky::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image: url("/brand/anu_network.svg");
+    background-repeat: no-repeat;
+    background-position: right bottom;
+    background-size: min(56rem, 90%) auto;
+    opacity: 0.32;
+  }
+
+  [dir="rtl"] .anu-sky::before {
+    background-image: url("/brand/anu_network_rtl.svg");
+    background-position: left bottom;
+  }
+
   @media (prefers-reduced-motion: no-preference) {
     @supports (animation-timeline: view()) {
       html:not([data-tier="0"]) .anu-sky::after {
@@ -37,21 +62,46 @@
         animation-timeline: view();
       }
     }
+
+    html:not([data-tier="0"]) .anu-sky::before {
+      animation: anu-breathe 7s ease-in-out infinite alternate;
+    }
   }
 
   @keyframes anu-sky-drift {
     from {
-      background-position:
-        0 0,
-        0 0,
-        0 0;
+      translate: 0 0;
     }
     to {
-      background-position:
-        -40px -220px,
-        -12px -70px,
-        0 0;
+      translate: 0 -18%;
     }
+  }
+
+  @keyframes anu-breathe {
+    from {
+      opacity: 0.18;
+      translate: 0 0;
+    }
+    to {
+      opacity: 0.42;
+      translate: -1.5% -1%;
+    }
+  }
+
+  /* a rendered loop over a poster: invisible until it actually plays */
+  .anu-loop {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 700ms var(--anu-ease);
+    pointer-events: none;
+  }
+
+  .anu-loop.is-live {
+    opacity: 1;
   }
 
   /* --------------------------------------------------------- way of Anu */
