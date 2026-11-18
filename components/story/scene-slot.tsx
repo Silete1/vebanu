@@ -11,6 +11,7 @@ export type SceneModule = { mount: (box: HTMLElement) => () => void }
 
 const scenes: Partial<Record<SceneName, () => Promise<SceneModule>>> = {
   network: () => import("@/scenes/network"),
+  twin: () => import("@/scenes/twin"),
 }
 
 /**
