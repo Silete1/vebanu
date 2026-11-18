@@ -31,7 +31,7 @@ export function InsightMetadata({
     <div
       className={cn(
         "mono-label flex flex-wrap items-center gap-x-2 gap-y-1",
-        inverse ? "text-white/64" : "text-[var(--color-graphite)]",
+        inverse ? "text-white/80" : "text-[var(--color-graphite)]",
         className
       )}
     >

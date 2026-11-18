@@ -11,7 +11,8 @@ import { PageShell } from "@/components/layout/page-shell"
 import { JsonLd } from "@/components/seo/json-ld"
 import { getInsightBySlug, getInsights } from "@/lib/cms/insights"
 import { categoryLabels, insights } from "@/lib/content/insights"
-import { isLocale, localizedAlternates, localizedPath } from "@/lib/i18n"
+import { isLocale, localizedPath } from "@/lib/i18n"
+import { pageMetadata } from "@/lib/seo/metadata"
 import { siteUrl } from "@/lib/site"
 
 export function generateStaticParams() {
@@ -26,22 +27,13 @@ export async function generateMetadata({
   const insight = await getInsightBySlug(slug)
   if (!insight) return {}
 
-  const path = `/insights/${slug}`
-  const title = `${insight.title[locale]} | ${locale === "ar" ? "رؤى أنو" : "ANU Insights"}`
-  return {
-    title,
+  return pageMetadata({
+    locale,
+    path: `/insights/${slug}`,
+    title: insight.title[locale],
     description: insight.summary[locale],
-    alternates: {
-      canonical: localizedPath(locale, path),
-      languages: localizedAlternates(path),
-    },
-    openGraph: {
-      type: "article",
-      url: localizedPath(locale, path),
-      title,
-      description: insight.summary[locale],
-    },
-  }
+    type: "article",
+  })
 }
 
 export default async function InsightArticlePage({
@@ -98,7 +90,7 @@ export default async function InsightArticlePage({
             <Container>
               <Link
                 href={localizedPath(locale, "/insights")}
-                className="mono-label inline-flex items-center gap-2 rounded-sm text-white/64 transition-colors outline-none hover:text-white focus-visible:ring-2 focus-visible:ring-[var(--color-bioluminescent-lime)] focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--color-abyssal-ink)]"
+                className="mono-label inline-flex items-center gap-2 rounded-sm text-white/80 transition-colors outline-none hover:text-white focus-visible:ring-2 focus-visible:ring-[var(--color-bioluminescent-lime)] focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--color-abyssal-ink)]"
               >
                 <ArrowLeftIcon className="size-4 rtl:-scale-x-100" />
                 {isRtl ? "العودة إلى الرؤى" : "Back to insights"}

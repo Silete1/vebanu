@@ -43,7 +43,7 @@ function SectionLabel({
   return (
     <p
       className={`mono-label tag-dot flex items-center gap-2 ${
-        dark ? "text-white/64" : "text-[var(--color-graphite)]"
+        dark ? "text-white/80" : "text-[var(--color-graphite)]"
       }`}
     >
       {children}
@@ -110,7 +110,7 @@ export function HomeIntroSection({ locale }: { locale: Locale }) {
                   {copy.workStory.map((step) => (
                     <span
                       key={step.counter}
-                      className="mono-label story-counter inline-flex rounded-full border border-[var(--color-graphite)] px-5 py-3 text-white/76"
+                      className="mono-label story-counter inline-flex rounded-full border border-[var(--color-graphite)] bg-[var(--color-abyssal-ink)] px-5 py-3 text-white/80"
                     >
                       {step.counter}
                     </span>
@@ -270,7 +270,7 @@ function IndustriesSection({ locale }: { locale: Locale }) {
           >
             {copy.viewAll}
             <ArrowUpRightIcon
-              className="size-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transition-none"
+              className="size-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transition-none rtl:-scale-x-100 rtl:group-hover:-translate-x-0.5"
               aria-hidden="true"
             />
           </Link>
@@ -303,7 +303,7 @@ function InsightSection({ locale }: { locale: Locale }) {
           >
             {copy.viewAll}
             <span className="arrow-cta">
-              <ArrowUpRightIcon className="size-4" />
+              <ArrowUpRightIcon className="size-4 rtl:-scale-x-100" />
             </span>
           </Link>
         </header>
@@ -335,7 +335,7 @@ function InsightSection({ locale }: { locale: Locale }) {
                   </h3>
                 </div>
                 <span className="arrow-cta transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none">
-                  <ArrowUpRightIcon className="size-4" aria-hidden="true" />
+                  <ArrowUpRightIcon className="size-4 rtl:-scale-x-100" aria-hidden="true" />
                 </span>
               </div>
             </Link>
@@ -366,7 +366,7 @@ function InsightSection({ locale }: { locale: Locale }) {
                   </div>
                   <span className="grid size-11 place-items-center text-[var(--color-graphite)] transition-colors group-hover:text-blue-700">
                     <ArrowUpRightIcon
-                      className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transform-none motion-reduce:transition-none"
+                      className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transform-none motion-reduce:transition-none rtl:-scale-x-100 rtl:group-hover:-translate-x-0.5"
                       aria-hidden="true"
                     />
                   </span>

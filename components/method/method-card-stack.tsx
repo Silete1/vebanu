@@ -107,7 +107,7 @@ export function MethodCardStack({
         className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-start"
       >
         <div className="lg:sticky lg:top-28 lg:pb-36">
-          <p className="mono-label tag-dot flex items-center gap-2 text-white/64">
+          <p className="mono-label tag-dot flex items-center gap-2 text-white/80">
             {label}
           </p>
           <h2 className="section-headline mt-6 max-w-4xl">{headline}</h2>

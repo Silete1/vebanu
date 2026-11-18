@@ -5,7 +5,8 @@ import { IndustriesIndexPage } from "@/components/industries/industries-index-pa
 import { PageShell } from "@/components/layout/page-shell"
 import { JsonLd } from "@/components/seo/json-ld"
 import { getIndustries } from "@/lib/content/industries"
-import { isLocale, localizedAlternates, localizedPath } from "@/lib/i18n"
+import { isLocale, localizedPath } from "@/lib/i18n"
+import { pageMetadata } from "@/lib/seo/metadata"
 import { siteUrl } from "@/lib/site"
 
 export async function generateMetadata({
@@ -14,29 +15,17 @@ export async function generateMetadata({
   const { locale } = await params
   if (!isLocale(locale)) return {}
 
-  const title =
-    locale === "ar"
-      ? "القطاعات | أنو للحلول البرمجية"
-      : "Industries | ANU Software Solutions"
   const description =
     locale === "ar"
       ? "حلول رقابة تشغيلية وتطبيق Odoo ERP لشركات التوزيع والتصنيع والتجزئة والخدمات اللوجستية والرعاية الصحية في العراق."
       : "Explore how ANU designs operating control and implements Odoo ERP for distribution, manufacturing, retail, logistics, and healthcare groups in Iraq."
 
-  return {
-    title,
+  return pageMetadata({
+    locale,
+    path: "/industries",
+    title: locale === "ar" ? "القطاعات" : "Industries",
     description,
-    alternates: {
-      canonical: localizedPath(locale, "/industries"),
-      languages: localizedAlternates("/industries"),
-    },
-    openGraph: {
-      type: "website",
-      url: localizedPath(locale, "/industries"),
-      title,
-      description,
-    },
-  }
+  })
 }
 
 export default async function IndustriesRoute({

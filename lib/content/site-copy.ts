@@ -22,6 +22,7 @@ export const siteCopy = {
       work: "Work",
       method: "Method",
       platform: "Platform",
+      services: "Services",
       industries: "Industries",
       insights: "Insights",
       contact: "Contact",
@@ -53,6 +54,7 @@ export const siteCopy = {
       work: "عملنا",
       method: "المنهج",
       platform: "المنصة",
+      services: "الخدمات",
       industries: "القطاعات",
       insights: "الرؤى",
       contact: "تواصل",
@@ -72,6 +74,8 @@ export const homePageCopy = {
     hero: {
       titlePrimary: "Business control,",
       titleSecondary: "implemented.",
+      subline:
+        "Odoo ERP implementation for companies in Iraq — we redesign how the work runs, then build it into Odoo.",
       primaryCta: "Start assessment",
       secondaryCta: "Discover the method",
     },
@@ -188,6 +192,8 @@ export const homePageCopy = {
     hero: {
       titlePrimary: "رقابة تشغيلية،",
       titleSecondary: "مطبّقة فعلياً.",
+      subline:
+        "تطبيق نظام Odoo ERP للشركات في العراق — نعيد تصميم طريقة سير العمل، ثم نبنيها داخل Odoo.",
       primaryCta: "ابدأ التقييم",
       secondaryCta: "اكتشف المنهج",
     },
@@ -306,6 +312,7 @@ export const assessmentCopy = {
     whatsapp: "Start on WhatsApp",
     whatsappDetail: "Open a message",
     call: "Call ANU",
+    email: "Email ANU",
     directOptions: "Direct assessment contact options",
     note: "Start with the operational challenge that matters most.",
     name: "Name",
@@ -322,6 +329,7 @@ export const assessmentCopy = {
     whatsapp: "ابدأ عبر واتساب",
     whatsappDetail: "افتح رسالة مباشرة",
     call: "اتصل بـ أنو",
+    email: "راسل أنو بالبريد",
     directOptions: "خيارات التواصل المباشر للتقييم",
     note: "ابدأ بالتحدي التشغيلي الأكثر أهمية لشركتك.",
     name: "الاسم",
@@ -330,6 +338,23 @@ export const assessmentCopy = {
     sending: "جارٍ الإرسال",
     submit: "ابدأ التقييم",
     successTitle: "تم استلام طلب التقييم.",
+  },
+} satisfies Record<Locale, object>
+
+export const notFoundCopy = {
+  en: {
+    label: "404",
+    title: "This page does not exist.",
+    description:
+      "The link may be old or mistyped. Continue from one of these pages, or start an assessment and tell us what you were looking for.",
+    home: "Back to home",
+  },
+  ar: {
+    label: "٤٠٤",
+    title: "هذه الصفحة غير موجودة.",
+    description:
+      "ربما يكون الرابط قديماً أو مكتوباً بشكل خاطئ. تابع من إحدى هذه الصفحات، أو ابدأ التقييم وأخبرنا عمّا كنت تبحث عنه.",
+    home: "العودة إلى الرئيسية",
   },
 } satisfies Record<Locale, object>
 

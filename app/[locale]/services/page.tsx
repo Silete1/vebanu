@@ -7,7 +7,8 @@ import { PageShell } from "@/components/layout/page-shell"
 import { JsonLd } from "@/components/seo/json-ld"
 import { buttonVariants } from "@/components/ui/button"
 import { servicesPageCopy } from "@/lib/content/site-copy"
-import { isLocale, localizedAlternates, localizedPath } from "@/lib/i18n"
+import { isLocale, localizedPath } from "@/lib/i18n"
+import { pageMetadata } from "@/lib/seo/metadata"
 import { siteUrl } from "@/lib/site"
 
 export async function generateMetadata({
@@ -16,28 +17,17 @@ export async function generateMetadata({
   const { locale } = await params
   if (!isLocale(locale)) return {}
 
-  const title =
-    locale === "ar"
-      ? "الخدمات | أنو للحلول البرمجية"
-      : "Services | ANU Software Solutions"
   const description =
     locale === "ar"
       ? "تعيد أنو تصميم العمليات والموافقات والمخزون والمالية والتقارير ثم تطبّق نظام Odoo ERP للشركات في العراق."
       : "ANU redesigns operating control, then implements Odoo ERP around workflows, approvals, inventory, finance, reporting, and management visibility."
 
-  return {
-    title,
+  return pageMetadata({
+    locale,
+    path: "/services",
+    title: locale === "ar" ? "الخدمات" : "Services",
     description,
-    alternates: {
-      canonical: localizedPath(locale, "/services"),
-      languages: localizedAlternates("/services"),
-    },
-    openGraph: {
-      url: localizedPath(locale, "/services"),
-      title,
-      description,
-    },
-  }
+  })
 }
 
 export default async function ServicesPage({
@@ -82,7 +72,7 @@ export default async function ServicesPage({
         data-header-theme="dark"
       >
         <Container>
-          <p className="mono-label tag-dot flex items-center gap-2 text-white/64">
+          <p className="mono-label tag-dot flex items-center gap-2 text-white/80">
             {copy.eyebrow}
           </p>
           <h1 className="display-headline mt-10 max-w-[10ch]">{copy.title}</h1>

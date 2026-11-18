@@ -263,12 +263,45 @@
     background: var(--color-abyssal-ink);
   }
 
-  body:has([data-intro-visual]) [data-intro-header],
-  body:has([data-intro-visual]) [data-intro-title],
-  body:has([data-intro-visual]) [data-intro-copy],
-  body:has([data-intro-visual]) [data-intro-actions] {
-    visibility: hidden;
-    opacity: 0;
+  /* Home intro start state. It applies only when scripts run and motion is
+     allowed, so the headline is readable without JS and under reduced
+     motion. Text is hidden by clip and offset (not opacity), matching the
+     values home-scroll-motion.tsx animates from. The delayed animation is a
+     last-resort reveal if the intro script never runs. */
+  @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+    body:has([data-intro-visual]) [data-intro-header] {
+      visibility: hidden;
+      opacity: 0;
+      animation: intro-failsafe-show 0s 4s forwards;
+    }
+
+    body:has([data-intro-visual])
+      :is([data-intro-title], [data-intro-copy], [data-intro-actions]) {
+      clip-path: inset(0% 0% 100% 0%);
+      transform: translateY(34px);
+      animation: intro-failsafe-unclip 0s 4s forwards;
+    }
+
+    @media (min-width: 768px) {
+      body:has([data-intro-visual])
+        :is([data-intro-title], [data-intro-copy], [data-intro-actions]) {
+        transform: translateY(72px);
+      }
+    }
+  }
+
+  @keyframes intro-failsafe-show {
+    to {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+
+  @keyframes intro-failsafe-unclip {
+    to {
+      clip-path: inset(0% 0% 0% 0%);
+      transform: none;
+    }
   }
 
   .hero-bg-motion {

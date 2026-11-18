@@ -1,5 +1,10 @@
 import Link from "next/link"
-import { ArrowUpRightIcon, MessageCircleIcon, PhoneIcon } from "lucide-react"
+import {
+  ArrowUpRightIcon,
+  MailIcon,
+  MessageCircleIcon,
+  PhoneIcon,
+} from "lucide-react"
 
 import { AssessmentForm } from "@/components/home/assessment-form"
 import { Container } from "@/components/layout/container"
@@ -41,7 +46,7 @@ function ContactChoice({
         </span>
       </span>
       <ArrowUpRightIcon
-        className="size-4 shrink-0 text-slate-500 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-blue-700 motion-reduce:transform-none motion-reduce:transition-none"
+        className="size-4 shrink-0 text-slate-500 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-blue-700 motion-reduce:transform-none motion-reduce:transition-none rtl:-scale-x-100 rtl:group-hover:-translate-x-0.5"
         aria-hidden="true"
       />
     </Link>
@@ -104,6 +109,13 @@ export function AssessmentCtaSection({ locale }: { locale: Locale }) {
                 icon={PhoneIcon}
                 label={copy.call}
                 detail={anuContact.phoneDisplay}
+                detailDirection="ltr"
+              />
+              <ContactChoice
+                href={anuContact.emailHref}
+                icon={MailIcon}
+                label={copy.email}
+                detail={anuContact.email}
                 detailDirection="ltr"
               />
             </nav>

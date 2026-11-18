@@ -211,11 +211,7 @@ export function SiteHeader({ locale }: { locale: Locale }) {
   const matchedHashItem = activeHash
     ? availableItems.find((item) => item.href.endsWith(activeHash))
     : null
-  const routeActiveId =
-    matchedRouteItem?.title ??
-    matchedHashItem?.title ??
-    availableItems[0]?.title ??
-    ""
+  const routeActiveId = matchedRouteItem?.title ?? matchedHashItem?.title ?? ""
   const activeId =
     pathname === `/${locale}` ? scrollActiveId || routeActiveId : routeActiveId
   const displayId = previewId || activeId
@@ -313,11 +309,6 @@ export function SiteHeader({ locale }: { locale: Locale }) {
     <header
       ref={headerRef}
       className="pointer-events-none fixed inset-x-0 top-0 z-50 w-full pt-5 sm:pt-6"
-      style={
-        pathname === `/${locale}`
-          ? { opacity: 0, visibility: "hidden" }
-          : undefined
-      }
       data-intro-header
     >
       <span
@@ -410,7 +401,7 @@ export function SiteHeader({ locale }: { locale: Locale }) {
             className="header-segmented-cta mono-label relative shrink-0 border-s border-[var(--header-segment-border)] py-3 transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
             <span>{copy.startAssessment}</span>
-            <ArrowUpRightIcon className="size-3.5" />
+            <ArrowUpRightIcon className="size-3.5 rtl:-scale-x-100" />
           </Link>
         </div>
         <div className="pointer-events-auto xl:hidden">

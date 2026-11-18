@@ -91,7 +91,7 @@ export function MobileNavSheet({ items, locale }: MobileNavSheetProps) {
                 >
                   {item.title}
                   <ArrowUpRightIcon
-                    className="size-4 text-white/46 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transition-none"
+                    className="size-4 text-white/46 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transition-none rtl:-scale-x-100 rtl:group-hover:-translate-x-0.5"
                     aria-hidden="true"
                   />
                 </Link>
@@ -122,7 +122,7 @@ export function MobileNavSheet({ items, locale }: MobileNavSheetProps) {
               )}
             >
               {copy.startAssessment}
-              <ArrowUpRightIcon className="size-4" aria-hidden="true" />
+              <ArrowUpRightIcon className="size-4 rtl:-scale-x-100" aria-hidden="true" />
             </Link>
           </div>
         </nav>

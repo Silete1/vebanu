@@ -27,21 +27,19 @@ export function HomeHero({ locale }: { locale: Locale }) {
         data-lab-visual
       >
         <div className="home-hero-content relative z-10 flex h-full w-full flex-col px-6 pt-32 pb-6 sm:px-12 sm:pt-40 sm:pb-8">
-          <h1
-            className="home-hero-title"
-            style={{ opacity: 0, visibility: "hidden" }}
-            data-intro-title
-          >
+          <h1 className="home-hero-title" data-intro-title>
             <span className="home-hero-title-line home-hero-title-line-primary">
               {copy.titlePrimary}
             </span>
             <span className="home-hero-title-line">{copy.titleSecondary}</span>
           </h1>
+          <p className="home-hero-copy mt-6 text-white/80" data-intro-copy>
+            {copy.subline}
+          </p>
 
           <div className="home-hero-bottom mt-auto flex justify-end">
             <div
               className="home-hero-actions flex flex-wrap items-center gap-2"
-              style={{ opacity: 0, visibility: "hidden" }}
               data-intro-actions
             >
               <Link
@@ -60,7 +58,7 @@ export function HomeHero({ locale }: { locale: Locale }) {
                 {copy.secondaryCta}
               </Link>
               <span className="arrow-cta" aria-hidden="true">
-                <ArrowUpRightIcon className="size-4" />
+                <ArrowUpRightIcon className="size-4 rtl:-scale-x-100" />
               </span>
             </div>
           </div>
