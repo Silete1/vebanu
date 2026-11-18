@@ -35,12 +35,16 @@ export function HomeSharedVideo({ children }: HomeSharedVideoProps) {
             loop
             muted
             playsInline
-            preload="auto"
+            preload="metadata"
+            poster="/hero-poster.webp"
           >
+            {/* phones get the 854px cut (~0.5 MB); larger screens the 1280px one (~0.8 MB) */}
             <source
-              src="/anu-architectural-background.mp4"
+              src="/hero-854.mp4"
               type="video/mp4"
+              media="(max-width: 767px)"
             />
+            <source src="/hero-1280.mp4" type="video/mp4" />
           </video>
           <div className="absolute inset-0 bg-[linear-gradient(110deg,rgba(9,11,17,0.72),rgba(9,11,17,0.32)_62%,rgba(9,11,17,0.48))]" />
         </div>
