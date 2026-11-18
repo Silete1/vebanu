@@ -1,0 +1,9 @@
+Sky of Anu (anu.ltd home hero) - sources
+
+Sky: NASA/Goddard Space Flight Center Scientific Visualization Studio, "Deep Star Maps 2020"
+     (Gaia DR2, Hipparcos-2, Tycho-2), public domain. https://svs.gsfc.nasa.gov/4851
+     Star positions and colours are read from these maps; Orion is drawn on its J2000 catalogue positions,
+     as seen from Ur (30.96 N).
+Textures: Poly Haven (CC0): brown_brick_02, clay_plaster, mud_cracked_dry_03. https://polyhaven.com
+Ziggurat, palms, reeds: procedural (ANU 3D lab), proportions after the Ziggurat of Ur.
+Lighting: baked in Blender Cycles. Real-time: three.js (MIT).
