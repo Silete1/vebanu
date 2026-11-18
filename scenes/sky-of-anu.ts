@@ -70,7 +70,7 @@ export function mount(box: HTMLElement): () => void {
     const scene = new Scene()
     scene.fog = new FogExp2(0, FOG)
     scene.fog.color.setRGB(HAZE.x, HAZE.y, HAZE.z)
-    const sky = createSky(assets.data, assets.sky, assets.stars, quality, HAZE)
+    const sky = createSky(assets.data, assets.sky, assets.stars, quality, HAZE, rtl)
 
     // the slabs' reflections: the same sky, prefiltered once
     const pmrem = new PMREMGenerator(renderer)

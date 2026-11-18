@@ -17,6 +17,8 @@ export type Rig = {
 }
 
 const ease = (x: number) => x * x * (3 - 2 * x)
+/** Arabic headlines run wider: the RTL frame pushes the subject further out (same factor in the Blender poster) */
+export const RTL_SHIFT = 1.4
 
 export function createRig(keys: CameraKey[], rtl: boolean): Rig {
   const camera = new PerspectiveCamera(28, 16 / 9, 1, 14000)
@@ -76,12 +78,12 @@ export function createRig(keys: CameraKey[], rtl: boolean): Rig {
 
       // phones: no side third; widen to keep the whole ziggurat, lift it above the headline
       const portrait = aspect < 1
-      camera.fov = portrait ? MathUtils.radToDeg(2 * Math.atan(Math.tan(MathUtils.degToRad(17)) / aspect)) : fov
+      camera.fov = portrait ? MathUtils.radToDeg(2 * Math.atan(Math.tan(MathUtils.degToRad(15)) / aspect)) : fov
       camera.updateProjectionMatrix()
       const e = camera.projectionMatrix.elements
-      const sx = portrait ? 0 : rtl ? -shift : shift
+      const sx = portrait ? 0 : rtl ? -shift * RTL_SHIFT : shift
       e[8] = (2 * sx) / aspect
-      e[9] = portrait ? -0.34 : 0
+      e[9] = portrait ? -0.62 : 0 // phones: the ziggurat in the top half, above the headline
       camera.projectionMatrixInverse.copy(camera.projectionMatrix).invert()
     },
   }

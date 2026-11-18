@@ -39,10 +39,11 @@ function toEquatorial(m: number[][]) {
   return new Matrix3().set(m[0][0], m[1][0], m[2][0], m[0][1], m[1][1], m[2][1], m[0][2], m[1][2], m[2][2])
 }
 
-export function createSky(data: SceneData, map: Texture, packed: Uint16Array, q: Quality, haze: Vector3): SkyLayer {
+export function createSky(data: SceneData, map: Texture, packed: Uint16Array, q: Quality, haze: Vector3, rtl: boolean): SkyLayer {
   const group = new Group()
   const world = new Group()
-  const toEq = toEquatorial(data.sky.matrix)
+  const m = rtl ? data.sky.matrixRtl : data.sky.matrix
+  const toEq = toEquatorial(m)
 
   // ---------------------------------------------------------------- dome: Milky Way + faint field
   const dome = new Mesh(
@@ -93,7 +94,6 @@ export function createSky(data: SceneData, map: Texture, packed: Uint16Array, q:
   const mag = new Float32Array(count)
   const col = new Float32Array(count * 3)
   const seed = new Float32Array(count)
-  const m = data.sky.matrix
   const v = new Vector3()
   for (let i = 0; i < count; i++) {
     const ra = (packed[i * 4] / 65535) * Math.PI * 2
@@ -158,7 +158,7 @@ export function createSky(data: SceneData, map: Texture, packed: Uint16Array, q:
   group.add(stars)
 
   // ---------------------------------------------------------------- the figure: shrine -> dingir -> Orion
-  const sky = data.orion.stars
+  const sky = rtl ? data.orion.starsRtl : data.orion.stars
   type End = { p: Vec3Like; sky: boolean }
   type Vec3Like = [number, number, number]
   const roof: End = { p: data.roof, sky: false }

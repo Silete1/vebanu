@@ -11,11 +11,12 @@ export type CameraKey = { at: number; pos: Vec3; target: Vec3; fov: number; shif
 
 export type SceneData = {
   yawDeg: number
-  sky: { matrix: number[][] }
+  /** equatorial → scene: LTR = Orion rising in the east, RTL = the same figure setting in the west (mirrored, and real) */
+  sky: { matrix: number[][]; matrixRtl: number[][] }
   skyMap: { scale: number; gamma: number }
   stars: { count: number; log2FluxMin: number; log2FluxMax: number }
   lightmaps: Record<"body" | "ground", { moon: number; torch: number; gamma: number }>
-  orion: { stars: Record<string, Vec3>; lines: [string, string][] }
+  orion: { stars: Record<string, Vec3>; starsRtl: Record<string, Vec3>; lines: [string, string][] }
   roof: Vec3
   dingir: Vec3
   slab: { size: Vec3; slugs: string[]; docks: number[][]; starts: number[][] }
