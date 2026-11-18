@@ -11,7 +11,10 @@ export const systemScenes: Partial<Record<string, SceneName>> = {
 }
 
 /** Scenes that take the pointer once live (hover/click/drag); others stay decorative. */
-export const interactiveScenes = new Set<SceneName>([])
+export const interactiveScenes = new Set<SceneName>(["sky-of-anu"])
 
-/** The home hero's scene (tier 2, over the home poster and loop). */
-export const homeScene: SceneName = "network"
+/** The home hero's scene (tier 2, over the home poster): the ziggurat under the real sky, systems as slabs. */
+export const homeScene: SceneName = "sky-of-anu"
+
+/** The home poster: the same scene rendered in Blender (scroll 0), mirrored framing for Arabic. */
+export const homePoster = { ltr: "/3d/sky-of-anu/poster", rtl: "/3d/sky-of-anu/poster-rtl" }

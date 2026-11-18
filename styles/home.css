@@ -33,6 +33,7 @@
     content: "";
     position: absolute;
     inset: 0;
+    pointer-events: none; /* the live scene under it takes the pointer */
     background: linear-gradient(
       to var(--anu-to-end, right),
       rgb(9 11 17 / 0.92) 0%,
@@ -55,6 +56,15 @@
     display: grid;
     gap: var(--anu-s-6);
     justify-items: start;
+  }
+
+  /* the text block spans the hero: only its own lines take the pointer, the live scene gets the rest */
+  .anu-home-hero__text {
+    pointer-events: none;
+  }
+
+  .anu-home-hero__text > * {
+    pointer-events: auto;
   }
 
   .anu-home-hero__text .anu-lede {

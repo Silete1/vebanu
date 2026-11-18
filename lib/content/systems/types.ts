@@ -1,3 +1,4 @@
+import type { SceneName } from "@/components/story/scene-slot"
 import type { Locale } from "@/lib/i18n"
 
 /**
@@ -27,7 +28,7 @@ export type StoryVisual = {
   /** /media/systems/<slug>.avif|webp; rendered by scripts/blender, 16:10 */
   poster: string
   /** optional realtime scene for tier 2 */
-  scene?: "network" | "twin" | "furniture"
+  scene?: SceneName
   /** optional short loop for tier 1–2, without extension (mp4 + webm next to it) */
   loop?: string
 }

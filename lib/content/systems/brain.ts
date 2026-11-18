@@ -6,7 +6,7 @@ export const brain: SystemStory = {
   status: "live",
   order: 1,
   related: ["control-layer", "walkthroughs", "support"],
-  visual: { poster: "/media/systems/brain", scene: "network" },
+  visual: { poster: "/media/systems/brain" },
   copy: {
     en: {
       name: "ANU Brain",

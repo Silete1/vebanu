@@ -4,13 +4,13 @@ import { useEffect, useRef } from "react"
 
 import { readTier } from "@/lib/tier"
 
-export type SceneName = "network" | "twin" | "furniture"
+export type SceneName = "sky-of-anu" | "twin" | "furniture"
 
 /** A scene module draws into the box it is given and returns its own teardown. */
 export type SceneModule = { mount: (box: HTMLElement) => () => void }
 
 const scenes: Partial<Record<SceneName, () => Promise<SceneModule>>> = {
-  network: () => import("@/scenes/network"),
+  "sky-of-anu": () => import("@/scenes/sky-of-anu"),
   twin: () => import("@/scenes/twin"),
 }
 
@@ -20,7 +20,16 @@ const scenes: Partial<Record<SceneName, () => Promise<SceneModule>>> = {
  * scene adds `is-live` to the box when its first frame is drawn, and the poster
  * fades under it. It stops when the reader moves the motion switch down.
  */
-export function SceneSlot({ scene, interactive = false }: { scene: SceneName; interactive?: boolean }) {
+export function SceneSlot({
+  scene,
+  interactive = false,
+  data,
+}: {
+  scene: SceneName
+  interactive?: boolean
+  /** what the scene needs from the page (e.g. the systems its slabs stand for), read by the scene as JSON */
+  data?: unknown
+}) {
   const box = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -67,5 +76,12 @@ export function SceneSlot({ scene, interactive = false }: { scene: SceneName; in
     }
   }, [scene])
 
-  return <div ref={box} className={interactive ? "anu-scene anu-scene--interactive" : "anu-scene"} aria-hidden="true" />
+  return (
+    <div
+      ref={box}
+      className={interactive ? "anu-scene anu-scene--interactive" : "anu-scene"}
+      data-scene={data === undefined ? undefined : JSON.stringify(data)}
+      aria-hidden="true"
+    />
+  )
 }

@@ -9,13 +9,12 @@ import { CtaBand } from "@/components/story/cta-band"
 import { Poster } from "@/components/story/poster"
 import { SystemCards } from "@/components/story/related"
 import { Road } from "@/components/story/road"
-import { Loop } from "@/components/story/loop"
 import { SceneSlot } from "@/components/story/scene-slot"
 import { SealFrieze, Ziggurat } from "@/components/story/sky"
 import { SystemMap } from "@/components/story/system-map"
 import { homeStory } from "@/lib/content/home-story"
 import { insights } from "@/lib/content/insights"
-import { homeScene, interactiveScenes } from "@/lib/content/systems/scenes"
+import { homePoster, homeScene, interactiveScenes } from "@/lib/content/systems/scenes"
 import { getSystems } from "@/lib/content/systems"
 import { storyCopy } from "@/lib/content/story-copy"
 import { isLocale, localizedAlternates, localizedPath } from "@/lib/i18n"
@@ -54,15 +53,23 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
   const featured = story.featured.slugs
     .map((slug) => systems.find((system) => system.slug === slug))
     .filter((system) => system !== undefined)
+  // the scene's slabs and shrine stand for the systems; the same links are in the page (map, cards)
+  const link = (system: (typeof systems)[number]) => ({
+    slug: system.slug,
+    name: system.copy.name,
+    href: localizedPath(locale, `/systems/${system.slug}`),
+  })
+  const brain = systems.find((system) => system.slug === "brain")
+  const sceneLinks = { slabs: systems.filter((system) => system.slug !== "brain").map(link), brain: brain && link(brain) }
   const notes = [...insights].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3)
 
   return (
     <>
-      {/* hero: the ink band, the claim, the network settling into order */}
+      {/* hero: the ink band, the claim, the ziggurat under the real sky with the systems docking on it */}
       <section className="anu-band anu-sky anu-home-hero" aria-labelledby="home-title">
         <div className="anu-home-hero__visual" aria-hidden="true">
           <Poster
-            src={locale === "ar" ? "/media/systems/home-rtl" : "/media/systems/home"}
+            src={locale === "ar" ? homePoster.rtl : homePoster.ltr}
             alt=""
             priority
             sizes="100vw"
@@ -70,8 +77,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             width={1920}
             height={1080}
           />
-          <Loop slug={locale === "ar" ? "home-rtl" : "home"} />
-          <SceneSlot scene={homeScene} interactive={interactiveScenes.has(homeScene)} />
+          <SceneSlot scene={homeScene} interactive={interactiveScenes.has(homeScene)} data={sceneLinks} />
         </div>
         <div className="anu-wrap anu-home-hero__text">
           <p className="anu-kicker">
