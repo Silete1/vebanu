@@ -66,7 +66,25 @@ const nextConfig: NextConfig = {
         source: "/:path*",
         headers: securityHeaders,
       },
+      {
+        // staging (site.brain.anu.ltd) and preview hosts stay out of search; only anu.ltd is indexed
+        source: "/:path*",
+        missing: [{ type: "host", value: "(www\\.)?anu\\.ltd" }],
+        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+      },
     ]
+  },
+  async rewrites() {
+    return {
+      // After real files (fonts, brand, media) are matched: any other path outside
+      // /en and /ar goes to the English tree, so it gets the branded 404.
+      afterFiles: [
+        {
+          source: "/:segment((?!(?:en|ar|_next)(?:/|$))[^/.]+)/:path*",
+          destination: "/en/:segment/:path*",
+        },
+      ],
+    }
   },
   async redirects() {
     return [
