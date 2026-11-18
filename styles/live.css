@@ -34,7 +34,8 @@
   .anu-live--phone {
     max-inline-size: 22rem;
     border-radius: 0;
-    border: 8px solid var(--live-ink);
+    border: 8px solid #1e2536;
+    outline: 1px solid rgb(148 163 184 / 0.45);
   }
 
   .anu-live__chrome {
@@ -355,6 +356,17 @@
   @keyframes live-type {
     from {
       clip-path: inset(0 100% 0 0);
+    }
+  }
+
+  /* Arabic types from the right */
+  [dir="rtl"] .anu-live[data-live="on"] .live-field.is-now .live-field__value {
+    animation-name: live-type-rtl;
+  }
+
+  @keyframes live-type-rtl {
+    from {
+      clip-path: inset(0 0 0 100%);
     }
   }
 
