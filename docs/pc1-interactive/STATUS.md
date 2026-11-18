@@ -22,9 +22,11 @@ click = soft navigation). three.js, tier 2 only, poster first.
 - [x] Encode (web/encode.py): desktop 2.46 MB, phone 0.82 MB
 - [x] Web scene (components/scene3d/*, scenes/sky-of-anu.ts) per PC2 mount contract; homeScene = sky-of-anu; network.ts removed
 - [x] RTL: real mirrored sky (Orion setting in the west), RTL shift x1.4; phones: ziggurat in the top half
-- [ ] Poster LTR/RTL from Blender (`--stage poster`, then `encode.py --only posters`): waits for the shared GPU lock;
-      until it lands, Poster falls back to the network SVG (public/3d/sky-of-anu/poster*.avif missing)
-- [ ] Final verification on `next build` + `next start -p 3321` (EN/AR, 1440 + 390), sizes, then mail PC2 "MERGE <sha>"
+- [x] Posters LTR/RTL from the same Blender scene (76/69 KB AVIF at 1920, 27/25 KB at 960)
+- [x] Verified on `next build` + `next start -p 3321`: EN/AR x 1440/390, scroll 0/25/50 %, hover labels EN+AR, click ->
+      /en/systems/workshops, tier 1 loads no 3D, tier 0 / reduced motion shows the poster. 3D chunk 161 KB gz,
+      desktop assets 2.54 MB, phone 0.82 MB. RTX 4060 laptop: 8.3 ms median frame at 1440x900.
+- [ ] Next: owner review; mail PC2 "MERGE <sha>" (coordinator); system-page scenes (see report)
 
 ## Checking
 `?tier=2&anu3d=keep` forces the scene and skips the <40 fps exit (headless); `window.__anu3d` = { scene, rig, renderer }
