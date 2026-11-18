@@ -34,9 +34,9 @@
   --anu-on-ink-rule: rgb(148 163 184 / 0.22);
   --anu-on-ink-signal: #60a5fa;
 
-  /* the mark's own gradient (logo only) */
-  --anu-mark-a: #2f6bf5;
-  --anu-mark-b: #6a2bd8;
+  /* the mark: Signal blue only (owner, 18 Nov) */
+  --anu-mark-a: #2563eb;
+  --anu-mark-b: #2563eb;
 
   /* type: Anu Sans = Inter Tight (Latin) + Tajawal (Arabic) by unicode range */
   --anu-sans: "Anu Sans", ui-sans-serif, system-ui, "Segoe UI", Tahoma, sans-serif;
