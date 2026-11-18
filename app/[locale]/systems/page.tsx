@@ -76,7 +76,7 @@ export default async function SystemsPage({ params }: PageProps<"/[locale]/syste
         return (
           <section
             key={group}
-            className={`anu-section ${index % 2 ? "anu-paper" : ""}`}
+            className={`anu-section ${index % 2 ? "anu-paper" : "anu-night"}`}
             aria-labelledby={`group-${group}`}
           >
             <div className="anu-wrap">

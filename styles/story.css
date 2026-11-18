@@ -234,6 +234,10 @@
     background: var(--anu-desk);
   }
 
+  .anu-chapter--night {
+    border-block-end-color: var(--anu-on-ink-rule);
+  }
+
   .anu-chapter > * {
     max-inline-size: 72rem;
   }
@@ -787,5 +791,19 @@
     .anu-map__node text {
       font-size: 24px;
     }
+  }
+}
+
+@layer components {
+  /* the story's frame is night sky; paper chapters sit in it as islands */
+  .anu-story {
+    background: var(--anu-band);
+  }
+
+  .anu-rail {
+    --anu-ink: #f1f5f9;
+    --anu-ink-soft: #94a3b8;
+    --anu-ink-faint: #64748b;
+    --anu-signal-text: #93c5fd;
   }
 }

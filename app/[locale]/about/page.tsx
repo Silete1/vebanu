@@ -47,7 +47,7 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
           <p className="anu-summary__text anu-reveal">{copy.name.body}</p>
         </div>
       </section>
-      <section className="anu-section" aria-label={copy.kicker}>
+      <section className="anu-section anu-night" aria-label={copy.kicker}>
         <div className="anu-wrap">
           <Features items={copy.story.map((item) => ({ label: item.title, body: item.body }))} />
           <Facts items={copy.facts} />

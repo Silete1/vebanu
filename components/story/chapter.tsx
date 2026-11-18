@@ -20,13 +20,13 @@ export function Chapter({
   title: string
   lede?: string
   children: ReactNode
-  tone?: "paper" | "desk"
+  tone?: "paper" | "desk" | "night"
 }) {
   return (
     <section
       id={id}
       aria-labelledby={`${id}-title`}
-      className={`anu-chapter anu-chapter--${tone}`}
+      className={`anu-chapter anu-chapter--${tone}${tone === "night" ? " anu-night" : ""}`}
       style={{ viewTimelineName: `--ch-${id}` } as CSSProperties}
     >
       <header className="anu-chapter__head">

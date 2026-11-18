@@ -140,7 +140,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
       <SealFrieze />
 
       {/* the noise: chat messages that settle into one ledger as you read */}
-      <section className="anu-section anu-noise" aria-labelledby="noise-title">
+      <section className="anu-section anu-noise anu-night" aria-labelledby="noise-title">
         <div className="anu-wrap anu-noise__grid">
           <div className="anu-section-head">
             <p className="anu-kicker">
@@ -208,7 +208,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
       <SealFrieze tone="paper" />
 
       {/* featured systems */}
-      <section className="anu-section" aria-labelledby="featured-title">
+      <section className="anu-section anu-night" aria-labelledby="featured-title">
         <div className="anu-wrap">
           <div className="anu-section-head">
             <p className="anu-kicker">{story.featured.kicker}</p>
@@ -234,7 +234,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
       </section>
 
       {/* how ANU builds */}
-      <section className="anu-section" aria-labelledby="rules-title">
+      <section className="anu-section anu-night" aria-labelledby="rules-title">
         <div className="anu-wrap">
           <div className="anu-section-head">
             <p className="anu-kicker">{story.rules.kicker}</p>
