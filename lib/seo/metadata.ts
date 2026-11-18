@@ -33,7 +33,7 @@ function defaultShareImage(locale: Locale) {
 }
 
 /** "Page | Brand", or the brand alone. The only place the brand is added. */
-export function brandedTitle(locale: Locale, title?: string) {
+function brandedTitle(locale: Locale, title?: string) {
   const { name } = getSiteContent(locale)
   return title ? `${title} | ${name}` : name
 }

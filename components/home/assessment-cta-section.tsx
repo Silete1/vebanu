@@ -1,5 +1,10 @@
 import Link from "next/link"
-import { ArrowUpRightIcon, MessageCircleIcon, PhoneIcon } from "lucide-react"
+import {
+  ArrowUpRightIcon,
+  MailIcon,
+  MessageCircleIcon,
+  PhoneIcon,
+} from "lucide-react"
 
 import { AssessmentForm } from "@/components/home/assessment-form"
 import { Container } from "@/components/layout/container"
@@ -104,6 +109,13 @@ export function AssessmentCtaSection({ locale }: { locale: Locale }) {
                 icon={PhoneIcon}
                 label={copy.call}
                 detail={anuContact.phoneDisplay}
+                detailDirection="ltr"
+              />
+              <ContactChoice
+                href={anuContact.emailHref}
+                icon={MailIcon}
+                label={copy.email}
+                detail={anuContact.email}
                 detailDirection="ltr"
               />
             </nav>
