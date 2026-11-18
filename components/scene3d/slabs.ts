@@ -32,6 +32,7 @@ export type Slab = {
   /** the pointer's target: a slightly larger box that does not lift (no hover flicker) */
   hit: Mesh
   channel: MeshBasicMaterial
+  slug: string
   link?: SlabLink
   start: Vector3
   dock: Vector3
@@ -52,7 +53,14 @@ export type SlabLayer = {
 
 const smooth = (x: number) => x * x * (3 - 2 * x)
 
-export function createSlabs(a: Assets, links: SlabLink[], env: Texture | null, rtl: boolean): SlabLayer {
+export function createSlabs(
+  a: Assets,
+  links: SlabLink[],
+  env: Texture | null,
+  rtl: boolean,
+  /** system pages: every slab already docked, this one lit up */
+  focus?: string
+): SlabLayer {
   const { data } = a
   const group = new Group()
   // geometry + its node matrix (quantized glTF dequantizes through the node transform)
@@ -115,6 +123,7 @@ export function createSlabs(a: Assets, links: SlabLink[], env: Texture | null, r
       visual,
       hit,
       channel,
+      slug,
       link: bySlug.get(slug),
       start: toThree(s),
       dock: toThree(d),
@@ -122,13 +131,13 @@ export function createSlabs(a: Assets, links: SlabLink[], env: Texture | null, r
       yaw1: (d[3] * Math.PI) / 180,
       tilt0: ((s[4] ?? 0) * Math.PI) / 180,
       lift: 0,
-      docked: 0,
+      docked: focus ? 1 : 0,
       flash: 0,
     }
   })
 
   // dust: 28 grains per slab, blown out from under it when it seats (spawn time per grain, -1 = idle)
-  const GRAINS = 28
+  const GRAINS = 40
   const dustPos = new Float32Array(slabs.length * GRAINS * 3)
   const dustDir = new Float32Array(slabs.length * GRAINS * 3)
   const dustT0 = new Float32Array(slabs.length * GRAINS).fill(-1)
@@ -159,17 +168,17 @@ export function createSlabs(a: Assets, links: SlabLink[], env: Texture | null, r
       varying float vA;
       void main() {
         float age = aT0 < 0.0 ? 99.0 : uTime - aT0;
-        vec3 p = position + aDir * (1.0 - exp(-age * 1.6)) * 2.2 + vec3(0.0, -0.5 * age * age * 0.6, 0.0);
+        vec3 p = position + aDir * (1.0 - exp(-age * 1.4)) * 3.0 + vec3(0.0, -0.5 * age * age * 0.5, 0.0);
         vec4 mv = modelViewMatrix * vec4(p, 1.0);
         gl_Position = projectionMatrix * mv;
         vA = age < 2.2 ? (1.0 - age / 2.2) : 0.0;
-        gl_PointSize = clamp(uPx * (0.35 + age * 0.5) / -mv.z, 1.0, 14.0);
+        gl_PointSize = clamp(uPx * (0.7 + age * 0.9) / -mv.z, 1.5, 22.0);
       }`,
     fragmentShader: /* glsl */ `
       varying float vA;
       void main() {
         float r = length(gl_PointCoord - 0.5) * 2.0;
-        gl_FragColor = vec4(vec3(0.62, 0.55, 0.46) * 0.5 * vA * smoothstep(1.0, 0.0, r), 1.0);
+        gl_FragColor = vec4(vec3(0.78, 0.68, 0.55) * 1.3 * vA * smoothstep(1.0, 0.0, r), 1.0);
       }`,
   })
   const dust = new Points(dustGeo, dustMat)
@@ -190,7 +199,7 @@ export function createSlabs(a: Assets, links: SlabLink[], env: Texture | null, r
       slabs.forEach((s, i) => {
         // each slab's own window of the scroll: the four layers first (by the shrine), then terrace by terrace
         const begin = 0.04 + (i / n) * 0.66
-        const u = smooth(Math.min(1, Math.max(0, (progress - begin) / 0.16)))
+        const u = focus ? 1 : smooth(Math.min(1, Math.max(0, (progress - begin) / 0.16)))
         if (u >= 1 && s.docked < 1) {
           s.flash = 1
           for (let k = 0; k < GRAINS; k++) dustT0[i * GRAINS + k] = time + k * 0.004
@@ -201,9 +210,9 @@ export function createSlabs(a: Assets, links: SlabLink[], env: Texture | null, r
         const target = hovered === s ? 1 : 0
         s.lift += (target - s.lift) * Math.min(1, dt * 8)
 
-        // a short glide from its waiting place onto the seat
+        // from its waiting place (or from the sky) along an arc onto the seat
         ctrl.copy(s.start).lerp(s.dock, 0.5)
-        ctrl.y = Math.max(s.start.y, s.dock.y) + 1.5
+        ctrl.y = Math.max(s.start.y, s.dock.y) + 1.5 + s.start.distanceTo(s.dock) * 0.12
         const k = 1 - u
         pos.copy(s.start).multiplyScalar(k * k).addScaledVector(ctrl, 2 * k * u).addScaledVector(s.dock, u * u)
         const bob = (1 - u) * Math.sin(time * 0.8 + i * 1.7) * 0.45
@@ -213,7 +222,9 @@ export function createSlabs(a: Assets, links: SlabLink[], env: Texture | null, r
         s.group.rotation.set(-s.tilt0 * (1 - u) * (1 - s.lift * 0.4), s.yaw0 + (s.yaw1 - s.yaw0) * u, 0, "YXZ")
 
         // light: awake while hovering, a flash at the seat, steady once docked; hover brightens
-        const level = 2.4 + 1.2 * u + 7 * s.flash * s.flash + 3.2 * s.lift + 0.3 * Math.sin(time * 1.6 + i)
+        // a close-up is ~10x nearer: its channels stay a deep blue (bloom would turn them white); its own slab leads
+        const mine = focus ? (focus === s.slug ? 1.1 + 0.4 * Math.sin(time * 1.2) : -1.6) : 0
+        const level = 2.4 + 1.2 * u + 7 * s.flash * s.flash + 3.2 * s.lift + 0.3 * Math.sin(time * 1.6 + i) + mine
         s.channel.color.copy(signal).multiplyScalar(level)
       })
     },

@@ -46,3 +46,15 @@ only with that flag. Screenshots: anu_nav/data/work/playwright-mcp/interactive/.
 - Slabs wait just off their seats on faces the camera sees; dock with a channel flash and a dust puff.
 - Camera: v2 hero position/aim, 68 mm (hfov 28) + lens shift -0.09 widths (poster uses the same shift).
 - [x] full bake (4096 body) + posters, verified EN/AR 1440/390 on next build; comparisons in anu_nav/data/work/playwright-mcp/interactive/cmp-*.png
+
+## Round 3 (coordinator, 18 Nov): polish + system pages
+- Atlas: hidden terrace-top cells dropped and the rest cut into their own UV islands (packer fills the gaps).
+- Scroll 0: five slabs wait in view (top + right); the rest fly in from the sky as the page scrolls.
+- Orion: web/frame_orion.py picks the real sky time/azimuth (LTR -5.5 h / -10 deg, RTL -5.1 h / +10 deg): no star
+  or line enters the headline block; the whole figure cannot fit a 68 mm frame (>= 0.8 of its height at any
+  hour), so the belt and shoulders show at scroll 0 and the feet arrive with the scroll. The figure draws in on load.
+- Torches x2.8 brighter layer, flames 4 m, dust puffs larger/brighter; phones: closer camera, lighter gradient.
+- System pages: systemScenes = sky-of-anu for every slug but twins (PC2's "twin"); story-hero passes
+  { slabs: [own link], focus: slug } (brain: { brain, focus: "brain" }); scene.json `presets` = close-up camera
+  per slug (and the shrine door), slow orbit; posters public/media/systems/<slug>[-rtl][-800] from
+  web/build_scene.py --stage systems (AVIF <= 60 KB). Arabic system pages use the -rtl poster.

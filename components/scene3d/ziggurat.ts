@@ -55,7 +55,7 @@ export function createZiggurat(a: Assets): ZigguratLayer {
   const group = new Group()
   const flicker = { value: 1 }
   // the torch layer was baked as luminance: give it the flame's warmth back
-  const torch = new Color().setRGB(...data.torchColor).multiplyScalar(1.6)
+  const torch = new Color().setRGB(...data.torchColor).multiplyScalar(4.5)
   const owned: Material[] = []
   const surface = { Body: "body", GroundNear: "near", GroundFar: "far" } as const
 

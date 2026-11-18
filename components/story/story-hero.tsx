@@ -6,7 +6,7 @@ import { Poster } from "@/components/story/poster"
 import { Loop } from "@/components/story/loop"
 import { SceneSlot } from "@/components/story/scene-slot"
 import { getWhatsappHref } from "@/lib/contact"
-import { interactiveScenes, systemScenes } from "@/lib/content/systems/scenes"
+import { interactiveScenes, skyPosterSlugs, systemScenes } from "@/lib/content/systems/scenes"
 import type { LocalizedSystem } from "@/lib/content/systems"
 import { storyCopy } from "@/lib/content/story-copy"
 import { type Locale, localizedPath } from "@/lib/i18n"
@@ -16,6 +16,10 @@ export function StoryHero({ system, locale }: { system: LocalizedSystem; locale:
   const copy = storyCopy[locale]
   const { name, pitch, audience } = system.copy
   const scene = systemScenes[system.slug] ?? system.visual.scene
+  // the shared 3D scene opens on this system's own slab (brain: the shrine door); Arabic gets the mirrored poster
+  const link = { slug: system.slug, name, href: localizedPath(locale, `/systems/${system.slug}`) }
+  const sceneData = system.slug === "brain" ? { brain: link, focus: "brain" } : { slabs: [link], focus: system.slug }
+  const poster = locale === "ar" && skyPosterSlugs.has(system.slug) ? `${system.visual.poster}-rtl` : system.visual.poster
 
   return (
     <section className="anu-band anu-sky anu-hero" aria-labelledby="story-title">
@@ -63,9 +67,15 @@ export function StoryHero({ system, locale }: { system: LocalizedSystem; locale:
           </div>
         </div>
         <figure className="anu-hero__visual">
-          <Poster src={system.visual.poster} alt={`${name}: ${pitch}`} priority />
+          <Poster src={poster} alt={`${name}: ${pitch}`} priority />
           <Loop slug={system.slug} />
-          {scene ? <SceneSlot scene={scene} interactive={interactiveScenes.has(scene)} /> : null}
+          {scene ? (
+            <SceneSlot
+              scene={scene}
+              interactive={interactiveScenes.has(scene)}
+              data={scene === "sky-of-anu" ? sceneData : undefined}
+            />
+          ) : null}
         </figure>
       </div>
     </section>

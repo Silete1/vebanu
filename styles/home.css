@@ -48,7 +48,8 @@
 
   @media (max-width: 47.99rem) {
     .anu-home-hero__visual::after {
-      background: linear-gradient(to top, rgb(9 11 17 / 0.95) 35%, rgb(9 11 17 / 0.35) 100%);
+      /* the ziggurat stands clear in the top part; the text keeps its dark ground */
+      background: linear-gradient(to top, rgb(9 11 17 / 0.95) 38%, rgb(9 11 17 / 0.55) 54%, rgb(9 11 17 / 0) 74%);
     }
   }
 

@@ -20,7 +20,8 @@ import { createSky } from "@/components/scene3d/sky"
 import { type Slab, createSlabs } from "@/components/scene3d/slabs"
 import { createZiggurat } from "@/components/scene3d/ziggurat"
 
-type BoxData = { slabs?: SlabLink[]; brain?: SlabLink }
+/** from the page: the systems the slabs stand for; `focus` = a system page's close-up (a slug, or "brain") */
+type BoxData = { slabs?: SlabLink[]; brain?: SlabLink; focus?: string }
 
 
 export function mount(box: HTMLElement): () => void {
@@ -82,10 +83,11 @@ export function mount(box: HTMLElement): () => void {
     scene.add(sky.group, sky.world)
 
     const zig = createZiggurat(assets)
-    const slabs = createSlabs(assets, links.slabs ?? [], env.texture, rtl)
+    const slabs = createSlabs(assets, links.slabs ?? [], env.texture, rtl, links.focus)
     const dressing = createDressing(assets.data, assets.cards, quality, HAZE, FOG)
     scene.add(zig.group, slabs.group, dressing.group)
-    const rig = createRig(data.hero, data.camera, rtl)
+    const preset = links.focus ? data.presets[links.focus] : undefined
+    const rig = createRig(data.hero, data.camera, rtl, preset)
     // checking hook (only with ?anu3d=keep): lets a test read the scene and the renderer
     if (keep) Object.assign(window, { __anu3d: { scene, rig, renderer } })
     // the bar (the lab's v2 still) reads brighter than the same exposure here: +0.3 EV for the live frame
@@ -146,7 +148,7 @@ export function mount(box: HTMLElement): () => void {
       drag = undefined
       if (wasDrag) return
       const link = hovered?.link ?? (shrineHover ? links.brain : undefined)
-      if (link) window.dispatchEvent(new CustomEvent("anu:navigate", { detail: { href: link.href } }))
+      if (link && link.href !== location.pathname) window.dispatchEvent(new CustomEvent("anu:navigate", { detail: { href: link.href } }))
     }
     const onLeave = () => {
       pointerIn = false
@@ -190,7 +192,7 @@ export function mount(box: HTMLElement): () => void {
       const t = (now - begin) / 1000
       const r = box.getBoundingClientRect()
       // the whole story plays while the hero scrolls away (done when ~55 % of it has left)
-      const progress = Math.min(1, Math.max(0, -r.top / Math.max(1, r.height * 0.55)))
+      const progress = links.focus ? 1 : Math.min(1, Math.max(0, -r.top / Math.max(1, r.height * 0.55)))
 
       rig.update(progress, t, dt)
       const cam = rig.camera
@@ -208,8 +210,8 @@ export function mount(box: HTMLElement): () => void {
       const lit = hovered ?? focused
       box.style.cursor = hovered?.link || shrineHover ? "pointer" : ""
 
-      const intro = Math.min(3, t * 1.1)
-      const draw = intro + Math.min(1, Math.max(0, (progress - 0.02) / 0.6)) * (sky.segments - 3)
+      // the figure draws itself in on arrival (shrine -> dingir -> Orion), line by line; scrolling never hides it
+      const draw = Math.min(sky.segments, t * 1.6 + progress * sky.segments)
       sky.update(cam.position, t, draw, size)
       zig.update(t)
       slabs.update(progress, t, dt, lit, pxPerMetre)

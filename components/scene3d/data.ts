@@ -36,7 +36,11 @@ export type SceneData = {
   palms: number[][]
   reeds: number[][]
   palmH: number
+  /** system pages: a close-up per slab (by slug) and the shrine door ("brain"), LTR; RTL mirrors x */
+  presets: Record<string, Preset>
 }
+
+export type Preset = { pos: Vec3; target: Vec3; hfov: number }
 
 /** One system the slabs stand for, from the page (the box's data-scene). */
 export type SlabLink = { slug: string; name: string; href: string }

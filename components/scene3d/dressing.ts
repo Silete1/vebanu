@@ -120,7 +120,7 @@ export function createDressing(data: SceneData, cards: Texture, q: Quality, haze
         vec4 mv = modelViewMatrix * vec4(position, 1.0);
         gl_Position = projectionMatrix * mv;
         vSeed = aSeed;
-        gl_PointSize = clamp(uScale * 2.4 / -mv.z, 3.0, 60.0);   // ~2.4 m of glow at its distance
+        gl_PointSize = clamp(uScale * 4.2 / -mv.z, 5.0, 90.0);   // ~4 m of glow at its distance
       }`,
     fragmentShader: /* glsl */ `
       uniform float uTime;
@@ -133,9 +133,9 @@ export function createDressing(data: SceneData, cards: Texture, q: Quality, haze
         float sway = sin(t * 0.9) * 0.08 + sin(t * 2.3) * 0.04;
         vec2 q = vec2((p.x - sway * (p.y + 1.0)) * 2.6, p.y * 1.4 + 0.3);
         float flame = smoothstep(1.0, 0.2, length(q) + max(q.y, 0.0) * 0.6);
-        float glow = exp(-dot(p, p) * 3.0) * 0.18;
+        float glow = exp(-dot(p, p) * 3.0) * 0.32;
         float fl = 0.85 + 0.15 * sin(t * 3.1) * sin(t * 1.7);
-        vec3 c = mix(uFire, vec3(1.0, 0.85, 0.6), flame * flame) * (flame * 0.95 + glow) * fl;
+        vec3 c = mix(uFire, vec3(1.0, 0.85, 0.6), flame * flame) * (flame * 1.6 + glow) * fl;
         gl_FragColor = vec4(c, 1.0);
       }`,
   })
