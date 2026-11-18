@@ -1,32 +1,14 @@
 import type { Metadata } from "next"
-import { Inter_Tight, Roboto_Mono, Tajawal } from "next/font/google"
 import { notFound } from "next/navigation"
 
 import "../globals.css"
 import { JsonLd } from "@/components/seo/json-ld"
 import { anuContact } from "@/lib/contact"
+import { fontVariables } from "@/lib/fonts"
 import { getLocaleAttributes, isLocale, localeMeta, locales } from "@/lib/i18n"
 import { pageMetadata } from "@/lib/seo/metadata"
 import { getSiteContent, siteUrl } from "@/lib/site"
 import { cn } from "@/lib/utils"
-
-const fontDisplay = Inter_Tight({
-  subsets: ["latin"],
-  variable: "--font-display",
-  weight: ["400"],
-})
-
-const fontMono = Roboto_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-  weight: ["400"],
-})
-
-const fontArabic = Tajawal({
-  subsets: ["arabic"],
-  variable: "--font-arabic",
-  weight: ["300", "400", "500", "700", "800"],
-})
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }))
@@ -111,12 +93,7 @@ export default async function LocaleLayout({
       data-locale={locale}
       data-scroll-behavior="smooth"
       suppressHydrationWarning
-      className={cn(
-        "scroll-smooth antialiased",
-        fontDisplay.variable,
-        fontMono.variable,
-        fontArabic.variable
-      )}
+      className={cn("scroll-smooth antialiased", fontVariables)}
     >
       <body>
         <JsonLd data={siteSchemas} />
