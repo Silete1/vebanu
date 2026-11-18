@@ -94,7 +94,10 @@ export function LField({ label, value, ...t }: { label: string; value: string } 
   return (
     <label className="live-field" {...timing(t)}>
       <small>{label}</small>
-      <span className="live-field__value">{value}</span>
+      {/* values without Arabic letters (figures, codes) stay left to right and type from the left */}
+      <span className="live-field__value" dir={/[\u0600-\u06FF]/.test(value) ? undefined : "ltr"}>
+        {value}
+      </span>
     </label>
   )
 }

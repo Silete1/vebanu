@@ -364,7 +364,7 @@
   }
 
   /* Arabic types from the right */
-  [dir="rtl"] .anu-live[data-live="on"] .live-field.is-now .live-field__value {
+  [dir="rtl"] .anu-live[data-live="on"] .live-field.is-now .live-field__value:not([dir="ltr"]) {
     animation-name: live-type-rtl;
   }
 
