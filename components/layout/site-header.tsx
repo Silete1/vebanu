@@ -211,11 +211,7 @@ export function SiteHeader({ locale }: { locale: Locale }) {
   const matchedHashItem = activeHash
     ? availableItems.find((item) => item.href.endsWith(activeHash))
     : null
-  const routeActiveId =
-    matchedRouteItem?.title ??
-    matchedHashItem?.title ??
-    availableItems[0]?.title ??
-    ""
+  const routeActiveId = matchedRouteItem?.title ?? matchedHashItem?.title ?? ""
   const activeId =
     pathname === `/${locale}` ? scrollActiveId || routeActiveId : routeActiveId
   const displayId = previewId || activeId

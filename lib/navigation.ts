@@ -28,6 +28,11 @@ export function getNavigationItems(locale: Locale): NavigationItem[] {
       available: true,
     },
     {
+      title: copy.services,
+      href: localizedPath(locale, "/services"),
+      available: true,
+    },
+    {
       title: copy.industries,
       href: localizedPath(locale, "/industries"),
       available: true,
