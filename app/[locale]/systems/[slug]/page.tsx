@@ -110,16 +110,16 @@ export default async function SystemPage({ params }: PageProps<"/[locale]/system
       <Story chapters={chapters}>
         <ChapterRail label={copy.chapters.problem} chapters={chapters} />
         <div>
-          <Chapter id="problem" index={1} kicker={copy.chapters.problem} title={story.problem.title} lede={story.problem.body}>
+          <Chapter id="problem" index={1} kicker={copy.chapters.problem} title={story.problem.title} lede={story.problem.body} tone="night">
             <Symptoms items={story.problem.symptoms} />
           </Chapter>
-          <Chapter id="how" index={2} kicker={copy.chapters.how} title={story.how.title} tone="desk">
+          <Chapter id="how" index={2} kicker={copy.chapters.how} title={story.how.title}>
             <Road steps={story.how.steps} stepLabel={copy.step} />
           </Chapter>
-          <Chapter id="inside" index={3} kicker={copy.chapters.inside} title={story.inside.title} lede={story.inside.body}>
+          <Chapter id="inside" index={3} kicker={copy.chapters.inside} title={story.inside.title} lede={story.inside.body} tone="night">
             <Inside items={story.inside.items} stack={story.inside.stack} stackLabel={copy.stack} />
           </Chapter>
-          <Chapter id="features" index={4} kicker={copy.chapters.features} title={story.name} tone="desk">
+          <Chapter id="features" index={4} kicker={copy.chapters.features} title={story.name} tone="night">
             <Features items={story.features} />
             {story.facts?.length ? <Facts items={story.facts} /> : null}
           </Chapter>
@@ -130,7 +130,7 @@ export default async function SystemPage({ params }: PageProps<"/[locale]/system
       </Story>
 
       {related.length ? (
-        <section className="anu-section anu-related" aria-labelledby="related-title">
+        <section className="anu-section anu-related anu-night" aria-labelledby="related-title">
           <div className="anu-wrap">
             <div className="anu-section-head">
               <p className="anu-kicker">{copy.related}</p>

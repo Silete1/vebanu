@@ -51,7 +51,7 @@ export default async function ServicesPage({ params }: PageProps<"/[locale]/serv
       />
       <PageHero id="services-title" kicker={copy.kicker} title={copy.title} lede={copy.lede} />
       {copy.groups.map((group, index) => (
-        <section key={group.title} className={`anu-section ${index % 2 ? "anu-paper" : ""}`} aria-labelledby={`services-${index}`}>
+        <section key={group.title} className={`anu-section ${index % 2 ? "anu-paper" : "anu-night"}`} aria-labelledby={`services-${index}`}>
           <div className="anu-wrap">
             <div className="anu-section-head">
               <p className="anu-kicker anu-num">{String(index + 1).padStart(2, "0")}</p>

@@ -58,7 +58,7 @@ export default async function MethodPage({ params }: PageProps<"/[locale]/method
         </div>
       </section>
 
-      <section className="anu-section" aria-labelledby="gates-title">
+      <section className="anu-section anu-night" aria-labelledby="gates-title">
         <div className="anu-wrap">
           <div className="anu-section-head">
             <h2 id="gates-title" className="anu-reveal">{copy.gates.title}</h2>
@@ -96,7 +96,7 @@ export default async function MethodPage({ params }: PageProps<"/[locale]/method
         </div>
       </section>
 
-      <section className="anu-section" aria-labelledby="fit-title">
+      <section className="anu-section anu-night" aria-labelledby="fit-title">
         <div className="anu-wrap">
           <div className="anu-section-head">
             <h2 id="fit-title" className="anu-reveal">{copy.fit.title}</h2>
