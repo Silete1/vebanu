@@ -1,5 +1,5 @@
 # anu.ltd on anu-cloud-01, behind Coolify's Traefik (coolify-proxy owns ports 80/443 and gets the certificates).
-# Hosts: SITE_HOSTS is a Traefik rule fragment, e.g. Host(`site.brain.anu.ltd`) || Host(`anu.ltd`) || Host(`www.anu.ltd`)
+# Hosts: SITE_HOSTS comes from deploy/hosts. The bare anu.ltd is sent on to www.anu.ltd, as Vercel does today.
 name: anu-website
 
 services:
@@ -19,6 +19,9 @@ services:
       traefik.http.middlewares.anu-website-https.redirectscheme.scheme: https
       traefik.http.middlewares.anu-website-https.redirectscheme.permanent: "true"
       traefik.http.middlewares.anu-website-gzip.compress: "true"
+      traefik.http.middlewares.anu-website-www.redirectregex.regex: "^https?://anu\\.ltd/(.*)"
+      traefik.http.middlewares.anu-website-www.redirectregex.replacement: "https://www.anu.ltd/$${1}"
+      traefik.http.middlewares.anu-website-www.redirectregex.permanent: "true"
       traefik.http.routers.anu-website-http.entrypoints: http
       traefik.http.routers.anu-website-http.rule: ${SITE_HOSTS}
       traefik.http.routers.anu-website-http.middlewares: anu-website-https
@@ -26,7 +29,7 @@ services:
       traefik.http.routers.anu-website.rule: ${SITE_HOSTS}
       traefik.http.routers.anu-website.tls: "true"
       traefik.http.routers.anu-website.tls.certresolver: ${CERT_RESOLVER:-letsencrypt}
-      traefik.http.routers.anu-website.middlewares: anu-website-gzip
+      traefik.http.routers.anu-website.middlewares: anu-website-www,anu-website-gzip
 
 networks:
   coolify:

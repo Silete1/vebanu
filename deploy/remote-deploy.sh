@@ -2,14 +2,13 @@
 # Runs ON anu-cloud-01 (called by deploy/deploy.sh). Builds the release, starts it behind Traefik, checks it.
 # Persistent state lives outside the source copy, in ~/anu-website:
 #   site.env  secrets (RESEND_API_KEY, ASSESSMENT_*; SANITY_* optional), chmod 600, never in git
-#   hosts     the Traefik host rule, e.g. Host(`site.brain.anu.ltd`) || Host(`anu.ltd`) || Host(`www.anu.ltd`)
+# The Traefik host rule is deploy/hosts, in git (one line).
 set -euo pipefail
 RELEASE="$1"
 HOME_DIR="$HOME/anu-website"
 SRC="$HOME_DIR/src"
 cd "$SRC/deploy"
 
-[ -f "$HOME_DIR/hosts" ] || echo 'Host(`site.brain.anu.ltd`)' > "$HOME_DIR/hosts"
 if [ ! -f "$HOME_DIR/site.env" ]; then
   printf 'ASSESSMENT_TO_EMAIL=info@anu.ltd\n# RESEND_API_KEY=\n# ASSESSMENT_FROM_EMAIL="ANU Website <website@anu.ltd>"\n' > "$HOME_DIR/site.env"
   chmod 600 "$HOME_DIR/site.env"
@@ -17,7 +16,7 @@ fi
 cp "$HOME_DIR/site.env" site.env
 
 export RELEASE
-export SITE_HOSTS="$(cat "$HOME_DIR/hosts")"
+export SITE_HOSTS="$(tr -d '\n' < hosts)"
 # the resolver name Coolify gave Traefik
 export CERT_RESOLVER="$(docker inspect coolify-proxy --format '{{join .Args " "}}' | grep -o 'certificatesresolvers\.[a-zA-Z0-9_-]*' | head -1 | cut -d. -f2)"
 CERT_RESOLVER="${CERT_RESOLVER:-letsencrypt}"
@@ -35,7 +34,7 @@ done
 echo "container health: $state"
 
 # through Traefik, for each host in the rule
-for h in $(grep -o 'Host(`[^`]*`)' "$HOME_DIR/hosts" | sed 's/Host(`\(.*\)`)/\1/'); do
+for h in $(grep -o 'Host(`[^`]*`)' hosts | sed 's/Host(`\(.*\)`)/\1/'); do
   code="$(curl -s -o /dev/null -w '%{http_code}' --resolve "$h:443:127.0.0.1" "https://$h/en" -k || true)"
   echo "https://$h/en -> $code"
 done
