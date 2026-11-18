@@ -14,7 +14,7 @@ export function StoryHero({ system, locale }: { system: LocalizedSystem; locale:
   const { name, pitch, audience } = system.copy
 
   return (
-    <section className="anu-band anu-hero" aria-labelledby="story-title">
+    <section className="anu-band anu-sky anu-hero" aria-labelledby="story-title">
       <div className="anu-wrap anu-hero__grid">
         <div className="anu-hero__text">
           <nav aria-label={copy.systems} className="anu-crumbs">

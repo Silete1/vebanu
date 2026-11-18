@@ -1,5 +1,6 @@
 import Link from "next/link"
 
+import { Dingir } from "@/components/brand/dingir"
 import { getWhatsappHref } from "@/lib/contact"
 import { storyCopy } from "@/lib/content/story-copy"
 import { type Locale, localizedPath } from "@/lib/i18n"
@@ -8,8 +9,9 @@ import { type Locale, localizedPath } from "@/lib/i18n"
 export function CtaBand({ locale, title, body }: { locale: Locale; title?: string; body?: string }) {
   const copy = storyCopy[locale]
   return (
-    <section className="anu-band anu-cta">
+    <section className="anu-band anu-sky anu-cta">
       <div className="anu-wrap anu-cta__inner">
+        <Dingir className="anu-dingir anu-cta__star" />
         <h2 className="anu-display anu-reveal">{title ?? copy.ctaTitle}</h2>
         <p className="anu-lede">{body ?? copy.ctaBody}</p>
         <div className="anu-hero__actions">

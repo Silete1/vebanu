@@ -57,7 +57,7 @@ export default async function SystemsPage({ params }: PageProps<"/[locale]/syste
         })}
       />
 
-      <section className="anu-band anu-section anu-home-map" aria-labelledby="systems-title">
+      <section className="anu-band anu-sky anu-section anu-home-map" aria-labelledby="systems-title">
         <div className="anu-wrap">
           <div className="anu-section-head">
             <p className="anu-kicker">{map.kicker}</p>

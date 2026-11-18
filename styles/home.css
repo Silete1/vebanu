@@ -271,3 +271,54 @@
     background: var(--anu-paper);
   }
 }
+
+@layer components {
+  .anu-does__grid {
+    display: grid;
+    gap: var(--anu-s-12);
+    align-items: center;
+  }
+
+  .anu-does__grid .anu-ziggurat {
+    max-inline-size: 34rem;
+    justify-self: center;
+    inline-size: 100%;
+  }
+
+  @media (min-width: 64rem) {
+    .anu-does__grid {
+      grid-template-columns: minmax(0, 0.95fr) minmax(0, 1fr);
+      gap: var(--anu-s-16);
+    }
+
+    .anu-does__grid .anu-road {
+      grid-template-columns: 1fr;
+    }
+
+    .anu-does__grid .anu-road::before {
+      inset-block: 0.4rem;
+      inset-inline: 0.4rem auto;
+      inline-size: 1px;
+      block-size: auto;
+    }
+
+    .anu-does__grid .anu-road__step {
+      grid-template-columns: auto 1fr;
+    }
+
+    .anu-does__grid .anu-road__mark {
+      grid-row: span 3;
+      padding-block-start: 0.25rem;
+    }
+
+    .anu-does__grid .anu-road__title {
+      margin-block-start: 0;
+    }
+  }
+
+  .anu-cta__star {
+    inline-size: 3.5rem;
+    margin-block-end: 0;
+    color: var(--anu-on-ink-signal);
+  }
+}

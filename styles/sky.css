@@ -1,0 +1,295 @@
+/*
+ * The sky of Anu: stars on the ink, the way of Anu across the top, the
+ * ziggurat that is laid as you read, the seal that rolls with the page.
+ * Everything here is moved by scroll position only (no script), and is
+ * simply still at tier 0 or under reduced motion.
+ */
+
+@layer components {
+  /* ---------------------------------------------------------- star sky */
+
+  .anu-sky {
+    background-color: var(--anu-band);
+    background-image:
+      url("/brand/sky-near.svg"),
+      url("/brand/sky-far.svg"),
+      radial-gradient(140% 70% at 50% 115%, rgb(37 99 235 / 0.22), transparent 62%);
+    background-size:
+      900px 900px,
+      640px 640px,
+      100% 100%;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      html:not([data-tier="0"]) .anu-sky {
+        animation: anu-sky-drift linear both;
+        animation-timeline: view();
+      }
+    }
+  }
+
+  @keyframes anu-sky-drift {
+    from {
+      background-position:
+        0 0,
+        0 0,
+        0 0;
+    }
+    to {
+      background-position:
+        -40px -220px,
+        -12px -70px,
+        0 0;
+    }
+  }
+
+  /* --------------------------------------------------------- way of Anu */
+
+  .anu-way {
+    position: fixed;
+    inset-inline: 0;
+    inset-block-start: 3.75rem;
+    z-index: 49;
+    block-size: 2px;
+    pointer-events: none;
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: scroll()) {
+      html:not([data-tier="0"]) .anu-way {
+        display: block;
+      }
+    }
+  }
+
+  .anu-way__band {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to var(--anu-to-end, right), transparent, var(--anu-signal) 30%, var(--anu-on-ink-signal));
+    transform-origin: var(--anu-origin-start, left) center;
+    animation: anu-way-band linear both;
+    animation-timeline: scroll(root);
+  }
+
+  .anu-way__star {
+    position: absolute;
+    inset-block-start: -7px;
+    inset-inline-start: 0;
+    inline-size: 16px;
+    block-size: 16px;
+    color: var(--anu-on-ink-signal);
+    animation: anu-way-star linear both;
+    animation-timeline: scroll(root);
+  }
+
+  .anu-way__star svg {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  [dir="rtl"] .anu-way {
+    --anu-to-end: left;
+    --anu-origin-start: right;
+  }
+
+  @keyframes anu-way-band {
+    from {
+      scale: 0 1;
+    }
+    to {
+      scale: 1 1;
+    }
+  }
+
+  @keyframes anu-way-star {
+    from {
+      inset-inline-start: 0;
+      rotate: 0deg;
+    }
+    to {
+      inset-inline-start: calc(100% - 16px);
+      rotate: 360deg;
+    }
+  }
+
+  /* ---------------------------------------------------------- ziggurat */
+
+  .anu-ziggurat {
+    margin: 0;
+  }
+
+  .anu-ziggurat__svg {
+    inline-size: 100%;
+    block-size: auto;
+    overflow: visible;
+    font-family: var(--anu-sans);
+  }
+
+  .anu-ziggurat__terrace rect {
+    fill: var(--anu-paper);
+    stroke: var(--anu-rule-strong);
+  }
+
+  .anu-ziggurat__terrace:last-of-type rect {
+    fill: var(--anu-band);
+    stroke: var(--anu-band);
+  }
+
+  .anu-ziggurat__terrace:last-of-type text {
+    fill: var(--anu-on-ink);
+  }
+
+  .anu-ziggurat__edge {
+    stroke: var(--anu-signal);
+    stroke-width: 3;
+  }
+
+  .anu-ziggurat__terrace text {
+    fill: var(--anu-ink);
+    font-size: 19px;
+  }
+
+  .anu-ziggurat__shrine {
+    fill: var(--anu-band);
+  }
+
+  .anu-ziggurat__light {
+    fill: var(--anu-on-ink-signal);
+  }
+
+  .anu-ziggurat__sky path {
+    fill: none;
+    stroke: var(--anu-signal);
+    stroke-width: 1.2;
+    opacity: 0.7;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      html:not([data-tier="0"]) .anu-ziggurat__terrace {
+        animation: anu-terrace linear both;
+        animation-timeline: view();
+        animation-range: entry calc(10% + var(--i) * 12%) cover calc(28% + var(--i) * 10%);
+      }
+
+      html:not([data-tier="0"]) :is(.anu-ziggurat__shrine, .anu-ziggurat__light) {
+        animation: anu-terrace linear both;
+        animation-timeline: view();
+        animation-range: cover 45% cover 60%;
+      }
+
+      html:not([data-tier="0"]) .anu-ziggurat__light {
+        animation:
+          anu-terrace linear both,
+          anu-beacon 2.4s ease-in-out infinite;
+        animation-timeline: view(), auto;
+        animation-range: cover 45% cover 60%, normal;
+      }
+    }
+  }
+
+  @keyframes anu-terrace {
+    from {
+      opacity: 0;
+      translate: 0 -48px;
+    }
+  }
+
+  @keyframes anu-beacon {
+    50% {
+      opacity: 0.35;
+    }
+  }
+
+  /* -------------------------------------------------------- seal frieze */
+
+  .anu-seal {
+    overflow: hidden;
+    border-block: var(--anu-hair) solid var(--anu-rule);
+    block-size: 4.5rem;
+  }
+
+  .anu-seal--ink {
+    background: var(--anu-band);
+    border-color: var(--anu-on-ink-rule);
+    color: rgb(148 163 184 / 0.55);
+  }
+
+  .anu-seal--paper {
+    background: var(--anu-desk);
+    color: var(--anu-ink-faint);
+  }
+
+  .anu-seal__strip {
+    block-size: 100%;
+    inline-size: 260%;
+    max-inline-size: none;
+  }
+
+  .anu-seal__strip :is(path, rect, circle) {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+  }
+
+  .anu-seal__strip path:not(.anu-seal__net) {
+    fill: currentColor;
+    fill-opacity: 0.18;
+  }
+
+  .anu-seal__strip circle,
+  .anu-seal__solid {
+    fill: currentColor !important;
+  }
+
+  .anu-seal__half {
+    fill: url(#none);
+  }
+
+  .anu-seal__net {
+    stroke: var(--anu-signal) !important;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      html:not([data-tier="0"]) .anu-seal__strip {
+        animation: anu-seal-roll linear both;
+        animation-timeline: view();
+      }
+
+      [dir="rtl"] .anu-seal__strip {
+        animation-direction: reverse;
+      }
+    }
+  }
+
+  @keyframes anu-seal-roll {
+    from {
+      translate: 0 0;
+    }
+    to {
+      translate: -38% 0;
+    }
+  }
+
+  /* ------------------------------------------------------ dingir draws */
+
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      html:not([data-tier="0"]) .anu-dingir .anu-dingir__wedge {
+        animation: anu-wedge linear both;
+        animation-timeline: view();
+        animation-range: entry calc(20% + var(--i) * 10%) cover calc(35% + var(--i) * 6%);
+      }
+    }
+  }
+
+  @keyframes anu-wedge {
+    from {
+      opacity: 0;
+      scale: 0.4;
+    }
+  }
+}

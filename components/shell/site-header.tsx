@@ -2,6 +2,7 @@ import Link from "next/link"
 
 import { AnuLogo } from "@/components/brand/anu-logo"
 import { statusGlyph } from "@/components/story/glyph"
+import { WayOfAnu } from "@/components/story/sky"
 import { HeaderLive, LanguageLink, NavLink } from "@/components/shell/header-live"
 import { getSystems } from "@/lib/content/systems"
 import { navOrder, shellCopy } from "@/lib/content/shell"
@@ -92,6 +93,7 @@ export function SiteHeader({ locale }: { locale: Locale }) {
           </div>
         </div>
       </div>
+      <WayOfAnu />
       <HeaderLive />
     </header>
   )

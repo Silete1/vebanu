@@ -9,6 +9,7 @@ import { Poster } from "@/components/story/poster"
 import { SystemCards } from "@/components/story/related"
 import { Road } from "@/components/story/road"
 import { SceneSlot } from "@/components/story/scene-slot"
+import { SealFrieze, Ziggurat } from "@/components/story/sky"
 import { SystemMap } from "@/components/story/system-map"
 import { homeStory } from "@/lib/content/home-story"
 import { insights } from "@/lib/content/insights"
@@ -55,7 +56,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
   return (
     <>
       {/* hero: the ink band, the claim, the network settling into order */}
-      <section className="anu-band anu-home-hero" aria-labelledby="home-title">
+      <section className="anu-band anu-sky anu-home-hero" aria-labelledby="home-title">
         <div className="anu-home-hero__visual" aria-hidden="true">
           <Poster src="/media/systems/home" alt="" priority sizes="100vw" />
           <SceneSlot scene="network" />
@@ -82,6 +83,8 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
           </div>
         </div>
       </section>
+
+      <SealFrieze />
 
       {/* the noise: chat messages that settle into one ledger as you read */}
       <section className="anu-section anu-noise" aria-labelledby="noise-title">
@@ -124,12 +127,15 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             <p className="anu-kicker">{story.does.kicker}</p>
             <h2 id="does-title">{story.does.title}</h2>
           </div>
-          <Road steps={story.does.items} stepLabel={storyCopy[locale].step} />
+          <div className="anu-does__grid">
+            <Ziggurat terraces={story.does.items.map((item) => item.title)} label={story.does.title} />
+            <Road steps={story.does.items} stepLabel={storyCopy[locale].step} />
+          </div>
         </div>
       </section>
 
       {/* the system map */}
-      <section className="anu-band anu-section anu-home-map" aria-labelledby="map-title">
+      <section className="anu-band anu-sky anu-section anu-home-map" aria-labelledby="map-title">
         <div className="anu-wrap">
           <div className="anu-section-head">
             <p className="anu-kicker">{story.map.kicker}</p>
@@ -145,6 +151,8 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
           </Link>
         </div>
       </section>
+
+      <SealFrieze tone="paper" />
 
       {/* featured systems */}
       <section className="anu-section" aria-labelledby="featured-title">

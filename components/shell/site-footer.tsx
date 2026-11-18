@@ -13,7 +13,7 @@ export function SiteFooter({ locale }: { locale: Locale }) {
   const systems = getSystems(locale)
 
   return (
-    <footer className="anu-band anu-footer">
+    <footer className="anu-band anu-sky anu-footer">
       <div className="anu-wrap anu-footer__grid">
         <div className="anu-footer__lead">
           <AnuLogo className="anu-footer__logo" title="ANU" />

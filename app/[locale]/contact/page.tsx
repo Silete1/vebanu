@@ -36,7 +36,7 @@ export default async function ContactPage({ params }: PageProps<"/[locale]/conta
           about: [{ "@type": "ContactPage", "@id": `${orgId}-contact`, mainEntity: { "@id": orgId } }],
         })}
       />
-      <section className="anu-band anu-hero" aria-labelledby="contact-title">
+      <section className="anu-band anu-sky anu-hero" aria-labelledby="contact-title">
         <div className="anu-wrap anu-contact">
           <div className="anu-hero__text">
             <p className="anu-kicker">
