@@ -1,5 +1,7 @@
 import type { Locale } from "@/lib/i18n"
 
+import imported from "./real-media.json"
+
 /**
  * Real material from ANU's own systems (Forgejo anu-web-assets, client: no),
  * encoded for the web under public/media/real/<slug>/. Stills are AVIF/WebP at
@@ -8,7 +10,7 @@ import type { Locale } from "@/lib/i18n"
 export type RealStill = { file: string; alt: Record<Locale, string>; localized?: boolean }
 export type RealClip = { file: string; alt: Record<Locale, string> }
 
-export const realMedia: Record<string, { stills: RealStill[]; clips: RealClip[] }> = {
+const curated: Record<string, { stills: RealStill[]; clips: RealClip[] }> = {
   workshops: {
     clips: [
       { file: "kitchen", alt: { en: "The Workshops designer turning a kitchen in 3D", ar: "مصمم أنو للورش يدير مطبخاً بالأبعاد الثلاثة" } },
@@ -23,3 +25,13 @@ export const realMedia: Record<string, { stills: RealStill[]; clips: RealClip[] 
     ],
   },
 }
+
+/** Curated entries first, then what scripts/media/import.mjs brought in from PC1 (screens and recordings). */
+export const realMedia: Record<string, { stills: RealStill[]; clips: RealClip[] }> = Object.fromEntries(
+  [...new Set([...Object.keys(curated), ...Object.keys(imported)])].map((slug) => {
+    const a = curated[slug] ?? { stills: [], clips: [] }
+    const b = (imported as Record<string, { stills: RealStill[]; clips: RealClip[] }>)[slug] ?? { stills: [], clips: [] }
+    return [slug, { stills: [...a.stills, ...b.stills], clips: [...a.clips, ...b.clips] }]
+  })
+)
+
