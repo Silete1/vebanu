@@ -58,7 +58,7 @@ export function SiteFooter({ locale }: { locale: Locale }) {
                 className="arrow-cta"
                 aria-label={copy.startAssessment}
               >
-                <ArrowUpRightIcon className="size-4" />
+                <ArrowUpRightIcon className="size-4 rtl:-scale-x-100" />
               </Link>
             </div>
           </div>

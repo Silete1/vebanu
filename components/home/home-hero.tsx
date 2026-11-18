@@ -58,7 +58,7 @@ export function HomeHero({ locale }: { locale: Locale }) {
                 {copy.secondaryCta}
               </Link>
               <span className="arrow-cta" aria-hidden="true">
-                <ArrowUpRightIcon className="size-4" />
+                <ArrowUpRightIcon className="size-4 rtl:-scale-x-100" />
               </span>
             </div>
           </div>

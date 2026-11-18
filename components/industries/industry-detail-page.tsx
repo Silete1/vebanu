@@ -37,7 +37,7 @@ export function IndustryDetailPage({
                   href={localizedPath(locale, "/industries")}
                   className="inline-flex min-h-11 items-center gap-2 rounded-lg transition-colors outline-none hover:text-white focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--color-abyssal-ink)]"
                 >
-                  <ArrowLeftIcon className="size-4" aria-hidden="true" />
+                  <ArrowLeftIcon className="size-4 rtl:-scale-x-100" aria-hidden="true" />
                   {copy.breadcrumb}
                 </Link>
               </li>
@@ -64,7 +64,7 @@ export function IndustryDetailPage({
                 className="mono-label mt-8 inline-flex min-h-11 items-center gap-3 rounded-lg bg-blue-600 px-4 text-white transition-colors outline-none hover:bg-blue-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--color-abyssal-ink)]"
               >
                 {copy.startAssessment}
-                <ArrowUpRightIcon className="size-4" aria-hidden="true" />
+                <ArrowUpRightIcon className="size-4 rtl:-scale-x-100" aria-hidden="true" />
               </Link>
             </div>
 
@@ -255,7 +255,7 @@ export function IndustryDetailPage({
                 className="mono-label inline-flex min-h-11 items-center gap-2 self-start rounded-lg px-2 outline-none hover:text-blue-700 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-4"
               >
                 {copy.viewInsights}
-                <ArrowUpRightIcon className="size-4" aria-hidden="true" />
+                <ArrowUpRightIcon className="size-4 rtl:-scale-x-100" aria-hidden="true" />
               </Link>
             </div>
             <div className="grid md:grid-cols-3">
@@ -274,7 +274,7 @@ export function IndustryDetailPage({
                   <span className="mono-label mt-7 inline-flex items-center gap-2 text-blue-700">
                     {copy.readInsight}
                     <ArrowUpRightIcon
-                      className="size-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transition-none"
+                      className="size-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transition-none rtl:-scale-x-100 rtl:group-hover:-translate-x-0.5"
                       aria-hidden="true"
                     />
                   </span>

@@ -46,7 +46,7 @@ function ContactChoice({
         </span>
       </span>
       <ArrowUpRightIcon
-        className="size-4 shrink-0 text-slate-500 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-blue-700 motion-reduce:transform-none motion-reduce:transition-none"
+        className="size-4 shrink-0 text-slate-500 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-blue-700 motion-reduce:transform-none motion-reduce:transition-none rtl:-scale-x-100 rtl:group-hover:-translate-x-0.5"
         aria-hidden="true"
       />
     </Link>

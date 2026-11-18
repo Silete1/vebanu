@@ -401,7 +401,7 @@ export function SiteHeader({ locale }: { locale: Locale }) {
             className="header-segmented-cta mono-label relative shrink-0 border-s border-[var(--header-segment-border)] py-3 transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
             <span>{copy.startAssessment}</span>
-            <ArrowUpRightIcon className="size-3.5" />
+            <ArrowUpRightIcon className="size-3.5 rtl:-scale-x-100" />
           </Link>
         </div>
         <div className="pointer-events-auto xl:hidden">
