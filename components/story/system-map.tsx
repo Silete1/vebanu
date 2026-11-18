@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react"
 
 import { statusGlyph } from "@/components/story/glyph"
+import { storyCopy } from "@/lib/content/story-copy"
 import type { LocalizedSystem } from "@/lib/content/systems"
 import { type Locale, localizedPath } from "@/lib/i18n"
 
@@ -34,6 +35,7 @@ export function SystemMap({
   locale: Locale
   label: string
 }) {
+  const status = storyCopy[locale].status
   const core = systems.find((s) => s.group === "core")
   const layer = ring(systems.filter((s) => s.group === "layer"), 250, 150, -Math.PI / 2)
   const industry = ring(systems.filter((s) => s.group === "industry"), 520, 318, -Math.PI / 2 + 0.18)
@@ -44,7 +46,7 @@ export function SystemMap({
     const anchorEnd = rtl ? !end : end
     const dx = end ? -size - 10 : size + 10
     return (
-      <a key={system.slug} href={localizedPath(locale, `/systems/${system.slug}`)} className="anu-map__node">
+      <a key={system.slug} href={localizedPath(locale, `/systems/${system.slug}`)} className="anu-map__node" data-slug={system.slug}>
         <rect
           x={x - size / 2}
           y={y - size / 2}
@@ -88,7 +90,7 @@ export function SystemMap({
         <ellipse cx={CX} cy={CY} rx={250} ry={150} className="anu-map__orbit" />
         <ellipse cx={CX} cy={CY} rx={520} ry={318} className="anu-map__orbit" />
         {core ? (
-          <a href={localizedPath(locale, `/systems/${core.slug}`)} className="anu-map__core">
+          <a href={localizedPath(locale, `/systems/${core.slug}`)} className="anu-map__core anu-map__node" data-slug={core.slug}>
             <rect x={CX - 70} y={CY - 46} width={140} height={92} />
             <line x1={CX - 70} x2={CX + 70} y1={CY + 46} y2={CY + 46} className="anu-map__edge" />
             <text x={CX} y={CY} dominantBaseline="middle" textAnchor="middle">
@@ -99,6 +101,42 @@ export function SystemMap({
         {layer.map((placed) => node(placed, 16))}
         {industry.map((placed) => node(placed, 14))}
       </svg>
+      {/* the card of the node under the pointer or focus (pure CSS, one rule per system); the core's by default */}
+      <style>
+        {systems
+          .map(
+            (system) =>
+              `.anu-map:has(.anu-map__node[data-slug="${system.slug}"]:is(:hover,:focus-visible)) .anu-map__card[data-slug="${system.slug}"]{opacity:1;translate:0 0;visibility:visible}`
+          )
+          .join("")}
+      </style>
+      <div className="anu-map__cards" aria-hidden="true">
+        {systems.map((system) => (
+          <div key={system.slug} className="anu-map__card" data-slug={system.slug} data-default={system.group === "core" ? "" : undefined}>
+            <p className="anu-kicker">
+              <span className="anu-glyph" data-state={statusGlyph(system.status)} />
+              {status[system.status]}
+              {system.star ? <span className="anu-num anu-map__star">{system.star.sign}</span> : null}
+            </p>
+            <p className="anu-map__card-name">{system.copy.name}</p>
+            <p className="anu-map__card-pitch">{system.copy.pitch}</p>
+          </div>
+        ))}
+      </div>
+      {/* on phones the map is a picture; this list is how you open a system */}
+      <ul className="anu-map__list">
+        {systems.map((system) => (
+          <li key={system.slug}>
+            <a href={localizedPath(locale, `/systems/${system.slug}`)}>
+              <span className="anu-glyph" data-state={statusGlyph(system.status)} aria-hidden="true" />
+              <span>
+                <b>{system.copy.name}</b>
+                <small>{system.copy.pitch}</small>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
     </figure>
   )
 }

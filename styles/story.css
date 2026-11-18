@@ -820,3 +820,125 @@
     cursor: grabbing;
   }
 }
+
+@layer components {
+  /* ------------------------------------------- the map, interactive */
+
+  .anu-map {
+    position: relative;
+  }
+
+  /* the card area sits under the map, so a card never covers a node */
+  .anu-map__cards {
+    position: relative;
+    inline-size: min(36rem, 100%);
+    min-block-size: 9.5rem;
+    margin-inline: auto;
+    margin-block-start: var(--anu-s-4);
+    pointer-events: none;
+  }
+
+  .anu-map__card {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline: 0;
+    inline-size: 100%;
+    display: grid;
+    gap: var(--anu-s-2);
+    padding: var(--anu-s-4) var(--anu-s-6);
+    background: rgb(20 24 36 / 0.86);
+    backdrop-filter: blur(10px);
+    border: var(--anu-hair) solid var(--anu-on-ink-rule);
+    border-block-end: var(--anu-edge) solid var(--anu-signal);
+    color: var(--anu-on-ink);
+    opacity: 0;
+    visibility: hidden;
+    translate: 0 0.5rem;
+    transition:
+      opacity var(--anu-fast) linear,
+      translate var(--anu-base) var(--anu-ease),
+      visibility 0s linear var(--anu-fast);
+  }
+
+  .anu-map__card[data-default] {
+    opacity: 1;
+    visibility: visible;
+    translate: 0 0;
+  }
+
+  /* any other node pointed at hides the default card */
+  .anu-map:has(.anu-map__node:not(.anu-map__core):is(:hover, :focus-visible)) .anu-map__card[data-default] {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .anu-map__card .anu-kicker {
+    color: var(--anu-on-ink-soft);
+  }
+
+  .anu-map__star {
+    margin-inline-start: auto;
+    font-size: var(--anu-t-12);
+    color: var(--anu-on-ink-signal);
+  }
+
+  .anu-map__card-name {
+    font-size: var(--anu-t-24);
+    font-weight: 300;
+    line-height: 1.2;
+  }
+
+  .anu-map__card-pitch {
+    font-size: var(--anu-t-15);
+    color: var(--anu-on-ink-soft);
+  }
+
+  .anu-map__list {
+    display: none;
+    margin: var(--anu-s-8) 0 0;
+    padding: 0;
+    list-style: none;
+    border-block-start: var(--anu-hair) solid var(--anu-on-ink-rule);
+  }
+
+  .anu-map__list a {
+    display: flex;
+    gap: var(--anu-s-3);
+    align-items: baseline;
+    padding-block: var(--anu-s-3);
+    border-block-end: var(--anu-hair) solid var(--anu-on-ink-rule);
+    color: var(--anu-on-ink);
+  }
+
+  .anu-map__list span:last-child {
+    display: grid;
+    gap: 2px;
+  }
+
+  .anu-map__list b {
+    font-weight: 400;
+  }
+
+  .anu-map__list small {
+    color: var(--anu-on-ink-soft);
+    font-size: var(--anu-t-13);
+  }
+
+  .anu-map__list .anu-glyph:not([data-state]) {
+    border-color: var(--anu-on-ink-soft);
+  }
+
+  @media (max-width: 47.99rem) {
+    .anu-map__cards {
+      display: none;
+    }
+
+    .anu-map__list {
+      display: block;
+    }
+
+    .anu-map__node text {
+      display: none;
+    }
+  }
+}
