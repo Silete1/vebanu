@@ -23,11 +23,9 @@ ANU redesigns how companies operate—mapping workflows, roles, approvals, inven
 
 ## Visual & Design System
 
-The visual design follows an **Enterprise Control Room** aesthetic:
-- **Dominant Colors:** Clean `bone-white` (`#ffffff`) background with `abyssal-ink` (`#0f172a` / `#020617`) contrast sections.
-- **Accents:** Precision `bioluminescent-lime` (`#84cc16`) status indicators and `graphite` borders.
-- **Typography:** Modern, structured sans-serif typography with strict hierarchy and monospaced technical labels (`mono-label`).
-- **Layout:** 12-column responsive grid with restrained, purposeful transitions that reinforce operational control and architectural rigor.
+The ANU design language, shared with the ANU Theme in ANU Brain: ink `#090B11`, one accent (Signal blue `#2563EB`),
+white paper on a bone desk `#F8FAFC`, radius 0, hairlines, square status glyphs, the ink band closed by a 3px blue edge,
+and the "Sky of Anu" (night sky, constellations, the dingir, the first ledger of Uruk). Details: `docs/redesign/`.
 
 ---
 
