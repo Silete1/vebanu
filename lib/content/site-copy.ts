@@ -339,6 +339,23 @@ export const assessmentCopy = {
   },
 } satisfies Record<Locale, object>
 
+export const notFoundCopy = {
+  en: {
+    label: "404",
+    title: "This page does not exist.",
+    description:
+      "The link may be old or mistyped. Continue from one of these pages, or start an assessment and tell us what you were looking for.",
+    home: "Back to home",
+  },
+  ar: {
+    label: "٤٠٤",
+    title: "هذه الصفحة غير موجودة.",
+    description:
+      "ربما يكون الرابط قديماً أو مكتوباً بشكل خاطئ. تابع من إحدى هذه الصفحات، أو ابدأ التقييم وأخبرنا عمّا كنت تبحث عنه.",
+    home: "العودة إلى الرئيسية",
+  },
+} satisfies Record<Locale, object>
+
 export const industriesPageCopy = {
   en: {
     index: {

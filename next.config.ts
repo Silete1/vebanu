@@ -39,6 +39,18 @@ const nextConfig: NextConfig = {
       },
     ]
   },
+  async rewrites() {
+    return {
+      // Paths outside /en and /ar (and not files or framework assets) go to
+      // the English catch-all, so they get the branded 404 page.
+      beforeFiles: [
+        {
+          source: "/:segment((?!(?:en|ar|_next)(?:/|$))[^/.]+)/:path*",
+          destination: "/en/:segment/:path*",
+        },
+      ],
+    }
+  },
   async redirects() {
     return [
       {
