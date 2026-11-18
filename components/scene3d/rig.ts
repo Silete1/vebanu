@@ -17,6 +17,8 @@ export type Rig = {
 }
 
 const ease = (x: number) => x * x * (3 - 2 * x)
+/** Arabic headlines run wider: the RTL frame pushes the subject further out (same factor in the Blender poster) */
+const RTL_SHIFT = 1.5
 const UP = new Vector3(0, 1, 0)
 
 export function createRig(hero: SceneData["hero"], keys: CameraKey[], rtl: boolean): Rig {
@@ -91,7 +93,7 @@ export function createRig(hero: SceneData["hero"], keys: CameraKey[], rtl: boole
       camera.updateProjectionMatrix()
       const e = camera.projectionMatrix.elements
       // Blender's lens shift (frame widths): the poster and this frame line up; phones lift the content instead
-      e[8] = portrait ? 0 : 2 * (rtl ? -lens.shift : lens.shift)
+      e[8] = portrait ? 0 : 2 * (rtl ? -lens.shift * RTL_SHIFT : lens.shift)
       e[9] = portrait ? -0.42 : 0
       camera.projectionMatrixInverse.copy(camera.projectionMatrix).invert()
     },
