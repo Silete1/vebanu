@@ -2,11 +2,12 @@ import type { MetadataRoute } from "next"
 
 import { industries } from "@/lib/content/industries"
 import { insights } from "@/lib/content/insights"
+import { systemSlugs } from "@/lib/content/systems"
 import { siteUrl } from "@/lib/site"
 import { locales, localizedPath } from "@/lib/i18n"
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const pageUpdatedAt = new Date("2026-08-18")
+  const pageUpdatedAt = new Date("2026-11-18")
   const pages = [
     {
       path: "/",
@@ -20,6 +21,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly" as const,
       priority: 0.8,
     },
+    {
+      path: "/systems",
+      lastModified: pageUpdatedAt,
+      changeFrequency: "monthly" as const,
+      priority: 0.95,
+    },
+    ...systemSlugs.map((slug) => ({
+      path: `/systems/${slug}`,
+      lastModified: pageUpdatedAt,
+      changeFrequency: "monthly" as const,
+      priority: 0.9,
+    })),
+    ...["/method", "/about", "/contact"].map((path) => ({
+      path,
+      lastModified: pageUpdatedAt,
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    })),
     {
       path: "/industries",
       lastModified: pageUpdatedAt,
