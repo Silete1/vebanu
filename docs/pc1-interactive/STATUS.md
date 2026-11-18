@@ -35,3 +35,14 @@ only with that flag. Screenshots: anu_nav/data/work/playwright-mcp/interactive/.
 ## Wishes for lab lib/ (not changed by this lane)
 - ziggurat.build() hard-codes Ur's 3-terrace stair layout; web/build_scene.py rebuilds PC2's 4-terrace form from
   lib pieces (battered, frusta, _buttresses, stair). A `stairs=` hook in lib would let both shots share build().
+
+## v2 pass (coordinator review, 18 Nov): bar = lab shot d v2 still 01_hero
+- Scene now = the lab's shot d v2 itself (shots/d-brain-ziggurat/shot.py imported as a module by web/build_scene.py):
+  lib Ur ziggurat with the triple stairway, v2 materials, procession + braziers, palms/reeds, dunes, 85 mm hero.
+  PC2's 4-terrace proportions are dropped for the v2 Ur form (coordinator's bar).
+- Surfaces: Cycles COMBINED bakes of the v2 materials (bump, erosion, courses, dust) on the realtime meshes:
+  RGB = moon + sky + door, A = torches (flickered live). Unlit in the web; no tiling textures any more.
+- Geometry: static.glb (no normals: unlit) + movers.glb (slab 6.4 x 3.0 x 1.0 m, pilgrim figure).
+- Slabs wait just off their seats on faces the camera sees; dock with a channel flash and a dust puff.
+- Camera: v2 hero position/aim, 68 mm (hfov 28) + lens shift -0.09 widths (poster uses the same shift).
+- [ ] full bake (4096 body) + posters -> encode -> verify EN/AR 1440/390 + side-by-side with 01_hero

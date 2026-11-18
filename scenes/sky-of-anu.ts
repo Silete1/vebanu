@@ -22,9 +22,6 @@ import { createZiggurat } from "@/components/scene3d/ziggurat"
 
 type BoxData = { slabs?: SlabLink[]; brain?: SlabLink }
 
-const HAZE = new Vector3(0.01, 0.012, 0.018)
-const FOG = 0.00165 // FogExp2 density ≈ the poster's 1 − e^(−0.0009 d) at the ziggurat's distance
-const EXPOSURE = 1.87 // = the poster's +0.9 EV
 
 export function mount(box: HTMLElement): () => void {
   const quality: Quality = window.innerWidth < 768 || matchMedia("(pointer: coarse)").matches ? "lo" : "hi"
@@ -67,6 +64,10 @@ export function mount(box: HTMLElement): () => void {
     .catch(() => dispose())
 
   function start(assets: Awaited<ReturnType<typeof loadAssets>>) {
+    const { data } = assets
+    // the lab's haze is 1 − e^(−k d); FogExp2 is 1 − e^(−(k' d)²): match them at the hero distance (~262 m)
+    const HAZE = new Vector3(...data.haze.color).multiplyScalar(1.8)
+    const FOG = Math.sqrt(data.haze.density * 262) / 262
     const scene = new Scene()
     scene.fog = new FogExp2(0, FOG)
     scene.fog.color.setRGB(HAZE.x, HAZE.y, HAZE.z)
@@ -81,13 +82,14 @@ export function mount(box: HTMLElement): () => void {
     scene.add(sky.group, sky.world)
 
     const zig = createZiggurat(assets)
-    const slabs = createSlabs(assets, links.slabs ?? [], env.texture)
+    const slabs = createSlabs(assets, links.slabs ?? [], env.texture, rtl)
     const dressing = createDressing(assets.data, assets.cards, quality, HAZE, FOG)
     scene.add(zig.group, slabs.group, dressing.group)
-    const rig = createRig(assets.data.camera, rtl)
+    const rig = createRig(data.hero, data.camera, rtl)
     // checking hook (only with ?anu3d=keep): lets a test read the scene and the renderer
     if (keep) Object.assign(window, { __anu3d: { scene, rig, renderer } })
-    const post = createPost(renderer, quality, EXPOSURE)
+    // the bar (the lab's v2 still) reads brighter than the same exposure here: +0.3 EV for the live frame
+    const post = createPost(renderer, quality, 2 ** (data.exposure + 0.3))
 
     // ------------------------------------------------------------ size
     const size = new Vector2()
@@ -210,7 +212,7 @@ export function mount(box: HTMLElement): () => void {
       const draw = intro + Math.min(1, Math.max(0, (progress - 0.02) / 0.6)) * (sky.segments - 3)
       sky.update(cam.position, t, draw, size)
       zig.update(t)
-      slabs.update(progress, t, dt, lit)
+      slabs.update(progress, t, dt, lit, pxPerMetre)
       dressing.update(t, pxPerMetre)
 
       // the label sits on the lit slab (or the shrine)

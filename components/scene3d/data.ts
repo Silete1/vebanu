@@ -7,25 +7,32 @@ import { Vector3 } from "three"
 
 export type Vec3 = [number, number, number]
 
-export type CameraKey = { at: number; pos: Vec3; target: Vec3; fov: number; shift: number }
+/** scroll keys, offsets from the hero camera: hfov (deg), rise/push (m), look_up (m on the aim) */
+export type CameraKey = { at: number; hfov: number; rise: number; push: number; look_up: number; shift: number }
+
+export type SkyFrame = { matrix: number[][]; orion: Record<string, Vec3> }
 
 export type SceneData = {
-  yawDeg: number
   /** equatorial → scene: LTR = Orion rising in the east, RTL = the same figure setting in the west (mirrored, and real) */
-  sky: { matrix: number[][]; matrixRtl: number[][] }
+  sky: { ltr: SkyFrame; rtl: SkyFrame }
+  orionLines: [string, string][]
   skyMap: { scale: number; gamma: number }
   stars: { count: number; log2FluxMin: number; log2FluxMax: number }
-  lightmaps: Record<"body" | "ground", { moon: number; torch: number; gamma: number }>
-  orion: { stars: Record<string, Vec3>; starsRtl: Record<string, Vec3>; lines: [string, string][] }
+  /** Cycles bakes: RGB everything but the torches, A the torches (scales to undo the 8-bit encode) */
+  beauty: Record<"body" | "near" | "far", { moon: number; torch: number; gamma: number }>
   roof: Vec3
   dingir: Vec3
+  /** the lab's v2 hero camera (85 mm), LTR; RTL mirrors x */
+  hero: { pos: Vec3; target: Vec3 }
+  camera: CameraKey[]
   slab: { size: Vec3; slugs: string[]; docks: number[][]; starts: number[][] }
-  torches: Vec3[]
+  /** pilgrims on the stair: x, y, z, yaw (rad), height */
+  figures: number[][]
+  flames: Vec3[]
   torchColor: Vec3
   moon: { elevation_deg: number; azimuth_deg: number; strength: number; color: Vec3 }
-  groundPatch: number
-  tile: { wall: number; top: number; ground: number }
-  camera: CameraKey[]
+  exposure: number
+  haze: { color: Vec3; density: number }
   palms: number[][]
   reeds: number[][]
   palmH: number

@@ -42,7 +42,8 @@ function toEquatorial(m: number[][]) {
 export function createSky(data: SceneData, map: Texture, packed: Uint16Array, q: Quality, haze: Vector3, rtl: boolean): SkyLayer {
   const group = new Group()
   const world = new Group()
-  const m = rtl ? data.sky.matrixRtl : data.sky.matrix
+  const frame = rtl ? data.sky.rtl : data.sky.ltr
+  const m = frame.matrix
   const toEq = toEquatorial(m)
 
   // ---------------------------------------------------------------- dome: Milky Way + faint field
@@ -158,7 +159,7 @@ export function createSky(data: SceneData, map: Texture, packed: Uint16Array, q:
   group.add(stars)
 
   // ---------------------------------------------------------------- the figure: shrine -> dingir -> Orion
-  const sky = rtl ? data.orion.starsRtl : data.orion.stars
+  const sky = frame.orion
   type End = { p: Vec3Like; sky: boolean }
   type Vec3Like = [number, number, number]
   const roof: End = { p: data.roof, sky: false }
@@ -168,7 +169,7 @@ export function createSky(data: SceneData, map: Texture, packed: Uint16Array, q:
     [roof, dingir],
     [dingir, at("saiph")],
     [dingir, at("rigel")],
-    ...data.orion.lines.map(([a, b]) => [at(a), at(b)] as [End, End]),
+    ...data.orionLines.map(([a, b]) => [at(a), at(b)] as [End, End]),
   ]
   const A: number[] = []
   const B: number[] = []

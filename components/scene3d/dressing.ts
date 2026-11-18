@@ -99,13 +99,13 @@ export function createDressing(data: SceneData, cards: Texture, q: Quality, haze
 
   // ---------------------------------------------------------------- torch flames
   const flamePos: number[] = []
-  for (const t of data.torches) {
+  for (const t of data.flames) {
     const p = toThree(t)
-    flamePos.push(p.x, p.y + 0.25, p.z)
+    flamePos.push(p.x, p.y, p.z)
   }
   const flameGeo = new BufferGeometry()
   flameGeo.setAttribute("position", new Float32BufferAttribute(flamePos, 3))
-  flameGeo.setAttribute("aSeed", new Float32BufferAttribute(data.torches.map((_, i) => i * 0.37), 1))
+  flameGeo.setAttribute("aSeed", new Float32BufferAttribute(data.flames.map((_, i) => i * 0.37), 1))
   const fire = new Color().setRGB(...data.torchColor)
   const flameMat = new ShaderMaterial({
     transparent: true,

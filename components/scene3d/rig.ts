@@ -1,12 +1,12 @@
 /**
- * The camera: a low telephoto view along the scroll path in scene.json (busy part in the right two-thirds,
- * the headline's calm third left — mirrored in Arabic), a slow idle drift, pointer parallax, and a gentle
- * drag-to-orbit with limits that eases home. The lens shift is Blender's (in frame heights), so the poster
- * and the live frame line up.
+ * The camera. Scroll 0 is the lab's v2 hero frame (85 mm, low, the ziggurat filling the right two-thirds, the
+ * headline's calm third on the left; Arabic mirrors it). Scrolling rises, pushes in and lifts the aim into
+ * Orion while the lens widens (keys in scene.json). On top: a slow idle drift, pointer parallax and a gentle
+ * drag-to-orbit with limits that eases home. The horizontal field is kept, so every window gets the 85 mm look.
  */
 import { MathUtils, PerspectiveCamera, Vector3 } from "three"
 
-import { type CameraKey, toThree } from "./data"
+import { type CameraKey, type SceneData, toThree } from "./data"
 
 export type Rig = {
   camera: PerspectiveCamera
@@ -17,20 +17,21 @@ export type Rig = {
 }
 
 const ease = (x: number) => x * x * (3 - 2 * x)
-/** Arabic headlines run wider: the RTL frame pushes the subject further out (same factor in the Blender poster) */
-export const RTL_SHIFT = 1.4
+const UP = new Vector3(0, 1, 0)
 
-export function createRig(keys: CameraKey[], rtl: boolean): Rig {
-  const camera = new PerspectiveCamera(28, 16 / 9, 1, 14000)
+export function createRig(hero: SceneData["hero"], keys: CameraKey[], rtl: boolean): Rig {
+  const camera = new PerspectiveCamera(14, 16 / 9, 1, 14000)
   let aspect = 16 / 9
   let aim = { x: 0, y: 0 }
   const look = { x: 0, y: 0 }
   const orbit = { yaw: 0, pitch: 0, idle: 0 }
+  const mirror = (v: number[]) => (rtl ? [-v[0], v[1], v[2]] : v)
+  const heroPos = toThree(mirror(hero.pos))
+  const heroTarget = toThree(mirror(hero.target))
+  const ahead = heroTarget.clone().sub(heroPos).setY(0).normalize()
+  const pivot = new Vector3(0, 12, 4) // the ziggurat's heart
   const pos = new Vector3()
   const target = new Vector3()
-  const a = new Vector3()
-  const b = new Vector3()
-  const pivot = new Vector3(0, 20, 0)
 
   const sample = (p: number) => {
     let i = 0
@@ -38,10 +39,12 @@ export function createRig(keys: CameraKey[], rtl: boolean): Rig {
     const k0 = keys[i]
     const k1 = keys[i + 1]
     const u = ease(MathUtils.clamp((p - k0.at) / (k1.at - k0.at), 0, 1))
-    const mirror = (v: number[]) => (rtl ? [-v[0], v[1], v[2]] : v)
-    pos.copy(toThree(mirror(k0.pos), a)).lerp(toThree(mirror(k1.pos), b), u)
-    target.copy(toThree(k0.target, a)).lerp(toThree(k1.target, b), u)
-    return { fov: MathUtils.lerp(k0.fov, k1.fov, u), shift: MathUtils.lerp(k0.shift, k1.shift, u) }
+    const mix = (key: keyof CameraKey) => MathUtils.lerp(k0[key], k1[key], u)
+    pos.copy(heroPos).addScaledVector(ahead, mix("push"))
+    pos.y += mix("rise")
+    target.copy(heroTarget)
+    target.y += mix("look_up")
+    return { hfov: mix("hfov"), shift: mix("shift") }
   }
 
   return {
@@ -54,12 +57,20 @@ export function createRig(keys: CameraKey[], rtl: boolean): Rig {
       aim = { x, y }
     },
     drag(dx, dy) {
-      orbit.yaw = MathUtils.clamp(orbit.yaw - dx * 0.0035, -0.32, 0.32)
-      orbit.pitch = MathUtils.clamp(orbit.pitch + dy * 0.0012, -0.05, 0.08)
+      orbit.yaw = MathUtils.clamp(orbit.yaw - dx * 0.003, -0.3, 0.3)
+      orbit.pitch = MathUtils.clamp(orbit.pitch + dy * 0.0012, -0.04, 0.08)
       orbit.idle = 0
     },
     update(progress, time, dt) {
-      const { fov, shift } = sample(progress)
+      const portrait = aspect < 1
+      const lens = sample(progress)
+      let hfov = lens.hfov
+      // phones: no side third; frame the whole ziggurat in the top half, above the headline
+      if (portrait) {
+        pos.lerp(pivot, 0.56)
+        target.lerp(pivot, 0.85)
+        hfov = Math.max(hfov, 50)
+      }
       look.x += (aim.x - look.x) * Math.min(1, dt * 2.5)
       look.y += (aim.y - look.y) * Math.min(1, dt * 2.5)
       orbit.idle += dt
@@ -68,22 +79,20 @@ export function createRig(keys: CameraKey[], rtl: boolean): Rig {
         orbit.yaw -= orbit.yaw * k
         orbit.pitch -= orbit.pitch * k
       }
-      // drift + parallax + orbit, all around the ziggurat
-      const yaw = orbit.yaw + look.x * 0.035 + Math.sin(time * 0.06) * 0.03
-      pos.sub(pivot).applyAxisAngle(new Vector3(0, 1, 0), yaw).add(pivot)
-      pos.y += Math.sin(time * 0.09) * 0.6 + orbit.pitch * 120 + look.y * -1.2
-      target.y += -look.y * 2.0
+      // drift + parallax + orbit, around the ziggurat
+      const yaw = orbit.yaw + look.x * 0.025 + Math.sin(time * 0.06) * 0.018
+      pos.sub(pivot).applyAxisAngle(UP, yaw).add(pivot)
+      target.sub(pivot).applyAxisAngle(UP, yaw * 0.6).add(pivot)
+      pos.y += Math.sin(time * 0.09) * 0.4 + orbit.pitch * 100 - look.y * 0.8
+      target.y -= look.y * 1.5
       camera.position.copy(pos)
       camera.lookAt(target)
-
-      // phones: no side third; widen to keep the whole ziggurat, lift it above the headline
-      const portrait = aspect < 1
-      camera.fov = portrait ? MathUtils.radToDeg(2 * Math.atan(Math.tan(MathUtils.degToRad(15)) / aspect)) : fov
+      camera.fov = MathUtils.radToDeg(2 * Math.atan(Math.tan(MathUtils.degToRad(hfov / 2)) / aspect))
       camera.updateProjectionMatrix()
       const e = camera.projectionMatrix.elements
-      const sx = portrait ? 0 : rtl ? -shift * RTL_SHIFT : shift
-      e[8] = (2 * sx) / aspect
-      e[9] = portrait ? -0.62 : 0 // phones: the ziggurat in the top half, above the headline
+      // Blender's lens shift (frame widths): the poster and this frame line up; phones lift the content instead
+      e[8] = portrait ? 0 : 2 * (rtl ? -lens.shift : lens.shift)
+      e[9] = portrait ? -0.42 : 0
       camera.projectionMatrixInverse.copy(camera.projectionMatrix).invert()
     },
   }
