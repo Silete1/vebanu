@@ -17,6 +17,9 @@ Repo: `Silete1/vebanu` on both remotes (`origin` = Forgejo git.brain.anu.ltd, `g
 The website is to be **completely remade as a new production**: 3D (Blender, Unreal Engine), ANU stories, **Anu the Sumerian god × ANU Software Solutions** remix. The owner's task list for it is on **PC2** (not found on PC1); asked in `site-mail/to-pc2/002` to push it to branch `pc2/remake-brief`.
 Until the brief is shared and split: the current site only gets the hosting move and the small fixes already running. **No redesign work on the current site.**
 
+## OWNER DECISION 18 Nov ~15:00
+Owner rejected PC2's stylised 3D/animation ("very bad"). Site visuals come from PC1's photoreal lane only. Staging = PC1 `pc1/photoreal` (release 202611181201-c44eff1). PC2's non-visual work (content, pages, AI layer, CSP) kept pending a combine decision. Mail site-mail/to-pc2/008.
+
 ## Status
 | Area | State |
 |---|---|
