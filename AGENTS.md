@@ -66,8 +66,7 @@ Read this file first. Do not begin each task with a full repository scan. Use th
 - `components/brand`: ANU logo component and embedded logo image.
 - `components/home`: current homepage-specific implementation.
 - `components/platform`, `components/industries`, `components/method`: interactive feature components used by the current homepage.
-- `components/sections`, `components/services`: content-driven section system backed by [`lib/content/home.ts`](/C:/Users/Lenovo/Documents/vebanu/lib/content/home.ts). These components exist in the repo, but the current `/` route is composed primarily from `components/home/*` plus selected feature components.
-- `components/navigation`: alternate navigation components present in the repo; the active page shell uses [`components/layout/site-header.tsx`](/C:/Users/Lenovo/Documents/vebanu/components/layout/site-header.tsx).
+- `components/navigation`: the mobile navigation sheet used by [`components/layout/site-header.tsx`](/C:/Users/Lenovo/Documents/vebanu/components/layout/site-header.tsx).
 
 ## Styling and Tokens
 
@@ -103,7 +102,7 @@ Read this file first. Do not begin each task with a full repository scan. Use th
 - Locale helpers: [`lib/i18n.ts`](/C:/Users/Lenovo/Documents/vebanu/lib/i18n.ts)
 - Site-level localized strings: [`lib/site.ts`](/C:/Users/Lenovo/Documents/vebanu/lib/site.ts)
 - Shared active-interface copy: [`lib/content/site-copy.ts`](/C:/Users/Lenovo/Documents/vebanu/lib/content/site-copy.ts)
-- Structured bilingual home content: [`lib/content/home.ts`](/C:/Users/Lenovo/Documents/vebanu/lib/content/home.ts)
+- Bilingual home copy: `homePageCopy` in [`lib/content/site-copy.ts`](/C:/Users/Lenovo/Documents/vebanu/lib/content/site-copy.ts)
 - Supported locales in code: `en`, `ar`.
 - Default locale: `en`.
 - `app/[locale]/layout.tsx` validates the locale and applies language-specific `lang`, `dir`, metadata, canonicals, and alternates.
@@ -149,9 +148,7 @@ Read this file first. Do not begin each task with a full repository scan. Use th
 - Use `cn()` from [`lib/utils.ts`](/C:/Users/Lenovo/Documents/vebanu/lib/utils.ts) for class merging.
 - Use `cva()` for component variants where already established (`button`, `tabs`).
 - Prefer server components by default; mark components with `"use client"` only when hooks, browser APIs, GSAP, or client-side interactivity are required.
-- Current implementation uses a mix of:
-  - route-specific section composition in `components/home/*`
-  - reusable content-driven sections in `components/sections/*`
+- Pages compose route-specific sections (`components/home/*`, `components/industries/*`, `components/insights/*`) inside `PageShell`.
 - Reuse the existing shell (`PageShell`, `SiteHeader`, `SiteFooter`, `Container`) before introducing new page framing.
 
 ## Naming and Imports

@@ -56,15 +56,6 @@ export async function generateMetadata({
           : "%s | ANU Software Solutions",
     },
     description: site.description,
-    icons: {
-      icon: [
-        { url: "/anulogopng-.png", type: "image/png" },
-        { url: "/icon.png", type: "image/png" },
-        { url: "/favicon.ico", type: "image/x-icon" },
-      ],
-      shortcut: ["/anulogopng-.png"],
-      apple: [{ url: "/anulogopng-.png", type: "image/png" }],
-    },
     openGraph: {
       type: "website",
       locale: localeMeta[locale].ogLocale,
@@ -156,10 +147,6 @@ export default async function LocaleLayout({
         fontArabic.variable
       )}
     >
-      <head>
-        <link rel="icon" type="image/png" href="/anulogopng-.png" />
-        <link rel="apple-touch-icon" href="/anulogopng-.png" />
-      </head>
       <body>
         <JsonLd data={siteSchemas} />
         {children}
