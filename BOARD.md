@@ -20,6 +20,12 @@ Until the brief is shared and split: the current site only gets the hosting move
 ## OWNER DECISION 18 Nov ~15:00
 Owner rejected PC2's stylised 3D/animation ("very bad"). Site visuals come from PC1's photoreal lane only. Staging = PC1 `pc1/photoreal` (release 202611181201-c44eff1). PC2's non-visual work (content, pages, AI layer, CSP) kept pending a combine decision. Mail site-mail/to-pc2/008.
 
+## OWNER DECISIONS 18 Nov (later)
+- PC1's version goes live; PC2 supports, mainly renders/3D (owner on PC2). PC2 stopped all its visuals.
+- Target = PC2's site structure (17 systems, live screens, interactivity) + PC1 PHOTOREAL INTERACTIVE realtime 3D. Branch `pc1/interactive` (rebasing onto PC2's rewritten f3c44d8). Video/stills only as fallbacks.
+- PC2 jobs (site-mail 011): photoreal realtime system scenes (twins first) on pc2/<topic> off pc1/interactive; render node; encoding; QA.
+- Shared 3D lab: Forgejo Silete1/anu-3d-lab. Ziggurat standard = PC2 proportions (site-mail to-pc1/006).
+
 ## Status
 | Area | State |
 |---|---|
