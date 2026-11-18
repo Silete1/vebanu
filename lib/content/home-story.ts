@@ -4,6 +4,15 @@ import type { Locale } from "@/lib/i18n"
 export type HomeStory = {
   meta: { title: string; description: string }
   hero: { kicker: string; title: [string, string]; lede: string; primary: string; secondary: string; visualAlt: string }
+  ledger: {
+    kicker: string
+    title: string
+    lede: string
+    facts: { value: string; label: string }[]
+    alt: string
+    caption: string
+    bridge: string
+  }
   noise: {
     kicker: string
     title: string
@@ -33,6 +42,19 @@ export const homeStory: Record<Locale, HomeStory> = {
       primary: "Book an assessment",
       secondary: "See the systems",
       visualAlt: "The ANU line network settling into an ordered grid of square status glyphs",
+    },
+    ledger: {
+      kicker: "c. 3100 BCE · southern Iraq",
+      title: "The first writing was a ledger.",
+      lede: "Around 3100 BCE, in the cities of southern Iraq, scribes pressed reeds into clay to count barley, livestock and rations. Every entry had its own ruled box. ANU does the same work today: one record that everyone can trust.",
+      facts: [
+        { value: "6,000+", label: "of the oldest tablets known, most from Uruk" },
+        { value: "≈ 85%", label: "of them are accounts, not stories" },
+        { value: "13–15", label: "ways of counting: grain, livestock and labour each had their own units" },
+      ],
+      alt: "A clay tablet ruled into boxes, each holding signs and number marks, with a cylinder-seal rolling below",
+      caption: "Proto-cuneiform tablet: barley distribution, with a cylinder-seal rolling. c. 3100–2900 BCE. The Metropolitan Museum of Art, 1988.433.1, public domain.",
+      bridge: "Five thousand years later, most companies still keep their accounts in someone's memory.",
     },
     noise: {
       kicker: "The noise",
@@ -124,6 +146,19 @@ export const homeStory: Record<Locale, HomeStory> = {
       primary: "احجز تقييماً",
       secondary: "شاهد الأنظمة",
       visualAlt: "شبكة خطوط أنو تستقر في شبكة منتظمة من مربعات الحالة",
+    },
+    ledger: {
+      kicker: "نحو 3100 ق.م · جنوب العراق",
+      title: "أول كتابة في التاريخ كانت سجلاً للحسابات.",
+      lede: "نحو عام 3100 قبل الميلاد، في مدن جنوب العراق، ضغط الكتبة أقلام القصب في الطين ليحصوا الشعير والماشية والحصص. لكل قيد خانة مسطّرة خاصة به. وأنو تقوم اليوم بالعمل نفسه: سجل واحد يثق به الجميع.",
+      facts: [
+        { value: "+6,000", label: "لوح من أقدم الألواح المعروفة، معظمها من الوركاء" },
+        { value: "≈ 85%", label: "منها حسابات، لا حكايات" },
+        { value: "13–15", label: "طريقة للعدّ: للحبوب والماشية والعمل وحداتها الخاصة" },
+      ],
+      alt: "لوح طيني مقسّم إلى خانات مسطّرة، في كل منها علامات وأرقام، وتحتها طبعة ختم أسطواني",
+      caption: "لوح بالكتابة المسمارية الأولى: توزيع الشعير مع طبعة ختم أسطواني. نحو 3100–2900 ق.م. متحف المتروبوليتان للفنون، 1988.433.1، ملكية عامة.",
+      bridge: "وبعد خمسة آلاف عام، ما زالت معظم الشركات تحفظ حساباتها في ذاكرة شخص واحد.",
     },
     noise: {
       kicker: "الفوضى",

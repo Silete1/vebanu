@@ -3,6 +3,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import type { CSSProperties } from "react"
 
+import { Sign } from "@/components/brand/sign"
 import { Glyph } from "@/components/story/glyph"
 import { CtaBand } from "@/components/story/cta-band"
 import { Poster } from "@/components/story/poster"
@@ -58,7 +59,15 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
       {/* hero: the ink band, the claim, the network settling into order */}
       <section className="anu-band anu-sky anu-home-hero" aria-labelledby="home-title">
         <div className="anu-home-hero__visual" aria-hidden="true">
-          <Poster src="/media/systems/home" alt="" priority sizes="100vw" />
+          <Poster
+            src={locale === "ar" ? "/media/systems/home-rtl" : "/media/systems/home"}
+            alt=""
+            priority
+            sizes="100vw"
+            small={960}
+            width={1920}
+            height={1080}
+          />
           <SceneSlot scene="network" />
         </div>
         <div className="anu-wrap anu-home-hero__text">
@@ -80,6 +89,48 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             <Link href={localizedPath(locale, "/systems")} className="anu-action anu-action--ghost">
               {story.hero.secondary}
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* the first ledger: Uruk, c. 3100 BCE */}
+      <section className="anu-section anu-first-ledger" aria-labelledby="ledger-title">
+        <div className="anu-wrap anu-first-ledger__grid">
+          <figure className="anu-first-ledger__tablet">
+            <picture>
+              <source type="image/avif" srcSet="/media/heritage/uruk-tablet-640.avif 640w, /media/heritage/uruk-tablet-1280.avif 1280w" sizes="(min-width: 64rem) 40vw, 90vw" />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/media/heritage/uruk-tablet-640.webp"
+                srcSet="/media/heritage/uruk-tablet-640.webp 640w, /media/heritage/uruk-tablet-1280.webp 1280w"
+                sizes="(min-width: 64rem) 40vw, 90vw"
+                width={1280}
+                height={1172}
+                alt={story.ledger.alt}
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
+            <figcaption className="anu-first-ledger__caption">{story.ledger.caption}</figcaption>
+          </figure>
+          <div className="anu-first-ledger__text">
+            <p className="anu-kicker">
+              <Sign name="ŠE" locale={locale} />
+              {story.ledger.kicker}
+            </p>
+            <h2 id="ledger-title" className="anu-reveal">
+              {story.ledger.title}
+            </h2>
+            <p className="anu-lede anu-reveal">{story.ledger.lede}</p>
+            <dl className="anu-facts">
+              {story.ledger.facts.map((fact) => (
+                <div key={fact.label} className="anu-reveal">
+                  <dt className="anu-num">{fact.value}</dt>
+                  <dd>{fact.label}</dd>
+                </div>
+              ))}
+            </dl>
+            <p className="anu-first-ledger__bridge anu-reveal">{story.ledger.bridge}</p>
           </div>
         </div>
       </section>

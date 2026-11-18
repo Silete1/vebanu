@@ -1,5 +1,6 @@
 import type { Locale } from "@/lib/i18n"
 
+import { type SystemStar, systemStars } from "./stars"
 import type { StoryCopy, SystemGroup, SystemStory } from "./types"
 import { brainLite } from "./brain-lite"
 import { brain } from "./brain"
@@ -19,6 +20,7 @@ import { twins } from "./twins"
 import { walkthroughs } from "./walkthroughs"
 import { workshops } from "./workshops"
 
+export type { SystemStar } from "./stars"
 export type { StoryCopy, SystemGroup, SystemStatus, SystemStory } from "./types"
 
 /** Every system the site tells, in map order. Adding a system = adding its file here. */
@@ -42,10 +44,10 @@ const registry: SystemStory[] = [
   workshops,
 ].sort((a, b) => a.order - b.order)
 
-export type LocalizedSystem = Omit<SystemStory, "copy"> & { copy: StoryCopy }
+export type LocalizedSystem = Omit<SystemStory, "copy"> & { copy: StoryCopy; star?: SystemStar }
 
 function localize(system: SystemStory, locale: Locale): LocalizedSystem {
-  return { ...system, copy: system.copy[locale] }
+  return { ...system, copy: system.copy[locale], star: systemStars[system.slug] }
 }
 
 export function getSystems(locale: Locale, group?: SystemGroup): LocalizedSystem[] {

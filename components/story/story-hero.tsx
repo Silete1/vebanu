@@ -1,5 +1,6 @@
 import Link from "next/link"
 
+import { Sign } from "@/components/brand/sign"
 import { Glyph, statusGlyph } from "@/components/story/glyph"
 import { Poster } from "@/components/story/poster"
 import { SceneSlot } from "@/components/story/scene-slot"
@@ -30,6 +31,17 @@ export function StoryHero({ system, locale }: { system: LocalizedSystem; locale:
             <Glyph state={statusGlyph(system.status)} large />
             {copy.status[system.status]}
           </p>
+          {system.star ? (
+            <p className="anu-star-caption">
+              <Sign name={system.star.sign === "AN" ? "AN" : "MUL"} locale={locale} />
+              <span className="anu-num" dir="ltr">
+                {system.star.sign}
+              </span>
+              <span>
+                {system.star.name[locale]} · {system.star.modern[locale]}
+              </span>
+            </p>
+          ) : null}
           <ul className="anu-chips" aria-label={copy.forWhom}>
             {audience.map((item) => (
               <li key={item}>{item}</li>

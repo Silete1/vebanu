@@ -82,3 +82,14 @@
   src: url("/fonts/roboto-mono-latin-wght.woff2") format("woff2");
   unicode-range: U+0030-0039;
 }
+
+/* Seven cuneiform signs (AN, MUL, KI, ŠE, DIŠ, U, 60) subset from Noto Sans Cuneiform (SIL OFL 1.1),
+   3.6 KB, fetched only on pages that show one. */
+@font-face {
+  font-family: "Anu Cuneiform";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/anu-cuneiform.woff2") format("woff2");
+  unicode-range: U+12000-1254F;
+}
