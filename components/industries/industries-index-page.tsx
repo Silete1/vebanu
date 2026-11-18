@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { ArrowUpRightIcon } from "lucide-react"
 
-import { AssessmentCtaSection } from "@/components/home/assessment-cta-section"
+import { CtaBand } from "@/components/story/cta-band"
 import { IndustriesAccordionShowcase } from "@/components/industries/industries-accordion-showcase"
 import { Container } from "@/components/layout/container"
 import { getIndustries } from "@/lib/content/industries"
@@ -103,7 +103,7 @@ export function IndustriesIndexPage({ locale }: { locale: Locale }) {
         </Container>
       </section>
 
-      <AssessmentCtaSection locale={locale} />
+      <CtaBand locale={locale} />
     </div>
   )
 }

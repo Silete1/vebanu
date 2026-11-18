@@ -1,0 +1,193 @@
+/* Pages beyond the stories: contact and its form, page heroes, gates, the dingir. */
+
+@layer components {
+  .anu-page-hero {
+    padding-block: clamp(4rem, 3rem + 6vw, 9rem) clamp(3rem, 2rem + 5vw, 7rem);
+  }
+
+  .anu-page-hero__title {
+    max-inline-size: 18ch;
+  }
+
+  /* ------------------------------------------------------------ contact */
+
+  .anu-contact {
+    display: grid;
+    gap: var(--anu-s-12);
+    align-items: start;
+  }
+
+  @media (min-width: 64rem) {
+    .anu-contact {
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+      gap: var(--anu-s-16);
+    }
+  }
+
+  .anu-contact__steps {
+    display: grid;
+    gap: var(--anu-s-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--anu-on-ink-soft);
+  }
+
+  .anu-contact__steps li {
+    display: flex;
+    gap: var(--anu-s-4);
+    padding-block-end: var(--anu-s-3);
+    border-block-end: var(--anu-hair) solid var(--anu-on-ink-rule);
+  }
+
+  .anu-contact__steps .anu-num {
+    color: var(--anu-on-ink-signal);
+  }
+
+  .anu-contact__direct {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--anu-s-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .anu-contact__form {
+    display: grid;
+    gap: var(--anu-s-4);
+    padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+    background: var(--anu-paper);
+    color: var(--anu-ink);
+    border-block-start: var(--anu-edge) solid var(--anu-signal);
+    color-scheme: light;
+  }
+
+  .anu-contact__form h2 {
+    font-size: var(--anu-t-24);
+    font-weight: 400;
+  }
+
+  .anu-contact__form > p {
+    color: var(--anu-ink-soft);
+    font-size: var(--anu-t-15);
+  }
+
+  /* --------------------------------------------------------------- form */
+
+  .anu-form {
+    display: grid;
+    gap: var(--anu-s-6);
+  }
+
+  .anu-field {
+    display: grid;
+    gap: var(--anu-s-2);
+  }
+
+  .anu-field label {
+    font-size: var(--anu-t-13);
+    color: var(--anu-ink-soft);
+  }
+
+  .anu-field input,
+  .anu-field select {
+    min-block-size: 3.25rem;
+    padding-inline: var(--anu-s-4);
+    border: var(--anu-hair) solid var(--anu-rule-strong);
+    border-radius: 0;
+    background: var(--anu-desk);
+    color: var(--anu-ink);
+    font: inherit;
+    font-size: var(--anu-t-18);
+    transition:
+      border-color var(--anu-fast) linear,
+      box-shadow var(--anu-fast) linear,
+      background-color var(--anu-fast) linear;
+  }
+
+  .anu-field input:focus,
+  .anu-field select:focus {
+    outline: none;
+    border-color: var(--anu-signal);
+    background: var(--anu-paper);
+    box-shadow: 0 0 0 3px var(--anu-signal-glow);
+  }
+
+  .anu-field input[aria-invalid="true"] {
+    border-color: var(--anu-danger);
+  }
+
+  .anu-field__phone {
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+  }
+
+  .anu-field__phone select {
+    border-inline-end: 0;
+    font-size: var(--anu-t-15);
+  }
+
+  .anu-field__error {
+    display: flex;
+    align-items: center;
+    gap: var(--anu-s-2);
+    font-size: var(--anu-t-13);
+    color: var(--anu-danger);
+  }
+
+  .anu-form__submit {
+    justify-content: center;
+    min-block-size: 3.5rem;
+  }
+
+  .anu-form__submit:disabled {
+    opacity: 0.7;
+    cursor: progress;
+  }
+
+  .anu-form__done {
+    display: grid;
+    gap: var(--anu-s-3);
+    justify-items: start;
+    padding-block: var(--anu-s-8);
+  }
+
+  .anu-form__done h3 {
+    font-size: var(--anu-t-24);
+    font-weight: 400;
+  }
+
+  /* -------------------------------------------------------------- gates */
+
+  .anu-gates__index {
+    min-inline-size: 2.5rem;
+    color: var(--anu-signal-text);
+    font-size: var(--anu-t-15);
+  }
+
+  /* -------------------------------------------------------------- dingir */
+
+  .anu-dingir {
+    inline-size: clamp(4rem, 3rem + 4vw, 7rem);
+    block-size: auto;
+    margin-block-end: var(--anu-s-8);
+    color: var(--anu-signal);
+  }
+
+  .anu-dingir__head {
+    fill: currentColor;
+  }
+
+  .anu-dingir__tail {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.5;
+    stroke-linecap: square;
+  }
+
+  .anu-about-name h2 {
+    font-size: clamp(2rem, 1.4rem + 2.6vw, 3.5rem);
+    margin-block-end: var(--anu-s-6);
+  }
+}

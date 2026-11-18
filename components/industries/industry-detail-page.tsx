@@ -2,7 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { ArrowLeftIcon, ArrowUpRightIcon } from "lucide-react"
 
-import { AssessmentCtaSection } from "@/components/home/assessment-cta-section"
+import { CtaBand } from "@/components/story/cta-band"
 import { Container } from "@/components/layout/container"
 import type { Industry } from "@/lib/content/industries"
 import { categoryLabels, getInsightBySlug } from "@/lib/content/insights"
@@ -285,7 +285,7 @@ export function IndustryDetailPage({
         </section>
       </div>
 
-      <AssessmentCtaSection locale={locale} />
+      <CtaBand locale={locale} />
     </div>
   )
 }

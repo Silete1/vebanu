@@ -31,6 +31,10 @@ const nextConfig: NextConfig = {
   // Self-contained server bundle for the Docker image (deploy/Dockerfile); Vercel ignores it.
   output: "standalone",
   poweredByHeader: false,
+  // every marketing page is prerendered (ensureStatic in app/[locale]/layout.tsx) and
+  // links prefetch a shared route shell, so moving between pages is near-instant
+  cacheComponents: true,
+  partialPrefetching: true,
   async headers() {
     return [
       {

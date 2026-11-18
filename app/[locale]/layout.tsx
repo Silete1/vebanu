@@ -1,34 +1,24 @@
-import type { Metadata } from "next"
-import { Inter_Tight, Roboto_Mono, Tajawal } from "next/font/google"
+import type { Metadata, Viewport } from "next"
 import { notFound } from "next/navigation"
 
 import "../globals.css"
 import { JsonLd } from "@/components/seo/json-ld"
-import { anuContact } from "@/lib/contact"
+import { SiteFooter } from "@/components/shell/site-footer"
+import { SiteHeader } from "@/components/shell/site-header"
+import { organizationGraph } from "@/lib/seo"
 import { getLocaleAttributes, isLocale, localeMeta, locales } from "@/lib/i18n"
 import { getSiteContent, siteUrl } from "@/lib/site"
-import { cn } from "@/lib/utils"
+import { tierScript } from "@/lib/tier"
 
-const fontDisplay = Inter_Tight({
-  subsets: ["latin"],
-  variable: "--font-display",
-  weight: ["400"],
-})
-
-const fontMono = Roboto_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-  weight: ["400"],
-})
-
-const fontArabic = Tajawal({
-  subsets: ["arabic"],
-  variable: "--font-arabic",
-  weight: ["300", "400", "500", "700", "800"],
-})
+export const ensureStatic = "navigation"
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }))
+}
+
+export const viewport: Viewport = {
+  themeColor: "#090b11",
+  colorScheme: "light dark",
 }
 
 type LocaleLayoutProps = {
@@ -43,126 +33,53 @@ export async function generateMetadata({
   if (!isLocale(locale)) return {}
 
   const site = getSiteContent(locale)
-  const defaultTitle =
-    locale === "ar" ? "أنو للحلول البرمجية" : "ANU Software Solutions"
 
   return {
     metadataBase: new URL(siteUrl),
-    title: {
-      default: defaultTitle,
-      template:
-        locale === "ar"
-          ? "%s | أنو للحلول البرمجية"
-          : "%s | ANU Software Solutions",
-    },
+    title: { default: site.name, template: `%s | ${site.name}` },
     description: site.description,
     icons: {
       icon: [
-        { url: "/anulogopng-.png", type: "image/png" },
+        { url: "/brand/anu-mark.svg", type: "image/svg+xml" },
         { url: "/icon.png", type: "image/png" },
-        { url: "/favicon.ico", type: "image/x-icon" },
       ],
-      shortcut: ["/anulogopng-.png"],
-      apple: [{ url: "/anulogopng-.png", type: "image/png" }],
+      apple: [{ url: "/apple-icon.png", type: "image/png" }],
     },
     openGraph: {
       type: "website",
       locale: localeMeta[locale].ogLocale,
       alternateLocale: localeMeta[locale === "ar" ? "en" : "ar"].ogLocale,
-      siteName:
-        locale === "ar" ? "أنو للحلول البرمجية" : "ANU Software Solutions",
-      title: defaultTitle,
+      siteName: site.name,
+      title: site.name,
       description: site.description,
-      images: [{ url: "/anulogopng-.png", alt: defaultTitle }],
+      images: [{ url: "/media/og.png", width: 1200, height: 630, alt: site.name }],
     },
-    twitter: {
-      card: "summary",
-      title: defaultTitle,
-      description: site.description,
-      images: ["/anulogopng-.png"],
-    },
+    twitter: { card: "summary_large_image", title: site.name, description: site.description },
+    alternates: { types: { "text/plain": "/llms.txt" } },
   }
 }
 
-export default async function LocaleLayout({
-  children,
-  params,
-}: LocaleLayoutProps) {
+export default async function LocaleLayout({ children, params }: LocaleLayoutProps) {
   const { locale } = await params
   if (!isLocale(locale)) notFound()
 
-  const localeAttributes = getLocaleAttributes(locale)
-  const site = getSiteContent(locale)
-  const siteSchemas = [
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "@id": `${siteUrl}/#organization`,
-      name: locale === "ar" ? "أنو للحلول البرمجية" : "ANU Software Solutions",
-      alternateName: locale === "ar" ? "أنو" : "ANU",
-      url: siteUrl,
-      logo: `${siteUrl}/anulogopng-.png`,
-      description: site.description,
-      email: anuContact.email,
-      telephone: anuContact.phoneInternational,
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: locale === "ar" ? "بغداد" : "Baghdad",
-        addressCountry: "IQ",
-      },
-      areaServed: {
-        "@type": "Country",
-        name: locale === "ar" ? "العراق" : "Iraq",
-      },
-      knowsAbout:
-        locale === "ar"
-          ? [
-              "تطبيق نظام Odoo ERP",
-              "تصميم العمليات",
-              "إدارة المخزون",
-              "التقارير التشغيلية",
-              "الرقابة المالية",
-            ]
-          : [
-              "Odoo ERP implementation",
-              "Business process design",
-              "Inventory management",
-              "Operational reporting",
-              "Financial controls",
-            ],
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "@id": `${siteUrl}/#website-${locale}`,
-      url: `${siteUrl}/${locale}`,
-      name: locale === "ar" ? "أنو للحلول البرمجية" : "ANU Software Solutions",
-      description: site.description,
-      publisher: { "@id": `${siteUrl}/#organization` },
-      inLanguage: localeMeta[locale].htmlLang,
-    },
-  ]
-
   return (
-    <html
-      {...localeAttributes}
-      data-locale={locale}
-      data-scroll-behavior="smooth"
-      suppressHydrationWarning
-      className={cn(
-        "scroll-smooth antialiased",
-        fontDisplay.variable,
-        fontMono.variable,
-        fontArabic.variable
-      )}
-    >
+    <html {...getLocaleAttributes(locale)} data-locale={locale} suppressHydrationWarning>
       <head>
-        <link rel="icon" type="image/png" href="/anulogopng-.png" />
-        <link rel="apple-touch-icon" href="/anulogopng-.png" />
+        <script dangerouslySetInnerHTML={{ __html: tierScript }} />
+        <link
+          rel="preload"
+          href={locale === "ar" ? "/fonts/tajawal-arabic-400.woff2" : "/fonts/inter-tight-latin-wght.woff2"}
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
       </head>
       <body>
-        <JsonLd data={siteSchemas} />
-        {children}
+        <JsonLd data={organizationGraph(locale)} />
+        <SiteHeader locale={locale} />
+        <main id="main">{children}</main>
+        <SiteFooter locale={locale} />
       </body>
     </html>
   )

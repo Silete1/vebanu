@@ -1,0 +1,100 @@
+/*
+ * ANU design tokens — the same values anu_theme publishes in the Odoo backend
+ * (Silete1/anu docs/anu-theme/DESIGN.md), so the site and the product speak one
+ * language. Every colour, line, type size and motion curve on the site comes
+ * from here; components never hard-code them.
+ */
+
+:root {
+  color-scheme: light;
+
+  /* ink and paper */
+  --anu-ink: #090b11;
+  --anu-ink-soft: #475569;
+  --anu-ink-faint: #5b6b80;
+  --anu-paper: #ffffff;
+  --anu-desk: #f8fafc;
+  --anu-sunken: #f1f5f9;
+  --anu-raise: #ffffff;
+  --anu-rule: #e2e8f0;
+  --anu-rule-strong: #cbd5e1;
+
+  /* the one accent */
+  --anu-signal: #2563eb;
+  --anu-signal-strong: #1d4ed8;
+  --anu-signal-text: #1d4ed8;
+  --anu-signal-soft: #eff6ff;
+  --anu-signal-glow: rgb(37 99 235 / 0.18);
+  --anu-danger: #c81e1e;
+
+  /* the band: ink in both schemes */
+  --anu-band: #090b11;
+  --anu-on-ink: #f8fafc;
+  --anu-on-ink-soft: #94a3b8;
+  --anu-on-ink-rule: rgb(148 163 184 / 0.22);
+  --anu-on-ink-signal: #60a5fa;
+
+  /* the mark's own gradient (logo only) */
+  --anu-mark-a: #2f6bf5;
+  --anu-mark-b: #6a2bd8;
+
+  /* type: Anu Sans = Inter Tight (Latin) + Tajawal (Arabic) by unicode range */
+  --anu-sans: "Anu Sans", ui-sans-serif, system-ui, "Segoe UI", Tahoma, sans-serif;
+  --anu-mono: "Anu Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
+
+  /* scale 12 · 13 · 15 · 18 · 24 · 32 · 44, plus fluid display sizes */
+  --anu-t-12: 0.75rem;
+  --anu-t-13: 0.8125rem;
+  --anu-t-15: 0.9375rem;
+  --anu-t-18: 1.125rem;
+  --anu-t-24: 1.5rem;
+  --anu-t-32: 2rem;
+  --anu-t-44: 2.75rem;
+  --anu-t-display: clamp(2.5rem, 1.6rem + 4.2vw, 5.5rem);
+  --anu-t-hero: clamp(2.9rem, 1.4rem + 7.2vw, 8.75rem);
+
+  /* space on a 4px base */
+  --anu-s-1: 0.25rem;
+  --anu-s-2: 0.5rem;
+  --anu-s-3: 0.75rem;
+  --anu-s-4: 1rem;
+  --anu-s-6: 1.5rem;
+  --anu-s-8: 2rem;
+  --anu-s-12: 3rem;
+  --anu-s-16: 4rem;
+  --anu-s-24: 6rem;
+  --anu-gutter: clamp(1rem, 0.6rem + 2vw, 2.5rem);
+  --anu-max: 84rem;
+
+  /* lines and depth */
+  --anu-edge: 3px;
+  --anu-hair: 1px;
+  --anu-float: 0 18px 48px -18px rgb(9 11 17 / 0.28), 0 2px 6px rgb(9 11 17 / 0.06);
+
+  /* motion: settles like a liquid — fast out, soft in */
+  --anu-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --anu-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --anu-fast: 200ms;
+  --anu-base: 280ms;
+  --anu-slow: 560ms;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-scheme="light"]) {
+    color-scheme: dark;
+    --anu-ink: #f1f5f9;
+    --anu-ink-soft: #cbd5e1;
+    --anu-ink-faint: #94a3b8;
+    --anu-paper: #141824;
+    --anu-desk: #0c1018;
+    --anu-sunken: #1b2130;
+    --anu-raise: #1e2536;
+    --anu-rule: #262d3d;
+    --anu-rule-strong: #334155;
+    --anu-signal-text: #93c5fd;
+    --anu-signal-soft: rgb(59 130 246 / 0.14);
+    --anu-signal-glow: rgb(96 165 250 / 0.2);
+    --anu-danger: #f87171;
+    --anu-float: 0 18px 48px -18px rgb(0 0 0 / 0.7), 0 2px 6px rgb(0 0 0 / 0.4);
+  }
+}

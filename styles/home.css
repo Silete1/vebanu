@@ -1,0 +1,273 @@
+/* The home story: hero, the noise ledger, the map band, field notes. */
+
+@layer components {
+  .anu-home-hero {
+    position: relative;
+    display: grid;
+    align-items: end;
+    min-block-size: min(92svh, 60rem);
+    padding-block: var(--anu-s-24) clamp(3rem, 2rem + 4vw, 6rem);
+    overflow: clip;
+  }
+
+  .anu-home-hero::before {
+    content: none;
+  }
+
+  .anu-home-hero__visual {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .anu-home-hero__visual .anu-poster img {
+    object-position: 70% 50%;
+  }
+
+  [dir="rtl"] .anu-home-hero__visual .anu-poster img {
+    object-position: 30% 50%;
+  }
+
+  /* text side stays legible over the picture */
+  .anu-home-hero__visual::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to var(--anu-to-end, right),
+      rgb(9 11 17 / 0.92) 0%,
+      rgb(9 11 17 / 0.6) 45%,
+      rgb(9 11 17 / 0.1) 100%
+    );
+  }
+
+  [dir="rtl"] .anu-home-hero__visual::after {
+    --anu-to-end: left;
+  }
+
+  @media (max-width: 47.99rem) {
+    .anu-home-hero__visual::after {
+      background: linear-gradient(to top, rgb(9 11 17 / 0.95) 35%, rgb(9 11 17 / 0.35) 100%);
+    }
+  }
+
+  .anu-home-hero__text {
+    display: grid;
+    gap: var(--anu-s-6);
+    justify-items: start;
+  }
+
+  .anu-home-hero__text .anu-lede {
+    color: var(--anu-on-ink-soft);
+  }
+
+  .anu-home-hero__text .anu-kicker {
+    color: var(--anu-on-ink-soft);
+  }
+
+  .anu-home-hero h1 span {
+    display: block;
+  }
+
+  .anu-home-hero__accent {
+    color: var(--anu-on-ink-signal);
+  }
+
+  /* first paint: the words are there; only a hairline draws under the title */
+  @media (prefers-reduced-motion: no-preference) {
+    html:not([data-tier="0"]) .anu-home-hero h1 {
+      background: linear-gradient(var(--anu-signal), var(--anu-signal)) no-repeat 0 100% / 0 3px;
+      animation: anu-underline 900ms var(--anu-ease) 200ms forwards;
+      padding-block-end: var(--anu-s-3);
+    }
+
+    [dir="rtl"] .anu-home-hero h1 {
+      background-position: 100% 100%;
+    }
+  }
+
+  @keyframes anu-underline {
+    to {
+      background-size: 6rem 3px;
+    }
+  }
+
+  /* ------------------------------------------------------------- noise */
+
+  .anu-noise {
+    background: var(--anu-desk);
+    overflow: clip;
+  }
+
+  .anu-noise__grid {
+    display: grid;
+    gap: var(--anu-s-12);
+  }
+
+  @media (min-width: 64rem) {
+    .anu-noise__grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: start;
+    }
+
+    .anu-noise__grid .anu-section-head {
+      position: sticky;
+      inset-block-start: 7rem;
+    }
+
+    .anu-noise__after {
+      grid-column: 2;
+    }
+  }
+
+  .anu-ledger {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    background: var(--anu-paper);
+    border: var(--anu-hair) solid var(--anu-rule);
+  }
+
+  .anu-ledger__row {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: var(--anu-s-4);
+    padding: var(--anu-s-4) var(--anu-s-6);
+    border-block-end: var(--anu-hair) solid var(--anu-rule);
+    background: var(--anu-paper);
+  }
+
+  .anu-ledger__row:last-child {
+    border-block-end: 0;
+  }
+
+  .anu-ledger__ref {
+    font-size: var(--anu-t-13);
+    color: var(--anu-ink-faint);
+  }
+
+  /* as the ledger crosses the screen, scattered chat bubbles settle into rows */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      html:not([data-tier="0"]) .anu-ledger__row {
+        animation: anu-settle linear both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 45%;
+      }
+    }
+  }
+
+  @keyframes anu-settle {
+    from {
+      translate: var(--x) var(--y);
+      rotate: var(--r);
+      border-radius: 1.25rem;
+      box-shadow: var(--anu-float);
+      background: var(--anu-signal-soft);
+    }
+    60% {
+      border-radius: 0;
+    }
+    to {
+      translate: 0 0;
+      rotate: 0deg;
+    }
+  }
+
+  .anu-noise__after {
+    display: grid;
+    gap: var(--anu-s-3);
+    padding: var(--anu-s-8);
+    background: var(--anu-band);
+    color: var(--anu-on-ink);
+    border-block-end: var(--anu-edge) solid var(--anu-signal);
+  }
+
+  .anu-noise__after h3 {
+    font-size: var(--anu-t-24);
+    font-weight: 300;
+    line-height: 1.25;
+  }
+
+  .anu-noise__after p {
+    color: var(--anu-on-ink-soft);
+  }
+
+  /* --------------------------------------------------------------- map */
+
+  .anu-home-map {
+    border-block-end: var(--anu-edge) solid var(--anu-signal);
+  }
+
+  .anu-home-map::before {
+    content: none;
+  }
+
+  .anu-home-map .anu-section-head .anu-lede {
+    color: var(--anu-on-ink-soft);
+  }
+
+  .anu-home-map .anu-map {
+    margin-block: var(--anu-s-8) var(--anu-s-12);
+  }
+
+  .anu-home-more {
+    display: inline-block;
+    margin-block-start: var(--anu-s-8);
+  }
+
+  /* ------------------------------------------------------------- notes */
+
+  .anu-notes {
+    display: grid;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-block-start: var(--anu-hair) solid var(--anu-rule);
+  }
+
+  @media (min-width: 64rem) {
+    .anu-notes {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-block-start: 0;
+      gap: var(--anu-hair);
+      background: var(--anu-rule);
+      border: var(--anu-hair) solid var(--anu-rule);
+    }
+  }
+
+  .anu-note {
+    display: grid;
+    gap: var(--anu-s-3);
+    align-content: start;
+    block-size: 100%;
+    padding: var(--anu-s-6);
+    background: var(--anu-paper);
+    border-block-end: var(--anu-hair) solid var(--anu-rule);
+  }
+
+  .anu-note__date {
+    font-size: var(--anu-t-13);
+    color: var(--anu-ink-faint);
+  }
+
+  .anu-note__title {
+    font-size: var(--anu-t-18);
+    line-height: 1.3;
+  }
+
+  .anu-note:hover .anu-note__title {
+    color: var(--anu-signal-text);
+  }
+
+  .anu-note__summary {
+    font-size: var(--anu-t-15);
+    color: var(--anu-ink-soft);
+  }
+
+  .anu-does {
+    background: var(--anu-paper);
+  }
+}

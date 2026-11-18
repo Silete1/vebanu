@@ -1,69 +1,36 @@
-import Link from "next/link"
-import Image from "next/image"
-import logoImg from "./anu_logo.png"
-
-import { cn } from "@/lib/utils"
+/**
+ * The ANU logo as inline SVG: the mark in its own gradient, the wordmark in
+ * the current text colour, so one component serves paper and ink. Traced from
+ * anu_theme's anu_logo.png (632×176); replace the paths if a master vector
+ * arrives from the brand files.
+ */
 
 type AnuLogoProps = {
-  align?: "left" | "right"
   className?: string
-  compact?: boolean
-  href?: string
-  label?: string
-  theme?: "dark" | "light"
+  title?: string
+  markOnly?: boolean
 }
 
-export function AnuLogo({
-  align = "left",
-  className,
-  compact = false,
-  href = "/",
-  label = "ANU Software Solutions",
-  theme = "light",
-}: AnuLogoProps) {
+const MARK = "M70.0 171.3C55.3 154.5 50.3 127.2 58.0 105.2C61.9 94.0 62.0 93.8 59.0 92.9C50.3 90.4 37.7 92.8 30.0 98.5C24.8 102.3 24.8 102.3 12.9 90.4C-0.9 76.7 -0.6 77.4 6.2 72.3C28.4 55.4 54.8 52.6 81.2 64.4C87.5 67.2 85.2 42.4 78.4 33.4C74.0 27.7 73.3 29.3 86.7 15.8C100.4 2.1 99.3 2.5 104.8 9.5C120.4 29.5 124.2 59.2 113.7 80.6C111.2 85.9 111.6 86.4 119.2 87.4C128.2 88.6 141.7 84.6 145.9 79.6C148.1 76.9 149.1 77.6 161.5 90.1C173.5 102.1 173.5 102.1 169.5 105.6C150.9 121.8 121.7 127.2 100.5 118.4C90.9 114.4 91.3 114.4 90.1 118.7C87.5 127.8 89.7 138.9 95.5 146.5C97.4 149.0 99.0 151.1 99.0 151.3C99.0 151.6 74.8 176.0 74.4 176.0C74.3 176.0 72.3 173.9 70.0 171.3Z"
+
+const WORDMARK = "M206.3 135.1C193.8 127.4 194.4 123.9 215.9 81.7C225.7 62.3 238.1 37.7 243.5 27.0C248.8 16.3 254.4 6.3 255.8 4.8C263.2 -3.2 276.9 -0.4 282.2 10.2C283.1 12.0 291.5 28.8 300.8 47.5C310.1 66.2 321.8 89.4 326.6 99.0C338.4 122.2 338.5 128.1 327.5 134.5C313.8 142.6 311.1 139.7 286.9 91.4C266.9 51.4 266.2 50.3 265.3 54.0C262.7 63.8 226.2 132.6 222.5 134.7C217.4 137.6 210.7 137.7 206.3 135.1ZM354.3 135.1C345.7 129.8 346.0 132.1 346.0 68.5C346.0 3.9 345.6 6.8 355.3 2.1C366.1 -3.2 367.2 -2.4 411.0 40.9C431.6 61.2 448.7 77.9 449.0 78.0C449.3 78.0 449.4 64.4 449.2 47.8C448.8 14.1 449.2 11.1 454.6 5.6C462.3 -2.4 474.1 -1.2 480.6 8.1C483.5 12.3 483.5 12.3 483.8 66.4C484.2 131.2 484.2 131.1 473.3 135.6C463.0 140.0 461.4 138.8 418.0 96.1C397.4 75.7 380.1 59.0 379.7 59.0C379.2 59.0 379.2 72.2 379.6 88.3C380.0 104.4 380.0 119.7 379.6 122.3C377.9 133.6 363.7 140.8 354.3 135.1ZM547.5 135.4C523.4 130.2 504.9 113.2 495.8 88.0C491.0 74.6 492.4 10.9 497.6 6.0C505.8 -1.6 514.2 -1.8 521.9 5.5C526.5 9.9 526.5 9.9 527.0 41.7C527.5 73.5 527.5 73.5 530.9 80.8C546.5 114.1 586.5 109.0 596.0 72.5C596.5 70.2 597.0 56.8 597.0 41.1C597.0 15.7 597.2 13.3 599.0 9.6C604.3 -1.2 617.7 -3.0 626.6 6.1C634.3 14.0 632.8 80.6 624.5 97.2C609.8 126.5 578.3 142.2 547.5 135.4Z"
+
+export function AnuLogo({ className, title = "ANU", markOnly = false }: AnuLogoProps) {
   return (
-    <Link
-      href={href}
-      className={cn(
-        "pointer-events-auto flex items-center outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-        className
-      )}
+    <svg
+      viewBox={markOnly ? "0 0 186 176" : "0 0 632 176"}
+      className={className}
+      role="img"
+      aria-label={title}
     >
-      <span
-        className={cn(
-          "anu-logo-flip relative block overflow-hidden",
-          theme === "dark" ? "anu-logo-flip-dark" : "anu-logo-flip-light",
-          compact
-            ? "h-20 w-[264px] md:h-[88px] md:w-[300px]"
-            : "h-[88px] w-[292px] md:h-[104px] md:w-[352px]"
-        )}
-      >
-        <span className="anu-logo-flip-inner">
-          <Image
-            src={logoImg}
-            alt={label}
-            width={160}
-            height={48}
-            className={cn(
-              "anu-logo-face anu-logo-face-front absolute inset-0 h-full w-full object-contain",
-              align === "right" ? "object-right" : "object-left"
-            )}
-            priority
-          />
-          <Image
-            src={logoImg}
-            alt=""
-            aria-hidden="true"
-            width={160}
-            height={48}
-            className={cn(
-              "anu-logo-monochrome anu-logo-face anu-logo-face-back absolute inset-0 h-full w-full object-contain",
-              align === "right" ? "object-right" : "object-left"
-            )}
-            priority
-          />
-        </span>
-      </span>
-    </Link>
+      <defs>
+        <linearGradient id="anu-mark-gradient" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="var(--anu-mark-a)" />
+          <stop offset="1" stopColor="var(--anu-mark-b)" />
+        </linearGradient>
+      </defs>
+      <path fill="url(#anu-mark-gradient)" fillRule="evenodd" d={MARK} />
+      {markOnly ? null : <path fill="currentColor" fillRule="evenodd" d={WORDMARK} />}
+    </svg>
   )
 }

@@ -57,9 +57,11 @@ function isRateLimited(identifier: string): boolean {
 async function getClientIp(): Promise<string> {
   try {
     const headerList = await headers()
+    // Traefik (and Vercel) append the address they saw to X-Forwarded-For; the
+    // first entries can be anything a client sent, so only the last one counts.
     const forwardedFor = headerList.get("x-forwarded-for")
     if (forwardedFor) {
-      return forwardedFor.split(",")[0].trim()
+      return forwardedFor.split(",").at(-1)?.trim() || "anonymous"
     }
     const realIp = headerList.get("x-real-ip")
     if (realIp) return realIp.trim()
@@ -148,6 +150,9 @@ export async function submitAssessment(
   formData: FormData
 ): Promise<AssessmentFormState> {
   const honeypot = formValue(formData, "website")
+  // a person needs a few seconds to type a name and a number; a script does not
+  const renderedAt = Number(formValue(formData, "t"))
+  const tooFast = Number.isFinite(renderedAt) && renderedAt > 0 && Date.now() - renderedAt < 2500
   const requestedLocale = formValue(formData, "locale")
   const locale: Locale = isLocale(requestedLocale) ? requestedLocale : "en"
   const arabicPhoneDisplay = `\u2066${anuContact.phoneDisplay}\u2069`
@@ -170,7 +175,7 @@ export async function submitAssessment(
     },
   }[locale]
 
-  if (honeypot) {
+  if (honeypot || tooFast) {
     return {
       status: "success",
       message: messages.received,

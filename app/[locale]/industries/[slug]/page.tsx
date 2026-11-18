@@ -8,8 +8,6 @@ import { getIndustry, industrySlugs } from "@/lib/content/industries"
 import { isLocale, localizedAlternates, localizedPath } from "@/lib/i18n"
 import { siteUrl } from "@/lib/site"
 
-export const dynamicParams = false
-
 export function generateStaticParams() {
   return industrySlugs.map((slug) => ({ slug }))
 }

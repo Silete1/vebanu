@@ -1,0 +1,791 @@
+/* The story blocks (components/story): hero, chapters, rail, road, lists, cards, FAQ, close. */
+
+@layer components {
+  /* ---------------------------------------------------------------- hero */
+
+  .anu-hero {
+    padding-block: clamp(2.5rem, 1.5rem + 5vw, 6rem) clamp(3rem, 2rem + 5vw, 7rem);
+    overflow: clip;
+  }
+
+  .anu-hero::before {
+    opacity: 0.22;
+  }
+
+  .anu-hero__grid {
+    display: grid;
+    gap: var(--anu-s-12);
+    align-items: center;
+  }
+
+  @media (min-width: 64rem) {
+    .anu-hero__grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+      gap: var(--anu-s-16);
+    }
+  }
+
+  .anu-hero__text {
+    display: grid;
+    gap: var(--anu-s-6);
+    align-content: start;
+  }
+
+  .anu-hero__title {
+    font-weight: 300;
+  }
+
+  .anu-hero__lede {
+    color: var(--anu-on-ink-soft);
+  }
+
+  .anu-hero__status {
+    color: var(--anu-on-ink);
+  }
+
+  .anu-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--anu-s-3);
+  }
+
+  .anu-hero__visual {
+    position: relative;
+    margin: 0;
+    aspect-ratio: 16 / 10;
+    border: var(--anu-hair) solid var(--anu-on-ink-rule);
+    background: var(--anu-band);
+    overflow: hidden;
+  }
+
+  .anu-crumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--anu-s-2);
+    font-size: var(--anu-t-13);
+    color: var(--anu-on-ink-soft);
+  }
+
+  .anu-crumbs a:hover {
+    color: var(--anu-on-ink);
+  }
+
+  .anu-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--anu-s-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--anu-t-13);
+  }
+
+  .anu-chips li {
+    padding: var(--anu-s-1) var(--anu-s-3);
+    border: var(--anu-hair) solid var(--anu-on-ink-rule);
+    color: var(--anu-on-ink-soft);
+  }
+
+  .anu-chips--paper li {
+    border-color: var(--anu-rule-strong);
+    color: var(--anu-ink-soft);
+    background: var(--anu-paper);
+  }
+
+  /* -------------------------------------------------------------- poster */
+
+  .anu-poster,
+  .anu-poster img {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  .anu-poster--network {
+    display: grid;
+    place-items: center;
+    background: var(--anu-band);
+  }
+
+  .anu-poster--network img {
+    inline-size: 80%;
+    block-size: auto;
+    object-fit: contain;
+    opacity: 0.8;
+  }
+
+  [dir="rtl"] .anu-poster--network img {
+    scale: -1 1;
+  }
+
+  /* a live scene sits on the poster and fades in over it once it draws */
+  .anu-scene {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .anu-scene__canvas {
+    inline-size: 100%;
+    block-size: 100%;
+    opacity: 0;
+    transition: opacity 600ms var(--anu-ease);
+  }
+
+  .anu-scene.is-live .anu-scene__canvas {
+    opacity: 1;
+  }
+
+  .anu-hero__visual:has(.anu-scene.is-live) .anu-poster {
+    opacity: 0.25;
+    transition: opacity 600ms var(--anu-ease);
+  }
+
+  /* ------------------------------------------------------- story + rail */
+
+  .anu-story {
+    position: relative;
+  }
+
+  .anu-rail {
+    display: none;
+  }
+
+  @media (min-width: 80rem) {
+    .anu-story {
+      display: grid;
+      grid-template-columns: 13rem minmax(0, 1fr);
+      max-inline-size: calc(var(--anu-max) + 13rem);
+      margin-inline: auto;
+    }
+
+    .anu-rail {
+      display: block;
+      position: sticky;
+      inset-block-start: 6rem;
+      align-self: start;
+      padding-block-start: var(--anu-s-24);
+      padding-inline-start: var(--anu-gutter);
+    }
+
+    .anu-rail ol {
+      display: grid;
+      gap: var(--anu-s-3);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      font-size: var(--anu-t-13);
+    }
+
+    .anu-rail a {
+      display: flex;
+      align-items: center;
+      gap: var(--anu-s-2);
+      color: var(--anu-ink-soft);
+    }
+
+    .anu-rail a:hover {
+      color: var(--anu-signal-text);
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      @supports (animation-timeline: view()) {
+        html:not([data-tier="0"]) .anu-rail__glyph {
+          animation: anu-rail-read linear both;
+          animation-range: entry 30% exit 70%;
+        }
+      }
+    }
+  }
+
+  @keyframes anu-rail-read {
+    0% {
+      border-color: var(--anu-ink-faint);
+      background: transparent;
+    }
+    10%,
+    90% {
+      border-color: var(--anu-signal);
+      background: var(--anu-signal);
+      scale: 1.25;
+    }
+    100% {
+      border-color: var(--anu-ink);
+      background: var(--anu-ink);
+    }
+  }
+
+  /* ------------------------------------------------------------ chapter */
+
+  .anu-chapter {
+    padding-block: clamp(4rem, 2.5rem + 5vw, 8rem);
+    padding-inline: var(--anu-gutter);
+    border-block-end: var(--anu-hair) solid var(--anu-rule);
+    content-visibility: auto;
+    contain-intrinsic-size: auto 60rem;
+  }
+
+  .anu-chapter--paper {
+    background: var(--anu-paper);
+  }
+
+  .anu-chapter--desk {
+    background: var(--anu-desk);
+  }
+
+  .anu-chapter > * {
+    max-inline-size: 72rem;
+  }
+
+  .anu-chapter__head {
+    display: grid;
+    gap: var(--anu-s-4);
+    margin-block-end: var(--anu-s-12);
+  }
+
+  .anu-chapter__title {
+    font-size: clamp(2rem, 1.4rem + 2.6vw, 3.5rem);
+    max-inline-size: 22ch;
+  }
+
+  /* --------------------------------------------------------------- road */
+
+  .anu-road {
+    position: relative;
+    display: grid;
+    gap: var(--anu-s-8);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: road;
+  }
+
+  .anu-road::before {
+    content: "";
+    position: absolute;
+    inset-block: 0.4rem 0.4rem;
+    inset-inline-start: 0.4rem;
+    inline-size: 1px;
+    background: var(--anu-rule-strong);
+  }
+
+  .anu-road__step {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--anu-s-1) var(--anu-s-6);
+  }
+
+  .anu-road__mark {
+    grid-row: span 3;
+    padding-block-start: 0.25rem;
+    background: var(--anu-paper);
+  }
+
+  .anu-road__index {
+    font-size: var(--anu-t-13);
+    color: var(--anu-ink-faint);
+  }
+
+  .anu-road__title {
+    font-size: var(--anu-t-24);
+    font-weight: 400;
+    letter-spacing: -0.015em;
+    line-height: 1.2;
+  }
+
+  .anu-road__body {
+    color: var(--anu-ink-soft);
+    max-inline-size: 40rem;
+  }
+
+  @media (min-width: 64rem) {
+    .anu-road {
+      grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+      gap: var(--anu-s-6);
+    }
+
+    .anu-road::before {
+      inset-block: 0.4rem auto;
+      inset-inline: 0.4rem 0;
+      inline-size: auto;
+      block-size: 1px;
+    }
+
+    .anu-road__step {
+      grid-template-columns: 1fr;
+      align-content: start;
+    }
+
+    .anu-road__mark {
+      grid-row: auto;
+      justify-self: start;
+      padding-block-start: 0;
+      padding-inline-end: var(--anu-s-2);
+    }
+
+    .anu-road__title {
+      font-size: var(--anu-t-18);
+      margin-block-start: var(--anu-s-4);
+    }
+
+    .anu-road__body {
+      font-size: var(--anu-t-15);
+    }
+  }
+
+  /* ----------------------------------------------------------- symptoms */
+
+  .anu-symptoms {
+    display: grid;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-block-start: var(--anu-hair) solid var(--anu-rule);
+  }
+
+  .anu-symptoms li {
+    display: flex;
+    align-items: center;
+    gap: var(--anu-s-4);
+    padding-block: var(--anu-s-4);
+    border-block-end: var(--anu-hair) solid var(--anu-rule);
+    font-size: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+  }
+
+  @media (min-width: 48rem) {
+    .anu-symptoms {
+      grid-template-columns: 1fr 1fr;
+      column-gap: var(--anu-s-8);
+    }
+  }
+
+  /* ------------------------------------------------------------- inside */
+
+  .anu-inside {
+    display: grid;
+    gap: var(--anu-s-12);
+  }
+
+  .anu-inside__list {
+    display: grid;
+    gap: var(--anu-s-8) var(--anu-s-12);
+    margin: 0;
+  }
+
+  @media (min-width: 48rem) {
+    .anu-inside__list {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .anu-inside__item dt {
+    display: flex;
+    align-items: center;
+    gap: var(--anu-s-3);
+    margin-block-end: var(--anu-s-2);
+    font-size: var(--anu-t-18);
+  }
+
+  .anu-inside__item dd {
+    margin: 0;
+    color: var(--anu-ink-soft);
+  }
+
+  .anu-inside__stack {
+    display: grid;
+    gap: var(--anu-s-3);
+  }
+
+  /* ----------------------------------------------------------- features */
+
+  .anu-features {
+    display: grid;
+    gap: var(--anu-hair);
+    margin: 0;
+    padding: var(--anu-hair);
+    list-style: none;
+    background: var(--anu-rule);
+  }
+
+  @media (min-width: 40rem) {
+    .anu-features {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 72rem) {
+    .anu-features {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .anu-feature {
+    display: grid;
+    gap: var(--anu-s-3);
+    align-content: start;
+    padding: var(--anu-s-8) var(--anu-s-6);
+    background: var(--anu-paper);
+    transition: background-color var(--anu-fast) linear;
+  }
+
+  .anu-feature h3 {
+    font-size: var(--anu-t-18);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+
+  .anu-feature p {
+    color: var(--anu-ink-soft);
+    font-size: var(--anu-t-15);
+  }
+
+  .anu-feature__index {
+    font-size: var(--anu-t-13);
+    color: var(--anu-signal-text);
+  }
+
+  /* -------------------------------------------------------------- facts */
+
+  .anu-facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    gap: var(--anu-s-8);
+    margin: var(--anu-s-12) 0 0;
+  }
+
+  .anu-facts dt {
+    font-size: clamp(2rem, 1.5rem + 2vw, 3rem);
+    color: var(--anu-signal-text);
+    line-height: 1;
+  }
+
+  .anu-facts dd {
+    margin: var(--anu-s-2) 0 0;
+    color: var(--anu-ink-soft);
+    font-size: var(--anu-t-15);
+  }
+
+  /* ---------------------------------------------------------------- faq */
+
+  .anu-faq {
+    border-block-start: var(--anu-hair) solid var(--anu-rule);
+  }
+
+  .anu-faq__item {
+    border-block-end: var(--anu-hair) solid var(--anu-rule);
+  }
+
+  .anu-faq__item summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--anu-s-6);
+    padding-block: var(--anu-s-6);
+    font-size: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .anu-faq__item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .anu-faq__item summary:hover {
+    color: var(--anu-signal-text);
+  }
+
+  .anu-faq__sign {
+    position: relative;
+    flex: none;
+    inline-size: 0.875rem;
+    block-size: 0.875rem;
+    border: 1.5px solid currentColor;
+  }
+
+  .anu-faq__item[open] .anu-faq__sign {
+    background: var(--anu-signal);
+    border-color: var(--anu-signal);
+  }
+
+  .anu-faq__item p {
+    padding-block-end: var(--anu-s-6);
+    color: var(--anu-ink-soft);
+    max-inline-size: 48rem;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .anu-faq__item::details-content {
+      block-size: 0;
+      overflow: clip;
+      transition:
+        block-size var(--anu-base) var(--anu-ease),
+        content-visibility var(--anu-base) allow-discrete;
+    }
+
+    .anu-faq__item[open]::details-content {
+      block-size: auto;
+    }
+
+    .anu-faq {
+      interpolate-size: allow-keywords;
+    }
+  }
+
+  /* -------------------------------------------------------------- cards */
+
+  .anu-cards {
+    display: grid;
+    gap: var(--anu-s-6);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (min-width: 40rem) {
+    .anu-cards {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 72rem) {
+    .anu-cards {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .anu-card {
+    display: grid;
+    gap: var(--anu-s-3);
+    align-content: start;
+    block-size: 100%;
+    padding-block-end: var(--anu-s-6);
+    background: var(--anu-paper);
+    border: var(--anu-hair) solid var(--anu-rule);
+    transition:
+      border-color var(--anu-fast) linear,
+      translate var(--anu-base) var(--anu-ease),
+      box-shadow var(--anu-base) var(--anu-ease);
+  }
+
+  .anu-card:hover {
+    border-color: var(--anu-rule-strong);
+    translate: 0 -4px;
+    box-shadow: var(--anu-float);
+  }
+
+  .anu-card__picture {
+    aspect-ratio: 16 / 10;
+    background: var(--anu-band);
+    overflow: hidden;
+  }
+
+  .anu-card__status,
+  .anu-card__name,
+  .anu-card__pitch {
+    padding-inline: var(--anu-s-6);
+  }
+
+  .anu-card__status {
+    margin-block-start: var(--anu-s-3);
+  }
+
+  .anu-card__name {
+    font-size: var(--anu-t-24);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+
+  .anu-card__pitch {
+    color: var(--anu-ink-soft);
+    font-size: var(--anu-t-15);
+  }
+
+  /* ---------------------------------------------------------------- cta */
+
+  .anu-cta {
+    padding-block: clamp(5rem, 3rem + 7vw, 10rem);
+  }
+
+  .anu-cta__inner {
+    display: grid;
+    gap: var(--anu-s-6);
+    justify-items: start;
+  }
+
+  .anu-cta .anu-display {
+    max-inline-size: 16ch;
+  }
+
+  /* ----------------------------------------------------- section header */
+
+  .anu-section-head {
+    display: grid;
+    gap: var(--anu-s-4);
+    margin-block-end: var(--anu-s-12);
+  }
+
+  .anu-section-head h2 {
+    font-size: clamp(2rem, 1.4rem + 2.6vw, 3.5rem);
+    max-inline-size: 20ch;
+  }
+}
+
+@layer components {
+  /* the answer-first summary under a hero: what AI readers quote */
+  .anu-summary {
+    padding-block: clamp(3rem, 2rem + 4vw, 6rem);
+    border-inline: 0;
+    border-block-start: 0;
+  }
+
+  .anu-summary__text {
+    font-size: clamp(1.375rem, 1.05rem + 1.4vw, 2.25rem);
+    line-height: 1.35;
+    font-weight: 300;
+    letter-spacing: -0.015em;
+  }
+
+  :lang(ar) .anu-summary__text {
+    line-height: 1.7;
+    letter-spacing: 0;
+  }
+
+  .anu-summary__text > * {
+    max-inline-size: 62rem;
+  }
+
+  .anu-related {
+    background: var(--anu-desk);
+  }
+}
+
+@layer components {
+  /* ------------------------------------------------------------ the map */
+
+  .anu-map {
+    margin: 0;
+  }
+
+  .anu-map__svg {
+    inline-size: 100%;
+    block-size: auto;
+    overflow: visible;
+    font-family: var(--anu-sans);
+  }
+
+  .anu-map__orbit {
+    fill: none;
+    stroke: var(--anu-on-ink-rule);
+    stroke-dasharray: 2 6;
+  }
+
+  .anu-map__lines :is(line, path) {
+    fill: none;
+    stroke: rgb(96 165 250 / 0.28);
+    stroke-width: 1;
+  }
+
+  .anu-map__pulses path {
+    fill: none;
+    stroke: var(--anu-on-ink-signal);
+    stroke-width: 2;
+    stroke-dasharray: 0.04 1;
+    stroke-dashoffset: 1;
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html:not([data-tier="0"]) .anu-map__pulses path {
+      opacity: 1;
+      animation: anu-pulse 4s linear infinite;
+      animation-delay: var(--d, 0s);
+    }
+  }
+
+  @keyframes anu-pulse {
+    from {
+      stroke-dashoffset: 1.04;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  .anu-map__core rect {
+    fill: var(--anu-band);
+    stroke: var(--anu-on-ink-rule);
+  }
+
+  .anu-map__edge {
+    stroke: var(--anu-signal);
+    stroke-width: 3;
+  }
+
+  .anu-map__core text {
+    fill: var(--anu-on-ink);
+    font-size: 22px;
+    font-weight: 300;
+  }
+
+  .anu-map__glyph {
+    fill: var(--anu-band);
+    stroke: var(--anu-on-ink-soft);
+    stroke-width: 1.5;
+    transition:
+      fill var(--anu-fast) linear,
+      stroke var(--anu-fast) linear;
+  }
+
+  .anu-map__glyph[data-state="done"] {
+    fill: var(--anu-on-ink);
+    stroke: var(--anu-on-ink);
+  }
+
+  .anu-map__glyph[data-state="due"] {
+    fill: var(--anu-signal);
+    stroke: var(--anu-signal);
+  }
+
+  .anu-map__glyph[data-state="progress"] {
+    stroke: var(--anu-signal);
+  }
+
+  .anu-map__node text {
+    fill: var(--anu-on-ink-soft);
+    font-size: 17px;
+    transition: fill var(--anu-fast) linear;
+  }
+
+  .anu-map__node:is(:hover, :focus-visible) text {
+    fill: var(--anu-on-ink);
+  }
+
+  .anu-map__node:is(:hover, :focus-visible) .anu-map__glyph {
+    stroke: var(--anu-on-ink-signal);
+    fill: var(--anu-signal);
+  }
+
+  /* the pointed node comes forward; the others recede */
+  @media (hover: hover) {
+    .anu-map__svg:has(.anu-map__node:hover) .anu-map__node:not(:hover) {
+      opacity: 0.45;
+    }
+  }
+
+  .anu-map__node,
+  .anu-map__core {
+    transition: opacity var(--anu-fast) linear;
+    outline: none;
+  }
+
+  @media (max-width: 47.99rem) {
+    .anu-map__node text {
+      font-size: 24px;
+    }
+  }
+}
