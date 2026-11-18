@@ -1,5 +1,6 @@
 import { existsSync } from "node:fs"
 import { join } from "node:path"
+import { preload } from "react-dom"
 
 import { cn } from "@/lib/utils"
 
@@ -22,12 +23,31 @@ export function Poster({ src, alt, className, priority = false, sizes = "(min-wi
   const rendered = existsSync(join(process.cwd(), "public", `${src}.avif`))
 
   if (!rendered) {
+    if (priority) preload("/brand/anu_network.svg", { as: "image", fetchPriority: "high" })
     return (
       <div className={cn("anu-poster anu-poster--network", className)} role="img" aria-label={alt}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/brand/anu_network.svg" alt="" width={640} height={420} />
+        <img
+          src="/brand/anu_network.svg"
+          alt=""
+          width={640}
+          height={420}
+          fetchPriority={priority ? "high" : "auto"}
+          loading={priority ? "eager" : "lazy"}
+        />
       </div>
     )
+  }
+
+  // the page's largest picture is asked for from <head>, before the CSS is read
+  if (priority) {
+    preload(`${src}-800.avif`, {
+      as: "image",
+      type: "image/avif",
+      imageSrcSet: `${src}-800.avif 800w, ${src}.avif 1600w`,
+      imageSizes: sizes,
+      fetchPriority: "high",
+    })
   }
 
   return (

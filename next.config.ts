@@ -56,6 +56,10 @@ const nextConfig: NextConfig = {
   // links prefetch a shared route shell, so moving between pages is near-instant
   cacheComponents: true,
   partialPrefetching: true,
+  experimental: {
+    // ~6 KB of CSS (br) in the HTML beats a render-blocking request on a slow link
+    inlineCss: true,
+  },
   async headers() {
     return [
       {

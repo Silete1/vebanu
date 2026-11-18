@@ -119,7 +119,7 @@
 
   .anu-header__lang {
     font-size: var(--anu-t-15);
-    color: var(--anu-on-ink-soft);
+    color: var(--anu-on-ink);
     padding-inline: var(--anu-s-2);
   }
 
