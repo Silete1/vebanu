@@ -486,3 +486,71 @@
     }
   }
 }
+
+@layer components {
+  /* ------------------------------------------- real material of a system */
+
+  .anu-real__strip {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: min(85vw, 40rem);
+    gap: var(--anu-s-6);
+    margin: 0;
+    padding: 0 var(--anu-gutter) var(--anu-s-6);
+    list-style: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--anu-gutter);
+    scrollbar-width: thin;
+  }
+
+  .anu-real__item {
+    display: grid;
+    gap: var(--anu-s-3);
+    scroll-snap-align: start;
+    color: var(--anu-ink-soft);
+    font-size: var(--anu-t-15);
+  }
+
+  .anu-real__frame {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: #0c1018;
+    border: 1px solid var(--anu-rule-strong);
+  }
+
+  .anu-real__frame img {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  .anu-real__note {
+    font-size: var(--anu-t-13);
+    color: var(--anu-ink-faint);
+  }
+
+  /* the strip drifts against the page as it passes */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      html:not([data-tier="0"]) .anu-real__item {
+        animation: anu-real-drift linear both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 50%;
+      }
+    }
+  }
+
+  @keyframes anu-real-drift {
+    from {
+      opacity: 0.2;
+      translate: calc(var(--anu-dir, 1) * 4rem) 2rem;
+    }
+  }
+
+  [dir="rtl"] .anu-real__item {
+    --anu-dir: -1;
+  }
+}

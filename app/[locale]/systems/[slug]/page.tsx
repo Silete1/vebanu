@@ -3,6 +3,7 @@ import { notFound } from "next/navigation"
 
 import { LiveStage } from "@/components/live/live-stage"
 import { JsonLd } from "@/components/seo/json-ld"
+import { RealGallery } from "@/components/story/real-gallery"
 import { Chapter, ChapterRail, Story } from "@/components/story/chapter"
 import { CtaBand } from "@/components/story/cta-band"
 import { Faq } from "@/components/story/faq"
@@ -106,6 +107,8 @@ export default async function SystemPage({ params }: PageProps<"/[locale]/system
       </section>
 
       <LiveStage slug={system.slug} locale={locale} {...copy.live} />
+
+      <RealGallery slug={system.slug} locale={locale} />
 
       <Story chapters={chapters}>
         <ChapterRail label={copy.chapters.problem} chapters={chapters} />
