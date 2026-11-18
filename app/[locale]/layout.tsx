@@ -6,6 +6,7 @@ import "../globals.css"
 import { JsonLd } from "@/components/seo/json-ld"
 import { anuContact } from "@/lib/contact"
 import { getLocaleAttributes, isLocale, localeMeta, locales } from "@/lib/i18n"
+import { pageMetadata } from "@/lib/seo/metadata"
 import { getSiteContent, siteUrl } from "@/lib/site"
 import { cn } from "@/lib/utils"
 
@@ -42,37 +43,7 @@ export async function generateMetadata({
   const { locale } = await params
   if (!isLocale(locale)) return {}
 
-  const site = getSiteContent(locale)
-  const defaultTitle =
-    locale === "ar" ? "أنو للحلول البرمجية" : "ANU Software Solutions"
-
-  return {
-    metadataBase: new URL(siteUrl),
-    title: {
-      default: defaultTitle,
-      template:
-        locale === "ar"
-          ? "%s | أنو للحلول البرمجية"
-          : "%s | ANU Software Solutions",
-    },
-    description: site.description,
-    openGraph: {
-      type: "website",
-      locale: localeMeta[locale].ogLocale,
-      alternateLocale: localeMeta[locale === "ar" ? "en" : "ar"].ogLocale,
-      siteName:
-        locale === "ar" ? "أنو للحلول البرمجية" : "ANU Software Solutions",
-      title: defaultTitle,
-      description: site.description,
-      images: [{ url: "/anulogopng-.png", alt: defaultTitle }],
-    },
-    twitter: {
-      card: "summary",
-      title: defaultTitle,
-      description: site.description,
-      images: ["/anulogopng-.png"],
-    },
-  }
+  return { metadataBase: new URL(siteUrl), ...pageMetadata({ locale }) }
 }
 
 export default async function LocaleLayout({
@@ -89,8 +60,8 @@ export default async function LocaleLayout({
       "@context": "https://schema.org",
       "@type": "Organization",
       "@id": `${siteUrl}/#organization`,
-      name: locale === "ar" ? "أنو للحلول البرمجية" : "ANU Software Solutions",
-      alternateName: locale === "ar" ? "أنو" : "ANU",
+      name: site.name,
+      alternateName: site.shortName,
       url: siteUrl,
       logo: `${siteUrl}/anulogopng-.png`,
       description: site.description,
@@ -127,7 +98,7 @@ export default async function LocaleLayout({
       "@type": "WebSite",
       "@id": `${siteUrl}/#website-${locale}`,
       url: `${siteUrl}/${locale}`,
-      name: locale === "ar" ? "أنو للحلول البرمجية" : "ANU Software Solutions",
+      name: site.name,
       description: site.description,
       publisher: { "@id": `${siteUrl}/#organization` },
       inLanguage: localeMeta[locale].htmlLang,

@@ -5,7 +5,8 @@ import { IndustryDetailPage } from "@/components/industries/industry-detail-page
 import { PageShell } from "@/components/layout/page-shell"
 import { JsonLd } from "@/components/seo/json-ld"
 import { getIndustry, industrySlugs } from "@/lib/content/industries"
-import { isLocale, localizedAlternates, localizedPath } from "@/lib/i18n"
+import { isLocale, localizedPath } from "@/lib/i18n"
+import { pageMetadata } from "@/lib/seo/metadata"
 import { siteUrl } from "@/lib/site"
 
 export const dynamicParams = false
@@ -22,32 +23,17 @@ export async function generateMetadata({
   const industry = getIndustry(slug, locale)
   if (!industry) return {}
 
-  const path = `/industries/${industry.slug}`
-  return {
+  return pageMetadata({
+    locale,
+    path: `/industries/${industry.slug}`,
     title: industry.metadata.title,
     description: industry.metadata.description,
     keywords: [
       industry.metadata.primaryKeyword,
       ...industry.metadata.secondaryKeywords,
     ],
-    alternates: {
-      canonical: localizedPath(locale, path),
-      languages: localizedAlternates(path),
-    },
-    openGraph: {
-      type: "website",
-      url: localizedPath(locale, path),
-      title: industry.metadata.title,
-      description: industry.metadata.description,
-      images: [{ url: industry.visual.imageUrl, alt: industry.visual.alt }],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: industry.metadata.title,
-      description: industry.metadata.description,
-      images: [industry.visual.imageUrl],
-    },
-  }
+    images: [{ url: industry.visual.imageUrl, alt: industry.visual.alt }],
+  })
 }
 
 export default async function IndustryRoute({
@@ -64,7 +50,7 @@ export default async function IndustryRoute({
       "@context": "https://schema.org",
       "@type": "Service",
       "@id": `${url}#service`,
-      name: industry.metadata.title.replace(locale === "ar" ? " | أنو" : " | ANU", ""),
+      name: industry.metadata.title,
       serviceType: industry.metadata.primaryKeyword,
       description: industry.metadata.description,
       url,

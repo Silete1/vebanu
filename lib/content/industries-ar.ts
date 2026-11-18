@@ -40,7 +40,7 @@ export const industriesAr: Record<IndustrySlug, IndustryTranslation> = {
     cardDescription:
       "اربط المشتريات وحركة المخزون والتجهيز والهوامش والتحصيل ضمن مسار واحد.",
     metadata: {
-      title: "نظام ERP للتوزيع وتطبيق Odoo في العراق | أنو",
+      title: "نظام ERP للتوزيع وتطبيق Odoo في العراق",
       description:
         "تصمم أنو عمليات شركات التوزيع وتطبّق Odoo ERP للمشتريات والمخازن والمبيعات والتجهيز والهوامش والتحصيل في العراق.",
       primaryKeyword: "نظام ERP لشركات التوزيع في العراق",
@@ -177,7 +177,7 @@ export const industriesAr: Record<IndustrySlug, IndustryTranslation> = {
     cardDescription:
       "اربط الطلب والمواد والإنتاج والجودة والتكلفة ضمن خطة تشغيل واحدة.",
     metadata: {
-      title: "نظام ERP للتصنيع وتطبيق Odoo MRP في العراق | أنو",
+      title: "نظام ERP للتصنيع وتطبيق Odoo MRP في العراق",
       description:
         "تطبّق أنو نظام Odoo للتصنيع في العراق لتخطيط المواد وأوامر الإنتاج والجودة والتكلفة والصيانة وربطها بالمالية والمخزون.",
       primaryKeyword: "نظام ERP للتصنيع في العراق",
@@ -317,7 +317,7 @@ export const industriesAr: Record<IndustrySlug, IndustryTranslation> = {
     cardDescription:
       "وحّد نقاط البيع والمخزون والتسعير والمشتريات والمالية عبر جميع الفروع.",
     metadata: {
-      title: "نظام ERP للتجزئة ونقاط البيع في العراق | أنو",
+      title: "نظام ERP للتجزئة ونقاط البيع في العراق",
       description:
         "تطبّق أنو نظام Odoo للتجزئة في العراق لربط نقاط البيع والفروع والمخزون والتسعير والمشتريات والمالية والتقارير الإدارية.",
       primaryKeyword: "نظام ERP للتجزئة في العراق",
@@ -453,7 +453,7 @@ export const industriesAr: Record<IndustrySlug, IndustryTranslation> = {
     cardDescription:
       "اربط الطلب والتخطيط والتنفيذ وإثبات التسليم والتكلفة والفوترة.",
     metadata: {
-      title: "نظام ERP للخدمات اللوجستية والنقل في العراق | أنو",
+      title: "نظام ERP للخدمات اللوجستية والنقل في العراق",
       description:
         "تطبّق أنو نظام Odoo لشركات الخدمات اللوجستية والنقل في العراق لربط الطلبات والتخطيط والتنفيذ وإثبات التسليم والتكلفة والفوترة.",
       primaryKeyword: "نظام ERP للخدمات اللوجستية في العراق",
@@ -588,7 +588,7 @@ export const industriesAr: Record<IndustrySlug, IndustryTranslation> = {
     cardDescription:
       "نظّم المشتريات والمخزون والموافقات والمالية والتقارير للعمليات غير السريرية.",
     metadata: {
-      title: "Odoo ERP لعمليات الرعاية الصحية في العراق | أنو",
+      title: "Odoo ERP لعمليات الرعاية الصحية في العراق",
       description:
         "تساعد أنو مؤسسات الرعاية الصحية في العراق على ضبط المشتريات والمخزون والموافقات والمالية والتقارير غير السريرية باستخدام Odoo ERP.",
       primaryKeyword: "نظام ERP لعمليات الرعاية الصحية في العراق",

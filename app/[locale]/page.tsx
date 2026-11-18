@@ -5,7 +5,8 @@ import { HomeBody, HomeIntroSection } from "@/components/home/home-body"
 import { HomeHero } from "@/components/home/home-hero"
 import { HomeSharedVideo } from "@/components/home/home-shared-video"
 import { PageShell } from "@/components/layout/page-shell"
-import { isLocale, localizedAlternates, localizedPath } from "@/lib/i18n"
+import { isLocale } from "@/lib/i18n"
+import { pageMetadata } from "@/lib/seo/metadata"
 
 export async function generateMetadata({
   params,
@@ -13,26 +14,18 @@ export async function generateMetadata({
   const { locale } = await params
   if (!isLocale(locale)) return {}
 
-  const title =
-    locale === "ar" ? "أنو للحلول البرمجية" : "ANU Software Solutions"
-  const description =
-    locale === "ar"
-      ? "تعيد أنو تصميم عمليات الشركات وتطبّق نظام Odoo ERP للمخزون والمالية والموافقات والتقارير والرقابة الإدارية في العراق."
-      : "ANU redesigns business processes and implements Odoo ERP for operations, inventory, finance, approvals, and management reporting in Iraq."
-
-  return {
-    title,
-    description,
-    alternates: {
-      canonical: localizedPath(locale),
-      languages: localizedAlternates(),
-    },
-    openGraph: {
-      url: localizedPath(locale),
-      title,
-      description,
-    },
-  }
+  return pageMetadata({
+    locale,
+    path: "/",
+    title:
+      locale === "ar"
+        ? "تطبيق نظام Odoo ERP في العراق"
+        : "Odoo ERP Implementation in Iraq",
+    description:
+      locale === "ar"
+        ? "تعيد أنو تصميم عمليات الشركات وتطبّق نظام Odoo ERP للمخزون والمالية والموافقات والتقارير والرقابة الإدارية في العراق."
+        : "ANU redesigns business processes and implements Odoo ERP for operations, inventory, finance, approvals, and management reporting in Iraq.",
+  })
 }
 
 export default async function HomePage({ params }: PageProps<"/[locale]">) {

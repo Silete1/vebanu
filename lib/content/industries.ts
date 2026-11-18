@@ -85,7 +85,7 @@ export const industries: readonly Industry[] = [
     cardDescription:
       "Connect purchasing, warehouse movement, fulfilment, margins and collections.",
     metadata: {
-      title: "Distribution ERP and Odoo in Iraq | ANU",
+      title: "Distribution ERP and Odoo in Iraq",
       description:
         "ANU designs distribution workflows and implements Odoo ERP for purchasing, warehouse control, sales, fulfilment, margins and collections in Iraq.",
       canonicalPath: "/industries/distribution",
@@ -232,7 +232,7 @@ export const industries: readonly Industry[] = [
     cardDescription:
       "Connect materials, production work, quality evidence and actual cost.",
     metadata: {
-      title: "Manufacturing ERP and Odoo in Iraq | ANU",
+      title: "Manufacturing ERP and Odoo in Iraq",
       description:
         "ANU designs light manufacturing workflows and implements Odoo for planning, materials, production, quality, maintenance and cost visibility in Iraq.",
       canonicalPath: "/industries/manufacturing",
@@ -384,7 +384,7 @@ export const industries: readonly Industry[] = [
     cardDescription:
       "Unify branch sales, inventory, transfers, closing and financial visibility.",
     metadata: {
-      title: "Multi-Branch Retail ERP and Odoo in Iraq | ANU",
+      title: "Multi-Branch Retail ERP and Odoo in Iraq",
       description:
         "ANU designs multi-branch retail workflows and implements Odoo for POS, purchasing, stock, transfers, returns, reconciliation and finance in Iraq.",
       canonicalPath: "/industries/retail",
@@ -531,7 +531,7 @@ export const industries: readonly Industry[] = [
     cardDescription:
       "Connect service intake, planning, dispatch, execution evidence and billing.",
     metadata: {
-      title: "Logistics Operations ERP and Odoo in Iraq | ANU",
+      title: "Logistics Operations ERP and Odoo in Iraq",
       description:
         "ANU designs logistics and service workflows and implements Odoo for requests, planning, dispatch, execution evidence, invoicing and reporting in Iraq.",
       canonicalPath: "/industries/logistics",
@@ -678,7 +678,7 @@ export const industries: readonly Industry[] = [
     cardDescription:
       "Control non-clinical purchasing, stock, maintenance, approvals and finance.",
     metadata: {
-      title: "Healthcare Operations ERP and Odoo in Iraq | ANU",
+      title: "Healthcare Operations ERP and Odoo in Iraq",
       description:
         "ANU designs non-clinical healthcare workflows and implements Odoo for purchasing, inventory, maintenance, approvals and financial control in Iraq.",
       canonicalPath: "/industries/healthcare",
