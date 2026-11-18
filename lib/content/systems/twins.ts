@@ -3,7 +3,7 @@ import type { SystemStory } from "./types"
 export const twins: SystemStory = {
   slug: "twins",
   group: "industry",
-  status: "live",
+  status: "demo",
   order: 12,
   related: ["construction", "brain", "intelligence"],
   visual: { poster: "/media/systems/twins", scene: "twin" },

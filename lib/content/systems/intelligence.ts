@@ -3,7 +3,7 @@ import type { SystemStory } from "./types"
 export const intelligence: SystemStory = {
   slug: "intelligence",
   group: "layer",
-  status: "live",
+  status: "demo",
   order: 5,
   related: ["brain", "support", "walkthroughs"],
   visual: { poster: "/media/systems/intelligence" },
