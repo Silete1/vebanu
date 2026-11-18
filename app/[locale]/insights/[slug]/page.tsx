@@ -1,248 +1,166 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { ArrowLeftIcon, ArrowUpRightIcon } from "lucide-react"
+import type { CSSProperties } from "react"
 
-import { ArticleReadingProgress } from "@/components/insights/article-reading-progress"
-import { InsightMetadata } from "@/components/insights/insight-metadata"
-import { InsightVisual } from "@/components/insights/insight-visual"
-import { Container } from "@/components/layout/container"
-import { PageShell } from "@/components/layout/page-shell"
+import { NoteFigure } from "@/components/insights/note-figure"
+import { NoteMeta } from "@/components/insights/note-meta"
+import { NoteList } from "@/components/insights/note-row"
 import { JsonLd } from "@/components/seo/json-ld"
+import { ChapterRail, Story } from "@/components/story/chapter"
+import { CtaBand } from "@/components/story/cta-band"
+import { Glyph } from "@/components/story/glyph"
 import { getInsightBySlug, getInsights } from "@/lib/cms/insights"
-import { categoryLabels, insights } from "@/lib/content/insights"
-import { isLocale, localizedAlternates, localizedPath } from "@/lib/i18n"
+import { categoryLabels, insights, notesCopy } from "@/lib/content/insights"
+import { isLocale, localeMeta, localizedAlternates, localizedPath } from "@/lib/i18n"
+import { orgId, pageGraph } from "@/lib/seo"
 import { siteUrl } from "@/lib/site"
 
 export function generateStaticParams() {
   return insights.map((insight) => ({ slug: insight.slug }))
 }
 
-export async function generateMetadata({
-  params,
-}: PageProps<"/[locale]/insights/[slug]">): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps<"/[locale]/insights/[slug]">): Promise<Metadata> {
   const { locale, slug } = await params
   if (!isLocale(locale)) return {}
   const insight = await getInsightBySlug(slug)
   if (!insight) return {}
-
   const path = `/insights/${slug}`
-  const title = `${insight.title[locale]} | ${locale === "ar" ? "رؤى أنو" : "ANU Insights"}`
+
   return {
-    title,
+    title: insight.title[locale],
     description: insight.summary[locale],
-    alternates: {
-      canonical: localizedPath(locale, path),
-      languages: localizedAlternates(path),
-    },
+    alternates: { canonical: localizedPath(locale, path), languages: localizedAlternates(path) },
     openGraph: {
       type: "article",
       url: localizedPath(locale, path),
-      title,
+      title: insight.title[locale],
       description: insight.summary[locale],
+      publishedTime: insight.date,
     },
   }
 }
 
-export default async function InsightArticlePage({
-  params,
-}: PageProps<"/[locale]/insights/[slug]">) {
+export default async function InsightPage({ params }: PageProps<"/[locale]/insights/[slug]">) {
   const { locale, slug } = await params
   if (!isLocale(locale)) notFound()
-  const [insight, allInsights] = await Promise.all([
-    getInsightBySlug(slug),
-    getInsights(),
-  ])
+  const [insight, all] = await Promise.all([getInsightBySlug(slug), getInsights()])
   if (!insight) notFound()
 
-  const isRtl = locale === "ar"
-  const related = allInsights
-    .filter((candidate) => candidate.slug !== insight.slug)
-    .filter((candidate) => candidate.category === insight.category)
-    .concat(allInsights.filter((candidate) => candidate.slug !== insight.slug))
-    .filter(
-      (candidate, index, collection) =>
-        collection.findIndex((item) => item.slug === candidate.slug) === index
-    )
-    .slice(0, 3)
-  const articleUrl = `${siteUrl}${localizedPath(locale, `/insights/${slug}`)}`
-  const articleSchema = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "@id": `${articleUrl}#article`,
-    headline: insight.title[locale],
-    description: insight.summary[locale],
-    datePublished: insight.date,
-    dateModified: insight.date,
-    inLanguage: isRtl ? "ar-IQ" : "en-IQ",
-    mainEntityOfPage: articleUrl,
-    author: {
-      "@type": "Organization",
-      name:
-        insight.author?.[locale] ??
-        (isRtl ? "أنو للحلول البرمجية" : "ANU Software Solutions"),
-    },
-    publisher: { "@id": `${siteUrl}/#organization` },
-  }
+  const copy = notesCopy[locale]
+  const topic = categoryLabels[insight.category][locale]
+  const parts = insight.body.map((section, index) => ({ id: `part-${index + 1}`, title: section.heading[locale] }))
+  // same topic first, then the newest of the rest
+  const others = [...all].filter((note) => note.slug !== insight.slug).sort((a, b) => b.date.localeCompare(a.date))
+  const related = [
+    ...others.filter((note) => note.category === insight.category),
+    ...others.filter((note) => note.category !== insight.category),
+  ].slice(0, 3)
+  const path = `/insights/${slug}`
+  const url = `${siteUrl}${localizedPath(locale, path)}`
 
   return (
-    <PageShell locale={locale}>
-      <JsonLd data={articleSchema} />
-      <div className="bg-[var(--color-bone-white)]">
-        <ArticleReadingProgress />
-        <article>
-          <header
-            className="bg-[var(--color-abyssal-ink)] pt-32 pb-16 text-white sm:pt-36 lg:pt-40 lg:pb-24"
-            data-header-theme="dark"
-          >
-            <Container>
-              <Link
-                href={localizedPath(locale, "/insights")}
-                className="mono-label inline-flex items-center gap-2 rounded-sm text-white/64 transition-colors outline-none hover:text-white focus-visible:ring-2 focus-visible:ring-[var(--color-bioluminescent-lime)] focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--color-abyssal-ink)]"
-              >
-                <ArrowLeftIcon className="size-4 rtl:-scale-x-100" />
-                {isRtl ? "العودة إلى الرؤى" : "Back to insights"}
-              </Link>
+    <>
+      <JsonLd
+        data={pageGraph(locale, {
+          path,
+          name: insight.title[locale],
+          description: insight.summary[locale],
+          crumbs: [
+            { name: copy.kicker, path: "/insights" },
+            { name: insight.title[locale], path },
+          ],
+          about: [
+            {
+              "@type": "Article",
+              "@id": `${url}#article`,
+              headline: insight.title[locale],
+              description: insight.summary[locale],
+              datePublished: insight.date,
+              dateModified: insight.date,
+              inLanguage: localeMeta[locale].htmlLang,
+              articleSection: topic,
+              timeRequired: `PT${insight.readingTime}M`,
+              author: { "@id": orgId },
+              publisher: { "@id": orgId },
+              mainEntityOfPage: { "@id": `${url}#page` },
+              isAccessibleForFree: true,
+            },
+          ],
+        })}
+      />
 
-              <div className="mt-14 grid min-w-0 gap-10 lg:grid-cols-[0.72fr_0.28fr] lg:items-end">
-                <div className="min-w-0">
-                  <InsightMetadata insight={insight} locale={locale} inverse />
-                  <h1 className="mt-7 max-w-[15ch] text-[clamp(2.75rem,7vw,6rem)] leading-[0.97] tracking-[-0.035em]">
-                    {insight.title[locale]}
-                  </h1>
-                </div>
-                <div className="border-t border-white/22 pt-5 lg:border-s lg:border-t-0 lg:ps-7 lg:pt-0">
-                  <p className="text-[clamp(1.15rem,1.7vw,1.45rem)] leading-[1.28] text-white/72">
-                    {insight.summary[locale]}
-                  </p>
-                  {insight.author ? (
-                    <p className="mono-label mt-7 text-white/48">
-                      {isRtl ? "بواسطة" : "By"} {insight.author[locale]}
-                    </p>
-                  ) : null}
-                </div>
-              </div>
-            </Container>
-          </header>
+      <article aria-labelledby="note-title">
+        <header className="anu-band anu-sky anu-hero">
+          <div className="anu-wrap anu-hero__text">
+            <nav aria-label={copy.crumbsLabel} className="anu-crumbs">
+              <Link href={localizedPath(locale, "/insights")}>{copy.kicker}</Link>
+              <span aria-hidden="true">/</span>
+              <span>{topic}</span>
+            </nav>
+            <h1 id="note-title" className="anu-note-hero__title">
+              {insight.title[locale]}
+            </h1>
+            <p className="anu-lede">{insight.summary[locale]}</p>
+            <NoteMeta insight={insight} locale={locale} />
+            {insight.author ? (
+              <p className="anu-kicker">
+                {copy.by} {insight.author[locale]}
+              </p>
+            ) : null}
+          </div>
+        </header>
 
-          <section className="bg-[var(--color-bone-white)] py-6 lg:py-8">
-            <Container>
-              <InsightVisual
-                variant={insight.visual}
-                alt={insight.visualAlt[locale]}
-                locale={locale}
-                className="min-h-[430px] lg:min-h-[680px]"
-              />
-            </Container>
-          </section>
-
-          <section className="bg-white py-20 lg:py-28">
-            <Container>
-              <div className="grid gap-14 lg:grid-cols-[0.28fr_0.72fr]">
-                <aside className="h-fit border-t border-[var(--color-abyssal-ink)] pt-5 lg:sticky lg:top-28">
-                  <p className="mono-label text-[var(--color-graphite)]">
-                    {isRtl ? "في هذه الرؤية" : "In this insight"}
-                  </p>
-                  <ol className="mt-5 grid gap-3">
-                    {insight.body.map((section, index) => (
-                      <li
-                        key={section.heading.en}
-                        className="flex gap-3 text-sm leading-5 text-[var(--color-graphite)]"
-                      >
-                        <span className="mono-label" aria-hidden="true">
-                          0{index + 1}
-                        </span>
-                        <span>{section.heading[locale]}</span>
-                      </li>
-                    ))}
-                  </ol>
-                </aside>
-
-                <div className="max-w-3xl">
-                  {insight.body.map((section, index) => (
-                    <section
-                      key={section.heading.en}
-                      className="border-t border-[var(--color-lichen)] py-10 first:border-[var(--color-abyssal-ink)] first:pt-0"
-                    >
-                      <p className="mono-label text-[var(--color-bioluminescent-lime)]">
-                        {String(index + 1).padStart(2, "0")}
-                      </p>
-                      <h2 className="mt-5 text-[clamp(2.2rem,4vw,4rem)] leading-[1.02] tracking-[-0.03em]">
-                        {section.heading[locale]}
-                      </h2>
-                      <p className="mt-7 text-[clamp(1.15rem,1.7vw,1.4rem)] leading-[1.55] text-[var(--color-graphite)]">
-                        {section.body[locale]}
-                      </p>
-                    </section>
-                  ))}
-
-                  <div className="mt-10 border-s-2 border-[var(--color-bioluminescent-lime)] bg-[var(--color-tissue)] p-7 sm:p-9">
-                    <p className="mono-label text-[var(--color-graphite)]">
-                      {isRtl ? "سؤال تنفيذي" : "Operating question"}
-                    </p>
-                    <p className="mt-5 text-[clamp(1.6rem,2.6vw,2.5rem)] leading-[1.1] tracking-[-0.025em]">
-                      {isRtl
-                        ? "ما القرار أو الدليل أو المسؤولية التي ما زالت موجودة خارج النظام؟"
-                        : "Which decision, evidence or responsibility still exists outside the system?"}
-                    </p>
-                  </div>
-
-                  <div className="mt-10 flex flex-wrap gap-2 border-t border-[var(--color-abyssal-ink)] pt-7">
-                    <Link
-                      href={`${localizedPath(locale)}?request=insight#assessment`}
-                      className="mono-label inline-flex h-11 items-center gap-3 bg-[var(--color-abyssal-ink)] px-4 text-white outline-none hover:bg-[var(--color-graphite)] focus-visible:ring-2 focus-visible:ring-[var(--color-bioluminescent-lime)] focus-visible:ring-offset-4"
-                    >
-                      {isRtl ? "ناقش الموضوع مع أنو" : "Discuss with ANU"}
-                      <ArrowUpRightIcon className="size-4 rtl:-scale-x-100" />
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </Container>
-          </section>
-        </article>
-
-        <section
-          className="bg-[var(--color-tissue)] py-20 lg:py-28"
-          aria-labelledby="related-insights"
-        >
-          <Container>
-            <div className="flex items-end justify-between gap-6 border-b border-[var(--color-abyssal-ink)] pb-6">
-              <div>
-                <p className="mono-label text-[var(--color-graphite)]">
-                  {categoryLabels[insight.category][locale]}
-                </p>
-                <h2
-                  id="related-insights"
-                  className="mt-4 text-[clamp(2.6rem,5vw,5rem)] leading-none tracking-[-0.035em]"
+        <Story chapters={parts}>
+          <ChapterRail label={copy.rail} chapters={parts} />
+          <div className="anu-article">
+            <div className="anu-article__body">
+              <span className="anu-article__line" aria-hidden="true" />
+              <NoteFigure variant={insight.visual} alt={insight.visualAlt[locale]} />
+              {insight.body.map((section, index) => (
+                <section
+                  key={parts[index].id}
+                  id={parts[index].id}
+                  aria-labelledby={`${parts[index].id}-title`}
+                  className="anu-article__part"
+                  style={{ viewTimelineName: `--ch-${parts[index].id}` } as CSSProperties}
                 >
-                  {isRtl ? "رؤى ذات صلة" : "Related insights"}
-                </h2>
-              </div>
-            </div>
-            <div className="grid gap-0 md:grid-cols-3">
-              {related.map((item) => (
-                <Link
-                  key={item.slug}
-                  href={localizedPath(locale, `/insights/${item.slug}`)}
-                  className="group border-b border-[var(--color-lichen)] py-8 outline-none focus-visible:bg-white md:border-e md:px-6 md:first:ps-0 md:last:border-e-0 md:last:pe-0"
-                >
-                  <p className="mono-label text-[var(--color-graphite)]">
-                    {categoryLabels[item.category][locale]}
-                  </p>
-                  <h3 className="mt-5 text-[clamp(1.65rem,2.8vw,2.55rem)] leading-[1.04] tracking-[-0.025em]">
-                    {item.title[locale]}
-                  </h3>
-                  <span className="mono-label mt-7 inline-flex items-center gap-2 text-[var(--color-graphite)] group-hover:text-[var(--color-abyssal-ink)]">
-                    {isRtl ? "اقرأ" : "Read"}
-                    <ArrowUpRightIcon className="size-4 rtl:-scale-x-100" />
-                  </span>
-                </Link>
+                  <h2 id={`${parts[index].id}-title`}>
+                    <span className="anu-num anu-article__index">{String(index + 1).padStart(2, "0")}</span>
+                    <span>{section.heading[locale]}</span>
+                  </h2>
+                  <p>{section.body[locale]}</p>
+                </section>
               ))}
+              <aside className="anu-band anu-band--plain anu-callout" aria-label={copy.question.label}>
+                <p className="anu-kicker">
+                  <Glyph state="due" />
+                  {copy.question.label}
+                </p>
+                <p className="anu-callout__text">{copy.question.text}</p>
+              </aside>
             </div>
-          </Container>
+          </div>
+        </Story>
+      </article>
+
+      {related.length ? (
+        <section className="anu-section anu-related" aria-labelledby="related-title">
+          <div className="anu-wrap">
+            <div className="anu-section-head">
+              <h2 id="related-title" className="anu-reveal">
+                {copy.related}
+              </h2>
+            </div>
+            <NoteList insights={related} locale={locale} />
+            <Link href={localizedPath(locale, "/insights")} className="anu-link anu-section-more">
+              {copy.all} →
+            </Link>
+          </div>
         </section>
-      </div>
-    </PageShell>
+      ) : null}
+
+      <CtaBand locale={locale} />
+    </>
   )
 }
