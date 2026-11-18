@@ -1,0 +1,452 @@
+/*
+ * Industries and field notes: what their pages add to the story blocks. The
+ * one-line flow, the two-by-two platform map, the control priorities, the
+ * field-note index and its topic glyphs, the article measure with its reading
+ * line, and the drawn note figures. Tokens only; radius 0; hairlines.
+ */
+
+@layer components {
+  /* ------------------------------------------------------- industries */
+
+  /* six or seven stages stay on one line on wide screens */
+  @media (min-width: 64rem) {
+    .anu-flow .anu-road {
+      grid-template-columns: repeat(var(--steps, 5), minmax(0, 1fr));
+      gap: var(--anu-s-4);
+    }
+  }
+
+  /* four platform needs read as two by two */
+  @media (min-width: 72rem) {
+    .anu-features--pairs {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .anu-feature .anu-chips {
+    margin-block-start: var(--anu-s-2);
+  }
+
+  .anu-priorities {
+    display: grid;
+    gap: var(--anu-s-2);
+    margin: var(--anu-s-3) 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--anu-t-15);
+    color: var(--anu-ink-soft);
+  }
+
+  .anu-priorities li {
+    display: flex;
+    align-items: center;
+    gap: var(--anu-s-3);
+  }
+
+  .anu-section-more {
+    display: inline-block;
+    margin-block-start: var(--anu-s-8);
+  }
+
+  /* ------------------------------------------------------ the meta line */
+
+  /* kind, topic, date and minutes; figures in mono, words in sans */
+  .anu-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--anu-s-1) var(--anu-s-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--anu-t-13);
+    color: var(--anu-ink-faint);
+  }
+
+  .anu-meta li + li::before {
+    content: "/";
+    margin-inline-end: var(--anu-s-3);
+    color: var(--anu-rule-strong);
+  }
+
+  .anu-band .anu-meta {
+    color: var(--anu-on-ink-soft);
+  }
+
+  .anu-band .anu-meta li + li::before {
+    color: var(--anu-on-ink-rule);
+  }
+
+  /* --------------------------------------------------- featured note */
+
+  .anu-featured {
+    display: grid;
+    gap: var(--anu-s-8);
+    align-items: center;
+  }
+
+  @media (min-width: 64rem) {
+    .anu-featured {
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+      gap: var(--anu-s-16);
+    }
+  }
+
+  .anu-featured__text {
+    display: grid;
+    gap: var(--anu-s-4);
+    justify-items: start;
+  }
+
+  .anu-featured__title {
+    font-size: clamp(2rem, 1.4rem + 2.4vw, 3.25rem);
+    max-inline-size: 20ch;
+  }
+
+  .anu-featured__title a:hover {
+    color: var(--anu-signal-text);
+  }
+
+  .anu-featured__summary {
+    color: var(--anu-ink-soft);
+    max-inline-size: 40rem;
+  }
+
+  .anu-featured__text .anu-action {
+    margin-block-start: var(--anu-s-4);
+  }
+
+  /* ------------------------------------------------------ topic glyphs */
+
+  .anu-topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--anu-s-2);
+  }
+
+  .anu-topic {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--anu-s-2);
+    min-block-size: 2.75rem;
+    padding-inline: var(--anu-s-4);
+    border: var(--anu-hair) solid var(--anu-rule-strong);
+    border-radius: 0;
+    background: var(--anu-paper);
+    color: var(--anu-ink-soft);
+    font: inherit;
+    font-size: var(--anu-t-15);
+    line-height: 1;
+    cursor: pointer;
+    transition:
+      border-color var(--anu-fast) linear,
+      color var(--anu-fast) linear;
+  }
+
+  .anu-topic:hover {
+    border-color: var(--anu-signal);
+    color: var(--anu-signal-text);
+  }
+
+  .anu-topic[aria-pressed="true"] {
+    border-color: var(--anu-ink);
+    color: var(--anu-ink);
+  }
+
+  .anu-topic .anu-num {
+    font-size: var(--anu-t-12);
+    color: var(--anu-ink-faint);
+  }
+
+  .anu-topics__status {
+    margin-block: var(--anu-s-6) var(--anu-s-3);
+    font-size: var(--anu-t-13);
+    color: var(--anu-ink-faint);
+  }
+
+  /* --------------------------------------------------------- note index */
+
+  .anu-notelist {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-block-start: var(--anu-hair) solid var(--anu-rule-strong);
+  }
+
+  .anu-notelist > li {
+    border-block-end: var(--anu-hair) solid var(--anu-rule);
+  }
+
+  .anu-notelist__empty {
+    padding-block: var(--anu-s-12);
+    border-block: var(--anu-hair) solid var(--anu-rule);
+    color: var(--anu-ink-soft);
+  }
+
+  .anu-noterow {
+    display: grid;
+    gap: var(--anu-s-3);
+    padding: var(--anu-s-6) var(--anu-s-4);
+  }
+
+  @media (min-width: 48rem) {
+    .anu-noterow {
+      grid-template-columns: 13rem minmax(0, 1fr);
+      gap: var(--anu-s-8);
+      padding-block: var(--anu-s-8);
+    }
+  }
+
+  .anu-noterow__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: start;
+    gap: var(--anu-s-1) var(--anu-s-4);
+    font-size: var(--anu-t-13);
+    color: var(--anu-ink-faint);
+  }
+
+  @media (min-width: 48rem) {
+    .anu-noterow__meta {
+      display: grid;
+    }
+  }
+
+  .anu-noterow__topic {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--anu-s-2);
+    color: var(--anu-ink-soft);
+  }
+
+  .anu-noterow__text {
+    display: grid;
+    gap: var(--anu-s-2);
+  }
+
+  .anu-noterow__title {
+    font-size: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
+    font-weight: 400;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    max-inline-size: 40ch;
+    transition: color var(--anu-fast) linear;
+  }
+
+  :lang(ar) .anu-noterow__title {
+    line-height: 1.5;
+    letter-spacing: 0;
+  }
+
+  .anu-noterow:hover .anu-noterow__title {
+    color: var(--anu-signal-text);
+  }
+
+  .anu-noterow__summary {
+    max-inline-size: 68ch;
+    color: var(--anu-ink-soft);
+    font-size: var(--anu-t-15);
+  }
+
+  /* ------------------------------------------------------------ article */
+
+  .anu-note-hero__title {
+    font-size: clamp(2.25rem, 1.5rem + 3.4vw, 4.5rem);
+    max-inline-size: 22ch;
+  }
+
+  .anu-article {
+    padding-block: clamp(3rem, 2rem + 4vw, 6rem);
+    padding-inline: var(--anu-gutter);
+    background: var(--anu-paper);
+  }
+
+  .anu-article__body {
+    position: relative;
+    max-inline-size: 48rem;
+    padding-inline-start: var(--anu-s-6);
+    view-timeline: --anu-read block;
+  }
+
+  @media (min-width: 48rem) {
+    .anu-article__body {
+      padding-inline-start: var(--anu-s-12);
+    }
+  }
+
+  /* the reading line: a hairline beside the text that turns Signal down to
+     where the reader is, driven by the article's own scroll position */
+  .anu-article__line {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    inline-size: 1px;
+    background: var(--anu-rule);
+  }
+
+  .anu-article__line::after {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: -1px;
+    inline-size: var(--anu-edge);
+    background: var(--anu-signal);
+    transform-origin: top;
+    scale: 1 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      html:not([data-tier="0"]) .anu-article__line::after {
+        animation: anu-read linear both;
+        animation-timeline: --anu-read;
+        animation-range: contain 0% contain 100%;
+      }
+    }
+  }
+
+  .anu-article__body > .anu-figure {
+    margin-block-end: var(--anu-s-12);
+  }
+
+  .anu-article__part + .anu-article__part {
+    margin-block-start: var(--anu-s-12);
+  }
+
+  .anu-article__part h2 {
+    display: flex;
+    align-items: baseline;
+    gap: var(--anu-s-4);
+    margin-block-end: var(--anu-s-4);
+    font-size: clamp(1.625rem, 1.3rem + 1.4vw, 2.25rem);
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+
+  :lang(ar) .anu-article__part h2 {
+    line-height: 1.45;
+    letter-spacing: 0;
+  }
+
+  .anu-article__index {
+    flex: none;
+    font-size: var(--anu-t-13);
+    color: var(--anu-signal-text);
+  }
+
+  .anu-article__part p {
+    max-inline-size: 68ch;
+    font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+    line-height: 1.65;
+  }
+
+  :lang(ar) .anu-article__part p {
+    font-size: clamp(1.125rem, 1.05rem + 0.3vw, 1.25rem);
+    line-height: 1.75;
+  }
+
+  /* the question the note leaves: a small ink band with its Signal edge */
+  .anu-callout {
+    display: grid;
+    gap: var(--anu-s-4);
+    margin-block-start: var(--anu-s-12);
+    padding: var(--anu-s-8) var(--anu-s-6);
+  }
+
+  .anu-callout__text {
+    max-inline-size: 30ch;
+    font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.25rem);
+    font-weight: 300;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  :lang(ar) .anu-callout__text {
+    font-weight: 400;
+    line-height: 1.6;
+    letter-spacing: 0;
+  }
+
+  /* --------------------------------------------------------- note figure */
+
+  .anu-figure {
+    margin: 0;
+    aspect-ratio: 16 / 10;
+    background: var(--anu-paper);
+    border: var(--anu-hair) solid var(--anu-rule);
+    overflow: hidden;
+  }
+
+  .anu-figure svg {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  [dir="rtl"] .anu-figure svg {
+    scale: -1 1;
+  }
+
+  .anu-figure__lines :is(line, path, polyline) {
+    fill: none;
+    stroke: var(--anu-rule-strong);
+    stroke-width: 1.5;
+  }
+
+  .anu-figure__lines .anu-figure__signal {
+    stroke: var(--anu-signal);
+    stroke-width: 2;
+  }
+
+  .anu-figure__lines .anu-figure__dash {
+    stroke-dasharray: 4 6;
+  }
+
+  .anu-figure__node {
+    fill: var(--anu-paper);
+    stroke: var(--anu-ink-faint);
+    stroke-width: 1.5;
+  }
+
+  .anu-figure__node[data-state="done"] {
+    fill: var(--anu-ink);
+    stroke: var(--anu-ink);
+  }
+
+  .anu-figure__node[data-state="due"],
+  .anu-figure__half {
+    fill: var(--anu-signal);
+    stroke: var(--anu-signal);
+  }
+
+  .anu-figure__node:is([data-state="progress"], [data-state="waiting"]) {
+    stroke: var(--anu-signal);
+  }
+
+  .anu-figure__node[data-state="waiting"] {
+    stroke-dasharray: 5 4;
+  }
+
+  .anu-figure__panel {
+    fill: var(--anu-desk);
+    stroke: var(--anu-rule-strong);
+  }
+
+  .anu-figure__bar {
+    fill: var(--anu-rule-strong);
+  }
+
+  .anu-figure__bar[data-state="due"] {
+    fill: var(--anu-signal);
+  }
+}
+
+@keyframes anu-read {
+  from {
+    scale: 1 0;
+  }
+  to {
+    scale: 1 1;
+  }
+}
