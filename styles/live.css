@@ -97,6 +97,10 @@
       border-color 280ms linear;
   }
 
+  .anu-live[data-live="still"] [data-only]:not(.is-on) {
+    visibility: hidden;
+  }
+
   .anu-live[data-live="on"] :is([data-at], [data-only]).is-on {
     opacity: 1;
     translate: 0 0;
@@ -386,13 +390,13 @@
   }
 
   .live-road__stage.is-on,
-  .anu-live:not([data-live]) .live-road__stage[data-road="past"] {
+  .anu-live:not([data-live="on"]) .live-road__stage[data-road="past"] {
     background: #eff6ff;
     color: var(--live-ink);
   }
 
   .live-road__stage.is-now,
-  .anu-live:not([data-live]) .live-road__stage[data-road="now"] {
+  .anu-live:not([data-live="on"]) .live-road__stage[data-road="now"] {
     background: var(--live-signal);
     color: #fff;
     outline: none;

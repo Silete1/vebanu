@@ -65,6 +65,8 @@ export function LiveScreen({
 
     const still = readTier() === 0 || matchMedia("(prefers-reduced-motion: reduce)").matches
     if (still) {
+      // the end state, with only the last step's passing layers shown
+      el.dataset.live = "still"
       show(steps - 1)
       return
     }
