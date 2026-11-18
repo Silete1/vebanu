@@ -9,6 +9,7 @@ import { CtaBand } from "@/components/story/cta-band"
 import { Poster } from "@/components/story/poster"
 import { SystemCards } from "@/components/story/related"
 import { Road } from "@/components/story/road"
+import { Loop } from "@/components/story/loop"
 import { SceneSlot } from "@/components/story/scene-slot"
 import { SealFrieze, Ziggurat } from "@/components/story/sky"
 import { SystemMap } from "@/components/story/system-map"
@@ -68,6 +69,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             width={1920}
             height={1080}
           />
+          <Loop slug={locale === "ar" ? "home-rtl" : "home"} />
           <SceneSlot scene="network" />
         </div>
         <div className="anu-wrap anu-home-hero__text">

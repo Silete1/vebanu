@@ -3,6 +3,7 @@ import Link from "next/link"
 import { Sign } from "@/components/brand/sign"
 import { Glyph, statusGlyph } from "@/components/story/glyph"
 import { Poster } from "@/components/story/poster"
+import { Loop } from "@/components/story/loop"
 import { SceneSlot } from "@/components/story/scene-slot"
 import { getWhatsappHref } from "@/lib/contact"
 import type { LocalizedSystem } from "@/lib/content/systems"
@@ -61,6 +62,7 @@ export function StoryHero({ system, locale }: { system: LocalizedSystem; locale:
         </div>
         <figure className="anu-hero__visual">
           <Poster src={system.visual.poster} alt={`${name}: ${pitch}`} priority />
+          <Loop slug={system.slug} />
           {system.visual.scene ? <SceneSlot scene={system.visual.scene} /> : null}
         </figure>
       </div>

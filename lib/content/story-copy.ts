@@ -19,6 +19,7 @@ export const storyCopy: Record<
     ctaBody: string
     systems: string
     step: string
+    live: { kicker: string; title: string; note: string }
   }
 > = {
   en: {
@@ -41,6 +42,7 @@ export const storyCopy: Record<
     ctaBody: "A short assessment maps how your company runs today and which parts of ANU would hold it. In Arabic or English, in Baghdad or online.",
     systems: "Systems",
     step: "Step",
+    live: { kicker: "Live", title: "See it working.", note: "A drawing of the real screens, running on demo data." },
   },
   ar: {
     group: { core: "المنصة", layer: "في كل أنو برين", industry: "نظام قطاعي" },
@@ -62,5 +64,6 @@ export const storyCopy: Record<
     ctaBody: "تقييم قصير يرسم كيف تعمل شركتك اليوم وأي أجزاء من أنو ستحفظ عملها. بالعربية أو الإنجليزية، في بغداد أو عن بُعد.",
     systems: "الأنظمة",
     step: "الخطوة",
+    live: { kicker: "مباشر", title: "شاهده وهو يعمل.", note: "رسم للشاشات الحقيقية، يعمل على بيانات تجريبية." },
   },
 }
