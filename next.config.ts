@@ -1,6 +1,27 @@
 import type { NextConfig } from "next"
 
+// Everything comes from this origin. Inline scripts stay allowed: the pages are
+// prerendered static HTML (no per-request nonce) and Next inlines its payload.
+const contentSecurityPolicy = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob:",
+  "font-src 'self'",
+  "media-src 'self'",
+  "connect-src 'self'",
+  "frame-ancestors 'none'",
+  "form-action 'self'",
+  "base-uri 'self'",
+  "object-src 'none'",
+  "upgrade-insecure-requests",
+].join("; ")
+
 const securityHeaders = [
+  {
+    key: "Content-Security-Policy",
+    value: contentSecurityPolicy,
+  },
   {
     key: "X-Frame-Options",
     value: "DENY",
