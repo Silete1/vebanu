@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // prebuilt, minified scene bundles (scripts/twin-scene/README.md)
+    "public/scenes/**",
   ]),
 ]);
 
