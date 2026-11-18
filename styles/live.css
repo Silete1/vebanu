@@ -554,3 +554,96 @@
     --anu-dir: -1;
   }
 }
+
+@layer components {
+  /* ------------------------------------------- the visitor drives the screen */
+
+  .anu-live__screen {
+    cursor: pointer;
+  }
+
+  .anu-live__controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    background: var(--live-ink);
+    color: #cbd5e1;
+    border-block-start: 1px solid #262d3d;
+  }
+
+  .anu-live__btn {
+    display: grid;
+    place-items: center;
+    inline-size: 32px;
+    block-size: 32px;
+    border: 1px solid #334155;
+    background: transparent;
+    color: #f1f5f9;
+    cursor: pointer;
+  }
+
+  .anu-live__btn:hover,
+  .anu-live__btn:focus-visible {
+    border-color: var(--live-signal);
+    background: rgb(37 99 235 / 0.25);
+    outline: none;
+  }
+
+  .anu-live__icon {
+    display: block;
+  }
+
+  [dir="rtl"] :is(.anu-live__icon--next, .anu-live__icon--prev, .anu-live__icon--play) {
+    scale: -1 1;
+  }
+
+  .anu-live__track {
+    display: flex;
+    flex: 1;
+    gap: 3px;
+    margin: 0 6px;
+    padding: 0;
+    list-style: none;
+  }
+
+  .anu-live__track li {
+    flex: 1;
+  }
+
+  .anu-live__track button {
+    display: block;
+    inline-size: 100%;
+    block-size: 24px;
+    padding: 0;
+    border: 0;
+    background: linear-gradient(#334155, #334155) center / 100% 3px no-repeat;
+    cursor: pointer;
+  }
+
+  .anu-live__track button[data-done] {
+    background-image: linear-gradient(#60a5fa, #60a5fa);
+  }
+
+  .anu-live__track button[aria-current="step"] {
+    background-image: linear-gradient(var(--live-signal), var(--live-signal));
+    background-size: 100% 5px;
+  }
+
+  .anu-live__track button:focus-visible {
+    outline: 2px solid var(--live-signal);
+    outline-offset: 1px;
+  }
+
+  .anu-live__count {
+    min-inline-size: 3.2em;
+    text-align: end;
+    font-size: 11px;
+  }
+
+  @media (max-width: 30rem) {
+    .anu-live__track {
+      display: none;
+    }
+  }
+}
