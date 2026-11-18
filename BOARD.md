@@ -22,7 +22,7 @@ Until the brief is shared and split: the current site only gets the hosting move
 |---|---|
 | **Remake (new production)** | Waiting for PC2's brief on `pc2/remake-brief`; then a plan + work split on this board |
 | Hosting move (Vercel → anu-cloud-01) | Server copy healthy at https://site.brain.anu.ltd. Branch `hosting/hetzner`. Runbook `deploy/README.md`. Waiting: Resend key in site.env, DNS login, owner's go |
-| Improvements (audit 18 Nov) | Branch `site/improvements` (PC1). Done: hero video 4.45 MB → 0.81/0.49 MB + poster; noindex on non-production hosts. Running: lane `site/fixes` (PC1 Claude agent) items below |
+| Current-site fixes (audit 18 Nov) | DONE on `site/improvements` 14bd109, live on staging: hero video 4.45→0.81/0.49 MB, headline visible without JS + subline, one brand per title, OG cards, robots/noindex off-production, branded 404, Services in nav, email in contact, contrast, fonts, 44px footer taps, RTL arrows, dead files removed. Reaches anu.ltd at the DNS switch (or a merge to main for Vercel) |
 | Production | www.anu.ltd = `main` 245731b on Vercel |
 
 ## Claims
@@ -30,7 +30,6 @@ Until the brief is shared and split: the current site only gets the hosting move
 |---|---|---|---|
 | Claude PC1 | `hosting/hetzner` | hosting, deploy, DNS switch | 18 Nov |
 | Claude PC1 | `site/improvements` | hero video, staging noindex, merging lanes | 18 Nov |
-| Claude PC1 agent | `site/fixes` | hero LCP + subline, titles, Open Graph + OG image, 404, Services in nav, email in contact block, contrast, fonts per locale, footer tap targets, RTL arrows, dead files | 18 Nov |
 
 ## Open — free to claim (owner content or decisions needed for most)
 - About page (team, Odoo partner status, years, office) — needs owner facts.
@@ -46,7 +45,8 @@ Until the brief is shared and split: the current site only gets the hosting move
 ## Owner decisions queue
 1. Go for the DNS switch of anu.ltd to the server (after the form test passes).
 2. Who holds the Google Cloud DNS login and the Vercel login.
-3. Is the separate `website2` (Vite + admin) project still meant to replace this site?
+3. Arabic wording on staging: hero subline, "راسل أنو بالبريد", Arabic 404 text.
+4. Is the separate `website2` (Vite + admin) project still meant to replace this site?
 
 ## main log
 | When (UTC) | SHA | By | What |
