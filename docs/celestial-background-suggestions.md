@@ -1,7 +1,7 @@
 # Sumerian Celestial Background Guide: Anu, God of the Sky & Enterprise Control
 
 > **Sumerian Mythology & Enterprise Metaphor**  
-> In ancient Mesopotamian/Sumerian mythology, **Anu (An)** is the supreme Lord of the Heavens (`God of the Sky`). His sacred cuneiform symbol (**DINGIR `𒀭`**) depicts an **eight-pointed celestial star**, representing supreme divine order from above.  
+> In ancient Mesopotamian/Sumerian mythology, **Anu (An)** is the supreme Lord of the Heavens (`God of the Sky`). The cuneiform sign **AN/DINGIR `𒀭`** (U+1202D) began as a star pictogram and reads *an* "sky" or *dingir* "god"; it is written as crossing wedges. (The filled eight-pointed star in a disc is Ishtar/Venus, not Anu; see `docs/redesign/SKY.md` §1.3.)  
 >  
 > Whether you choose a **Dark Cosmic Constellation Mesh** or a **Lighter Ethereal Blue Sky & Cloud Loop**, both directly embody Anu's domain: **High-level operational clarity and command from the heavens above.**
 
@@ -16,13 +16,13 @@ All links below have been **100% verified accessible (`HTTP 200 OK`) and will no
 * **Visual**: Fluffy white clouds drifting across a crisp, light-blue daytime sky—evoking clarity, transparency, and high-altitude perspective.
 * **Verified Direct Video Page (`HTTP 200 OK`)**:  
   [Wikimedia Commons: Summer Clouds Time-Lapse (.webm)](https://commons.wikimedia.org/wiki/File:Grand_Canyon_National_Park-_Timelapse_Video_-_Summer_Clouds_(7775362134).webm)
-* **License & Usage**: 100% free, open domain, zero watermarks.
+* **License & Usage**: free to use under the provider's own licence (not public domain); check the terms per file before shipping.
 
 ### B. Soft Ethereal Cloudscape at Sunset / Golden Horizon (Direct & Verified)
 * **Visual**: Delicate light-blue sky shifting into soft golden cloud layers—calming, executive, and gentle behind hero headlines.
 * **Verified Direct Video Page (`HTTP 200 OK`)**:  
   [Wikimedia Commons: Clouds at Sunset Time-Lapse (.webm)](https://commons.wikimedia.org/wiki/File:Clouds_at_sunset_(time_lapse).webm)
-* **License & Usage**: 100% free, open domain, zero watermarks.
+* **License & Usage**: free to use under the provider's own licence (not public domain); check the terms per file before shipping.
 
 ### C. Curated Light Sky & Cloud Categories on Coverr (`HTTP 200 OK`)
 * **Coverr Clear Skies & Blue Sky Loops**: [https://coverr.co/s/clear-skies](https://coverr.co/s/clear-skies)
