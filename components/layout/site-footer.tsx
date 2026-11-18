@@ -4,21 +4,26 @@ import Link from "next/link"
 import { Container } from "@/components/layout/container"
 import { anuContact, getWhatsappHref } from "@/lib/contact"
 import { siteCopy } from "@/lib/content/site-copy"
+import { getNavigationItems } from "@/lib/navigation"
 import { type Locale, localizedPath } from "@/lib/i18n"
+
+// Phones get 44px-tall rows; from `sm` up the links keep their compact look.
+const footerLinkClass =
+  "flex min-h-11 items-center text-[clamp(0.95rem,1.2vw,1.15rem)] leading-none tracking-[-0.03em] text-white/78 transition-colors hover:text-white sm:min-h-0"
+const footerListClass = "mt-3 grid sm:gap-2"
 
 export function SiteFooter({ locale }: { locale: Locale }) {
   const copy = siteCopy[locale]
   const contactHref = `${localizedPath(locale)}?request=contact#assessment`
   const footerLinks = [
-    { label: copy.links.work, href: localizedPath(locale, "/#work") },
-    { label: copy.links.method, href: localizedPath(locale, "/#method") },
-    { label: copy.links.platform, href: localizedPath(locale, "/#platform") },
-    {
-      label: copy.links.industries,
-      href: localizedPath(locale, "/industries"),
-    },
-    { label: copy.links.insights, href: localizedPath(locale, "/insights") },
-    { label: copy.links.contact, href: contactHref },
+    ...getNavigationItems(locale).filter((item) => item.available),
+    { title: copy.links.contact, href: contactHref },
+  ]
+  const externalLinks = [
+    { label: copy.links.instagram, href: anuContact.instagramHref },
+    { label: copy.links.facebook, href: anuContact.facebookHref },
+    { label: copy.links.linkedin, href: anuContact.linkedinHref },
+    { label: copy.links.odooPartner, href: anuContact.odooPartnerHref },
   ]
   return (
     <footer
@@ -62,75 +67,48 @@ export function SiteFooter({ locale }: { locale: Locale }) {
             <div className="border-s border-white/18 ps-5">
               <p className="mono-label text-white/80">{copy.navigate}</p>
               <nav
-                className="mt-3 grid gap-2"
+                className={footerListClass}
                 aria-label={copy.footerNavigation}
               >
                 {footerLinks.map((link) => (
                   <Link
-                    key={link.label}
+                    key={link.href}
                     href={link.href}
-                    className="text-[clamp(0.95rem,1.2vw,1.15rem)] leading-none tracking-[-0.03em] text-white/78 transition-colors hover:text-white"
+                    className={footerLinkClass}
                   >
-                    {link.label}
+                    {link.title}
                   </Link>
                 ))}
               </nav>
             </div>
             <div className="border-s border-white/18 ps-5">
               <p className="mono-label text-white/80">{copy.connect}</p>
-              <div className="mt-3 grid gap-2">
+              <div className={footerListClass}>
                 <Link
                   href={getWhatsappHref(locale)}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-[clamp(0.95rem,1.2vw,1.15rem)] leading-none tracking-[-0.03em] text-white/78 transition-colors hover:text-white"
+                  className={footerLinkClass}
                 >
                   {copy.links.whatsapp}
                 </Link>
-                <Link
-                  href={anuContact.phoneHref}
-                  className="text-[clamp(0.95rem,1.2vw,1.15rem)] leading-none tracking-[-0.03em] text-white/78 transition-colors hover:text-white"
-                >
+                <Link href={anuContact.phoneHref} className={footerLinkClass}>
                   <bdi dir="ltr">{anuContact.phoneDisplay}</bdi>
                 </Link>
-                <Link
-                  href={anuContact.emailHref}
-                  className="text-[clamp(0.95rem,1.2vw,1.15rem)] leading-none tracking-[-0.03em] text-white/78 transition-colors hover:text-white"
-                >
+                <Link href={anuContact.emailHref} className={footerLinkClass}>
                   {anuContact.email}
                 </Link>
-                <Link
-                  href={anuContact.instagramHref}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-[clamp(0.95rem,1.2vw,1.15rem)] leading-none tracking-[-0.03em] text-white/78 transition-colors hover:text-white"
-                >
-                  {copy.links.instagram}
-                </Link>
-                <Link
-                  href={anuContact.facebookHref}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-[clamp(0.95rem,1.2vw,1.15rem)] leading-none tracking-[-0.03em] text-white/78 transition-colors hover:text-white"
-                >
-                  {copy.links.facebook}
-                </Link>
-                <Link
-                  href={anuContact.linkedinHref}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-[clamp(0.95rem,1.2vw,1.15rem)] leading-none tracking-[-0.03em] text-white/78 transition-colors hover:text-white"
-                >
-                  {copy.links.linkedin}
-                </Link>
-                <Link
-                  href={anuContact.odooPartnerHref}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-[clamp(0.95rem,1.2vw,1.15rem)] leading-none tracking-[-0.03em] text-white/78 transition-colors hover:text-white"
-                >
-                  {copy.links.odooPartner}
-                </Link>
+                {externalLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={footerLinkClass}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
               </div>
             </div>
           </div>
