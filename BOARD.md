@@ -26,6 +26,9 @@ Owner rejected PC2's stylised 3D/animation ("very bad"). Site visuals come from 
 - PC2 jobs (site-mail 011): photoreal realtime system scenes (twins first) on pc2/<topic> off pc1/interactive; render node; encoding; QA.
 - Shared 3D lab: Forgejo Silete1/anu-3d-lab. Ziggurat standard = PC2 proportions (site-mail to-pc1/006).
 
+## STAGING NOW
+https://site.brain.anu.ltd = `pc1/interactive` 83b01fd (release 202611181333-83b01fd): PC2 site + PC1 realtime photoreal home scene (v1). v2 pass running (match Blender v2 still). Blender v2 masters in anu-web-assets 8449f75 for PC2 web cuts.
+
 ## Status
 | Area | State |
 |---|---|
