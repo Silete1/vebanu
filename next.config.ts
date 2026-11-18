@@ -28,6 +28,9 @@ const securityHeaders = [
 ]
 
 const nextConfig: NextConfig = {
+  // Self-contained server bundle for the Docker image (deploy/Dockerfile); Vercel ignores it.
+  output: "standalone",
+  poweredByHeader: false,
   async headers() {
     return [
       {

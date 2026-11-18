@@ -1,0 +1,33 @@
+# anu.ltd on anu-cloud-01, behind Coolify's Traefik (coolify-proxy owns ports 80/443 and gets the certificates).
+# Hosts: SITE_HOSTS is a Traefik rule fragment, e.g. Host(`site.brain.anu.ltd`) || Host(`anu.ltd`) || Host(`www.anu.ltd`)
+name: anu-website
+
+services:
+  web:
+    image: anu-website:${RELEASE:-latest}
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    restart: unless-stopped
+    env_file: site.env
+    mem_limit: 512m
+    networks: [coolify]
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: coolify
+      traefik.http.services.anu-website.loadbalancer.server.port: "3000"
+      traefik.http.middlewares.anu-website-https.redirectscheme.scheme: https
+      traefik.http.middlewares.anu-website-https.redirectscheme.permanent: "true"
+      traefik.http.middlewares.anu-website-gzip.compress: "true"
+      traefik.http.routers.anu-website-http.entrypoints: http
+      traefik.http.routers.anu-website-http.rule: ${SITE_HOSTS}
+      traefik.http.routers.anu-website-http.middlewares: anu-website-https
+      traefik.http.routers.anu-website.entrypoints: https
+      traefik.http.routers.anu-website.rule: ${SITE_HOSTS}
+      traefik.http.routers.anu-website.tls: "true"
+      traefik.http.routers.anu-website.tls.certresolver: ${CERT_RESOLVER:-letsencrypt}
+      traefik.http.routers.anu-website.middlewares: anu-website-gzip
+
+networks:
+  coolify:
+    external: true
