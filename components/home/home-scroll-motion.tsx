@@ -32,51 +32,44 @@ export function HomeScrollMotion() {
           const introActions = document.querySelector<HTMLElement>(
             "[data-intro-actions]"
           )
-          const introItems = [
-            introHeader,
-            introVisual,
-            introTitle,
-            introCopy,
-            introActions,
-          ].filter(Boolean)
+          const introText = [introTitle, introCopy, introActions].filter(
+            (item): item is HTMLElement => Boolean(item)
+          )
+          const introItems = [introHeader, ...introText].filter(Boolean)
 
           const finalInset = desktop ? 12 : 8
+          const visualFinalState = {
+            autoAlpha: 1,
+            top: finalInset,
+            left: finalInset,
+            width: `calc(100% - ${finalInset * 2}px)`,
+            height: `calc(100lvh - ${finalInset * 2}px)`,
+            borderRadius: 20,
+            "--intro-clip-y": "0%",
+            "--intro-clip-x": "0%",
+            "--intro-clip-radius": "20px",
+          }
+          // The hero's start state (clipped, offset text and a hidden header)
+          // lives in globals.css under `(scripting: enabled)`, so the
+          // headline stays readable without JS and under reduced motion.
+          const textHidden = {
+            y: desktop ? 72 : 34,
+            clipPath: "inset(0% 0% 100% 0%)",
+          }
+          const textShown = { y: 0, clipPath: "inset(0% 0% 0% 0%)" }
 
-          // Failsafe: reveal the completed hero if the intro timeline is interrupted.
-          const safetyTimer = setTimeout(() => {
-            if (introVisual) {
-              introVisual.style.top = `${finalInset}px`
-              introVisual.style.left = `${finalInset}px`
-              introVisual.style.width = `calc(100% - ${finalInset * 2}px)`
-              introVisual.style.height = `calc(100lvh - ${finalInset * 2}px)`
-              introVisual.style.borderRadius = "20px"
-              introVisual.style.opacity = "1"
-              introVisual.style.visibility = "visible"
-              introVisual.style.transform = "none"
-              introVisual.style.setProperty("--intro-clip-y", "0%")
-              introVisual.style.setProperty("--intro-clip-x", "0%")
-              introVisual.style.setProperty("--intro-clip-radius", "20px")
-            }
-          }, 2400)
+          const backgroundVideo = document.querySelector<HTMLVideoElement>(
+            "[data-shared-video-media]"
+          )
 
           if (reduceMotion) {
-            clearTimeout(safetyTimer)
-            gsap.set(introVisual, {
-              autoAlpha: 1,
-              top: finalInset,
-              left: finalInset,
-              width: `calc(100% - ${finalInset * 2}px)`,
-              height: `calc(100lvh - ${finalInset * 2}px)`,
-              borderRadius: 20,
-              "--intro-clip-y": "0%",
-              "--intro-clip-x": "0%",
-              "--intro-clip-radius": "20px",
-            })
+            backgroundVideo?.pause()
+            gsap.set(introVisual, visualFinalState)
             gsap.set(introItems, {
               autoAlpha: 1,
               y: 0,
               scale: 1,
-              clearProps: "transform,visibility",
+              clearProps: "transform,visibility,clipPath",
             })
             gsap.set(".story-track, .story-counter-track", {
               clearProps: "all",
@@ -85,27 +78,22 @@ export function HomeScrollMotion() {
             gsap.set(".story-counter", { clearProps: "all" })
             gsap.set(".story-progress-fill", { scaleX: 1 })
             gsap.set("[data-story-letter]", { clearProps: "color" })
-            return () => clearTimeout(safetyTimer)
+            return () => {
+              backgroundVideo?.play().catch(() => undefined)
+            }
           }
+
+          let safetyTimer: ReturnType<typeof setTimeout> | undefined
 
           if (introVisual) {
             gsap.set(introHeader, { autoAlpha: 0, y: -16 })
             gsap.set(introVisual, {
-              autoAlpha: 1,
-              top: finalInset,
-              left: finalInset,
-              width: `calc(100% - ${finalInset * 2}px)`,
-              height: `calc(100lvh - ${finalInset * 2}px)`,
-              borderRadius: 20,
+              ...visualFinalState,
               "--intro-clip-y": "50%",
               "--intro-clip-x": "50%",
               "--intro-clip-radius": "999px",
             })
-            gsap.set([introTitle, introCopy, introActions].filter(Boolean), {
-              autoAlpha: 0,
-              y: desktop ? 72 : 34,
-              clipPath: "inset(0% 0% 100% 0%)",
-            })
+            gsap.set(introText, textHidden)
 
             const introTl = gsap.timeline({
               defaults: { ease: "power4.out" },
@@ -114,6 +102,15 @@ export function HomeScrollMotion() {
                 ScrollTrigger.refresh()
               },
             })
+
+            // Failsafe: if the intro has not finished after 2.4 s (for
+            // example a background tab pausing the ticker), jump to the end.
+            safetyTimer = setTimeout(() => {
+              introTl.progress(1)
+              gsap.set(introVisual, visualFinalState)
+              gsap.set(introHeader, { autoAlpha: 1, y: 0 })
+              gsap.set(introText, textShown)
+            }, 2400)
 
             introTl
               .addLabel("open", 0)
@@ -134,38 +131,19 @@ export function HomeScrollMotion() {
                 { autoAlpha: 1, y: 0, duration: 0.7 },
                 "reveal"
               )
-              .to(
-                introTitle,
-                {
-                  autoAlpha: 1,
-                  y: 0,
-                  clipPath: "inset(0% 0% 0% 0%)",
-                  duration: 0.86,
-                },
-                "reveal+=0.08"
-              )
+              .to(introTitle, { ...textShown, duration: 0.86 }, "reveal+=0.08")
 
             if (introCopy) {
               introTl.to(
                 introCopy,
-                {
-                  autoAlpha: 1,
-                  y: 0,
-                  clipPath: "inset(0% 0% 0% 0%)",
-                  duration: 0.66,
-                },
+                { ...textShown, duration: 0.66 },
                 "reveal+=0.2"
               )
             }
 
             introTl.to(
               introActions,
-              {
-                autoAlpha: 1,
-                y: 0,
-                clipPath: "inset(0% 0% 0% 0%)",
-                duration: 0.66,
-              },
+              { ...textShown, duration: 0.66 },
               "reveal+=0.28"
             )
           }
@@ -396,6 +374,8 @@ export function HomeScrollMotion() {
           )
 
           ScrollTrigger.refresh()
+
+          return () => clearTimeout(safetyTimer)
         }
       )
 

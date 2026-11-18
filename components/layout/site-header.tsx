@@ -313,11 +313,6 @@ export function SiteHeader({ locale }: { locale: Locale }) {
     <header
       ref={headerRef}
       className="pointer-events-none fixed inset-x-0 top-0 z-50 w-full pt-5 sm:pt-6"
-      style={
-        pathname === `/${locale}`
-          ? { opacity: 0, visibility: "hidden" }
-          : undefined
-      }
       data-intro-header
     >
       <span

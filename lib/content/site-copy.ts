@@ -72,6 +72,8 @@ export const homePageCopy = {
     hero: {
       titlePrimary: "Business control,",
       titleSecondary: "implemented.",
+      subline:
+        "Odoo ERP implementation for companies in Iraq — we redesign how the work runs, then build it into Odoo.",
       primaryCta: "Start assessment",
       secondaryCta: "Discover the method",
     },
@@ -188,6 +190,8 @@ export const homePageCopy = {
     hero: {
       titlePrimary: "رقابة تشغيلية،",
       titleSecondary: "مطبّقة فعلياً.",
+      subline:
+        "تطبيق نظام Odoo ERP للشركات في العراق — نعيد تصميم طريقة سير العمل، ثم نبنيها داخل Odoo.",
       primaryCta: "ابدأ التقييم",
       secondaryCta: "اكتشف المنهج",
     },
