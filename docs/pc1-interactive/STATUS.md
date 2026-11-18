@@ -58,3 +58,15 @@ only with that flag. Screenshots: anu_nav/data/work/playwright-mcp/interactive/.
   { slabs: [own link], focus: slug } (brain: { brain, focus: "brain" }); scene.json `presets` = close-up camera
   per slug (and the shrine door), slow orbit; posters public/media/systems/<slug>[-rtl][-800] from
   web/build_scene.py --stage systems (AVIF <= 60 KB). Arabic system pages use the -rtl poster.
+
+## Round 4 (coordinator, 18 Nov): system pages get their own scenes
+- Opening beat (2.6 s, the slab close-up) -> a 1.3 s dive (lens closes, Signal-blue flash) -> the system's stage.
+- Stages: components/scene3d/stages (stage.ts = the contract + registry; workshops.ts first). systemStages in
+  lib/content/systems/scenes.ts; story-hero passes `stage`. Each stage lives inside the same mount.
+- Workshops: wardrobe 2400 x 2400 x 600 mm from anu-3d-lab/web/workshops.py (board list + guillotine nesting on
+  2800 x 2070 sheets, 7 sheets on a 4 x 2 CNC bed), Workshops lane maps (lacquer, anodised), CC0 plywood/concrete,
+  carpentry_shop_01 HDR env; scroll: explode with glowing edge bands -> boards fly onto their nested sheets ->
+  gantry runs; hover = board name + cut size (EN/AR); click a sheet -> #from-the-real-system. 0.89 MB.
+- Close-ups: tiling brick/plaster detail layer (world scale, albedo/mean + normal lit by the bake's moon) on the
+  body within ~70 m of the camera; loaded on system pages only (0.42 MB).
+- Swap-in of the Workshops session's own model later: replace wardrobe() in web/workshops.py (same board dicts).

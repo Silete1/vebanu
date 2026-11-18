@@ -6,7 +6,7 @@ import { Poster } from "@/components/story/poster"
 import { Loop } from "@/components/story/loop"
 import { SceneSlot } from "@/components/story/scene-slot"
 import { getWhatsappHref } from "@/lib/contact"
-import { interactiveScenes, skyPosterSlugs, systemScenes } from "@/lib/content/systems/scenes"
+import { interactiveScenes, skyPosterSlugs, systemScenes, systemStages } from "@/lib/content/systems/scenes"
 import type { LocalizedSystem } from "@/lib/content/systems"
 import { storyCopy } from "@/lib/content/story-copy"
 import { type Locale, localizedPath } from "@/lib/i18n"
@@ -18,7 +18,10 @@ export function StoryHero({ system, locale }: { system: LocalizedSystem; locale:
   const scene = systemScenes[system.slug] ?? system.visual.scene
   // the shared 3D scene opens on this system's own slab (brain: the shrine door); Arabic gets the mirrored poster
   const link = { slug: system.slug, name, href: localizedPath(locale, `/systems/${system.slug}`) }
-  const sceneData = system.slug === "brain" ? { brain: link, focus: "brain" } : { slabs: [link], focus: system.slug }
+  const sceneData =
+    system.slug === "brain"
+      ? { brain: link, focus: "brain" }
+      : { slabs: [link], focus: system.slug, stage: systemStages[system.slug] }
   const poster = locale === "ar" && skyPosterSlugs.has(system.slug) ? `${system.visual.poster}-rtl` : system.visual.poster
 
   return (

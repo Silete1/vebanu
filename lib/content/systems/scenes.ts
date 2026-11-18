@@ -1,3 +1,4 @@
+import type { StageName } from "@/components/scene3d/stages/stage"
 import type { SceneName } from "@/components/story/scene-slot"
 
 import { systemSlugs } from "./index"
@@ -12,6 +13,9 @@ export const systemScenes: Partial<Record<string, SceneName>> = Object.fromEntri
   // twins keeps PC2's port-terminal scene; every other system opens on its own slab (brain: the shrine door)
   systemSlugs.map((slug) => [slug, slug === "twins" ? "twin" : "sky-of-anu"])
 )
+
+/** Systems with their own scene after the shared opening beat (components/scene3d/stages). */
+export const systemStages: Partial<Record<string, StageName>> = { workshops: "workshops" }
 
 /** Systems whose hero poster is rendered from the Sky of Anu scene (an Arabic, mirrored poster exists too). */
 export const skyPosterSlugs = new Set(systemSlugs.filter((slug) => slug !== "twins"))

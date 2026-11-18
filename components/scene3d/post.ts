@@ -29,7 +29,12 @@ const VERT = /* glsl */ `
   varying vec2 vUv;
   void main() { vUv = position.xy * 0.5 + 0.5; gl_Position = vec4(position.xy, 0.0, 1.0); }`
 
-export type Post = { setSize(w: number, h: number): void; render(scene: Scene, camera: PerspectiveCamera, time: number): void; dispose(): void }
+export type Post = {
+  setSize(w: number, h: number): void
+  /** flash 0..1: the frame washes to Signal-blue light (the pull from the slab into a system's own scene) */
+  render(scene: Scene, camera: PerspectiveCamera, time: number, flash?: number): void
+  dispose(): void
+}
 
 export function createPost(renderer: WebGLRenderer, q: Quality, exposure: number): Post {
   renderer.toneMapping = AgXToneMapping
@@ -98,12 +103,13 @@ export function createPost(renderer: WebGLRenderer, q: Quality, exposure: number
       uBloom: { value: chain[0].texture },
       uStrength: { value: 0.9 },
       uTime: { value: 0 },
+      uFlash: { value: 0 },
       uRes: { value: new Vector2(1, 1) },
     },
     vertexShader: VERT,
     fragmentShader: /* glsl */ `
       uniform sampler2D uScene, uBloom;
-      uniform float uStrength, uTime;
+      uniform float uStrength, uTime, uFlash;
       uniform vec2 uRes;
       varying vec2 vUv;
       float hash(vec2 p) { return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
@@ -113,6 +119,7 @@ export function createPost(renderer: WebGLRenderer, q: Quality, exposure: number
         c *= 1.0 - dot(v, v) * 0.55;                      // vignette
         c = pow(max(c, 0.0) / 0.18, vec3(1.18)) * 0.18;    // filmic contrast about mid-grey
         c *= mix(vec3(0.94, 0.97, 1.06), vec3(1.04, 1.0, 0.95), smoothstep(0.02, 0.4, dot(c, vec3(0.3, 0.59, 0.11))));  // cool shadows, warm lights
+        c = mix(c, vec3(0.38, 0.62, 1.0) * 3.0, uFlash);
         gl_FragColor = vec4(c, 1.0);
         #include <tonemapping_fragment>
         #include <colorspace_fragment>
@@ -133,7 +140,7 @@ export function createPost(renderer: WebGLRenderer, q: Quality, exposure: number
       chain.forEach((t, i) => t.setSize(Math.max(1, w >> (i + 1)), Math.max(1, h >> (i + 1))))
       composite.uniforms.uRes.value.set(w, h)
     },
-    render(scene, camera, time) {
+    render(scene, camera, time, flash = 0) {
       renderer.setRenderTarget(main)
       renderer.render(scene, camera)
       // bloom: threshold + downsample, then upsample back up adding each level
@@ -153,6 +160,7 @@ export function createPost(renderer: WebGLRenderer, q: Quality, exposure: number
         renderer.autoClear = true
       }
       composite.uniforms.uTime.value = time
+      composite.uniforms.uFlash.value = flash
       pass(composite, null)
     },
     dispose() {

@@ -18,10 +18,18 @@ import { createPost } from "@/components/scene3d/post"
 import { createRig } from "@/components/scene3d/rig"
 import { createSky } from "@/components/scene3d/sky"
 import { type Slab, createSlabs } from "@/components/scene3d/slabs"
+import { type Stage, type StageName, stages } from "@/components/scene3d/stages/stage"
 import { createZiggurat } from "@/components/scene3d/ziggurat"
 
-/** from the page: the systems the slabs stand for; `focus` = a system page's close-up (a slug, or "brain") */
-type BoxData = { slabs?: SlabLink[]; brain?: SlabLink; focus?: string }
+/**
+ * from the page: the systems the slabs stand for; `focus` = a system page's close-up (a slug, or "brain");
+ * `stage` = the system's own scene the page pulls into after that opening beat
+ */
+type BoxData = { slabs?: SlabLink[]; brain?: SlabLink; focus?: string; stage?: StageName }
+
+/** the shared opening beat on a system page (its slab docked on the ziggurat), then the pull into its own scene */
+const OPENING = 2.6
+const PULL = 1.3
 
 
 export function mount(box: HTMLElement): () => void {
@@ -54,7 +62,7 @@ export function mount(box: HTMLElement): () => void {
   let disposed = false
   let teardown: (() => void) | undefined
 
-  loadAssets(quality, renderer, abort.signal)
+  loadAssets(quality, renderer, abort.signal, !!links.focus)
     .then((assets) => {
       if (disposed) {
         disposeAssets(assets)
@@ -92,6 +100,26 @@ export function mount(box: HTMLElement): () => void {
     if (keep) Object.assign(window, { __anu3d: { scene, rig, renderer } })
     // the bar (the lab's v2 still) reads brighter than the same exposure here: +0.3 EV for the live frame
     const post = createPost(renderer, quality, 2 ** (data.exposure + 0.3))
+    const baseExposure = renderer.toneMappingExposure
+
+    // the system's own scene loads while the opening beat plays; if it fails, the close-up simply stays
+    let stage: Stage | undefined
+    if (links.stage) {
+      const locale = document.documentElement.lang.startsWith("ar") ? "ar" : "en"
+      stages[links.stage](renderer, abort.signal, { rtl, locale, quality })
+        .then((s) => {
+          if (disposed) s.dispose()
+          else {
+            stage = s
+            s.resize(box.clientWidth, box.clientHeight)
+          }
+        })
+        .catch(() => {})
+    }
+    let pulledAt: number | undefined
+    let stageTop: number | undefined
+    let stageLink: string | undefined
+    const pointer = { x: 0, y: 0, inside: false }
 
     // ------------------------------------------------------------ size
     const size = new Vector2()
@@ -105,6 +133,7 @@ export function mount(box: HTMLElement): () => void {
       size.set(Math.round(w * dpr), Math.round(h * dpr))
       post.setSize(size.x, size.y)
       rig.resize(w, h)
+      stage?.resize(w, h)
     }
     resize()
     const sizeObserver = new ResizeObserver(resize)
@@ -120,7 +149,11 @@ export function mount(box: HTMLElement): () => void {
     let drag: { x: number; y: number; moved: boolean } | undefined
     const targets = [...slabs.slabs.map((s) => s.hit), zig.shrine]
 
-    const onWindowPointer = (e: PointerEvent) => rig.pointer((e.clientX / window.innerWidth - 0.5) * 2, (e.clientY / window.innerHeight - 0.5) * 2)
+    const onWindowPointer = (e: PointerEvent) => {
+      pointer.x = (e.clientX / window.innerWidth - 0.5) * 2
+      pointer.y = (e.clientY / window.innerHeight - 0.5) * 2
+      rig.pointer(pointer.x, pointer.y)
+    }
     const pick = (e: PointerEvent) => {
       const r = box.getBoundingClientRect()
       ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1)
@@ -147,6 +180,11 @@ export function mount(box: HTMLElement): () => void {
       const wasDrag = drag?.moved
       drag = undefined
       if (wasDrag) return
+      if (stageLink) {
+        if (stageLink.startsWith("#")) location.hash = stageLink.slice(1)
+        else window.dispatchEvent(new CustomEvent("anu:navigate", { detail: { href: stageLink } }))
+        return
+      }
       const link = hovered?.link ?? (shrineHover ? links.brain : undefined)
       if (link && link.href !== location.pathname) window.dispatchEvent(new CustomEvent("anu:navigate", { detail: { href: link.href } }))
     }
@@ -194,7 +232,51 @@ export function mount(box: HTMLElement): () => void {
       // the whole story plays while the hero scrolls away (done when ~55 % of it has left)
       const progress = links.focus ? 1 : Math.min(1, Math.max(0, -r.top / Math.max(1, r.height * 0.55)))
 
+      // a system page: the opening beat, a flash of Signal light as the camera dives into the slab, its own scene
+      if (stage && pulledAt === undefined && t > OPENING) pulledAt = t
+      const pull = pulledAt === undefined ? 0 : Math.min(1, (t - pulledAt) / PULL)
+      const flash = pull === 0 || pull >= 1 ? 0 : pull < 0.5 ? (pull * 2) ** 2 : (1 - (pull - 0.5) * 2) ** 2
+      if (stage && pull >= 0.5) {
+        if (stageTop === undefined) stageTop = r.top
+        // its story plays as the visitor scrolls the hero through the window
+        // the whole story plays while the box rises to the header, so every beat is seen whole
+        const p = Math.min(1, Math.max(0, (stageTop - r.top) / Math.max(160, stageTop - 70)))
+        pointer.inside = pointerIn
+        const px = stage.pxPerMetre(size.y)
+        stage.update(p, t, dt, pointer, px)
+        stageLink = undefined
+        let shown = false
+        if (pointerIn && !drag?.moved) {
+          ray.setFromCamera(ndc, stage.camera)
+          const hit = ray.intersectObjects(stage.targets, false)[0]
+          const info = hit && stage.describe(hit.object)
+          if (info) {
+            stageLink = info.href
+            tmp.copy(info.anchor)
+            tmp.y += 0.25
+            tmp.project(stage.camera)
+            label.textContent = info.label
+            label.hidden = false
+            label.style.transform = `translate(${((tmp.x + 1) / 2) * box.clientWidth}px, ${((1 - tmp.y) / 2) * box.clientHeight}px)`
+            shown = true
+          }
+        } else stage.describe(stage.scene)
+        if (!shown) label.hidden = true
+        box.style.cursor = stageLink ? "pointer" : ""
+        renderer.toneMappingExposure = baseExposure * stage.exposure
+        post.render(stage.scene, stage.camera, t, flash)
+        finishFrame(now)
+        return
+      }
+      renderer.toneMappingExposure = baseExposure
+
       rig.update(progress, t, dt)
+      if (pulledAt !== undefined) {
+        // the dive: the lens closes on the slab while the light washes in
+        const k = Math.min(1, (t - pulledAt) / (PULL * 0.5))
+        rig.camera.fov *= 1 - 0.7 * k * k
+        rig.camera.updateProjectionMatrix()
+      }
       const cam = rig.camera
       pxPerMetre = size.y / (2 * Math.tan((cam.fov * Math.PI) / 360))
 
@@ -229,8 +311,11 @@ export function mount(box: HTMLElement): () => void {
         label.style.transform = `translate(${((tmp.x + 1) / 2) * box.clientWidth}px, ${((1 - tmp.y) / 2) * box.clientHeight}px)`
       } else label.hidden = true
 
-      post.render(scene, cam, t)
+      post.render(scene, cam, t, flash)
+      finishFrame(now)
+    }
 
+    function finishFrame(now: number) {
       frames++
       if (frames === 1) {
         firstAt = now
@@ -259,6 +344,7 @@ export function mount(box: HTMLElement): () => void {
       document.removeEventListener("focusin", onFocus)
       document.removeEventListener("visibilitychange", onVisibility)
       box.style.cursor = ""
+      stage?.dispose()
       sky.dispose()
       zig.dispose()
       slabs.dispose()

@@ -38,6 +38,8 @@ export type SceneData = {
   palmH: number
   /** system pages: a close-up per slab (by slug) and the shrine door ("brain"), LTR; RTL mirrors x */
   presets: Record<string, Preset>
+  /** close-ups: a tiling CC0 detail layer over the bake (mean = the texture's average sRGB colour) */
+  detail: Record<"wall" | "top", { mean: Vec3; repeat: number }>
 }
 
 export type Preset = { pos: Vec3; target: Vec3; hfov: number }
