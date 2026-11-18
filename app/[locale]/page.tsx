@@ -15,6 +15,7 @@ import { SealFrieze, Ziggurat } from "@/components/story/sky"
 import { SystemMap } from "@/components/story/system-map"
 import { homeStory } from "@/lib/content/home-story"
 import { insights } from "@/lib/content/insights"
+import { homeScene, interactiveScenes } from "@/lib/content/systems/scenes"
 import { getSystems } from "@/lib/content/systems"
 import { storyCopy } from "@/lib/content/story-copy"
 import { isLocale, localizedAlternates, localizedPath } from "@/lib/i18n"
@@ -70,7 +71,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             height={1080}
           />
           <Loop slug={locale === "ar" ? "home-rtl" : "home"} />
-          <SceneSlot scene="network" />
+          <SceneSlot scene={homeScene} interactive={interactiveScenes.has(homeScene)} />
         </div>
         <div className="anu-wrap anu-home-hero__text">
           <p className="anu-kicker">

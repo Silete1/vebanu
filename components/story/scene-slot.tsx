@@ -20,7 +20,7 @@ const scenes: Partial<Record<SceneName, () => Promise<SceneModule>>> = {
  * scene adds `is-live` to the box when its first frame is drawn, and the poster
  * fades under it. It stops when the reader moves the motion switch down.
  */
-export function SceneSlot({ scene }: { scene: SceneName }) {
+export function SceneSlot({ scene, interactive = false }: { scene: SceneName; interactive?: boolean }) {
   const box = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -67,5 +67,5 @@ export function SceneSlot({ scene }: { scene: SceneName }) {
     }
   }, [scene])
 
-  return <div ref={box} className="anu-scene" aria-hidden="true" />
+  return <div ref={box} className={interactive ? "anu-scene anu-scene--interactive" : "anu-scene"} aria-hidden="true" />
 }

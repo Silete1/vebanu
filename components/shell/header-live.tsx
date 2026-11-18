@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { type ReactNode, useEffect } from "react"
 
 import { type Locale, switchLocalePath } from "@/lib/i18n"
@@ -53,6 +53,18 @@ export function LanguageLink({
 
 export function HeaderLive() {
   const pathname = usePathname()
+  const router = useRouter()
+
+  // 3D scenes ask for a move with an "anu:navigate" event ({ detail: { href } }),
+  // so a click on a slab is a soft navigation like any link
+  useEffect(() => {
+    const onNavigate = (event: Event) => {
+      const href = (event as CustomEvent<{ href?: string }>).detail?.href
+      if (href?.startsWith("/")) router.push(href)
+    }
+    window.addEventListener("anu:navigate", onNavigate)
+    return () => window.removeEventListener("anu:navigate", onNavigate)
+  }, [router])
 
   // a move closes the phone menu
   useEffect(() => {

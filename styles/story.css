@@ -807,3 +807,16 @@
     --anu-signal-text: #93c5fd;
   }
 }
+
+@layer components {
+  /* a scene that takes the pointer once it is live (hover, click, drag) */
+  .anu-scene--interactive.is-live {
+    pointer-events: auto;
+    cursor: grab;
+    touch-action: pan-y;
+  }
+
+  .anu-scene--interactive.is-live:active {
+    cursor: grabbing;
+  }
+}
