@@ -32,6 +32,6 @@ export type Stage = {
 export const stages: Record<StageName, (renderer: WebGLRenderer, signal: AbortSignal, opts: StageOptions) => Promise<Stage>> = {
   workshops: async (renderer, signal, opts) => {
     const m = await import("./workshops")
-    return m.createWorkshops(await m.loadWorkshops(renderer, signal), renderer, opts)
+    return m.createWorkshops(await m.loadWorkshops(renderer, signal, opts.quality), renderer, opts)
   },
 }

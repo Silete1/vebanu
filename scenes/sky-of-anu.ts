@@ -239,8 +239,14 @@ export function mount(box: HTMLElement): () => void {
       if (stage && pull >= 0.5) {
         if (stageTop === undefined) stageTop = r.top
         // its story plays as the visitor scrolls the hero through the window
-        // the whole story plays while the box rises to the header, so every beat is seen whole
-        const p = Math.min(1, Math.max(0, (stageTop - r.top) / Math.max(160, stageTop - 70)))
+        // a sticky hero (desktop, .anu-hero--stage) gives the story ~2 viewports of scroll; elsewhere it plays while
+        // the box rises to the header, so every beat is seen whole
+        const hero = box.closest(".anu-hero--stage")
+        const sticky = hero && getComputedStyle(box.closest(".anu-hero__visual") ?? box).position === "sticky"
+        const s = hero?.getBoundingClientRect()
+        const p = sticky && s
+          ? Math.min(1, Math.max(0, -s.top / Math.max(1, s.height - window.innerHeight)))
+          : Math.min(1, Math.max(0, (stageTop - r.top) / Math.max(160, stageTop - 70)))
         pointer.inside = pointerIn
         const px = stage.pxPerMetre(size.y)
         stage.update(p, t, dt, pointer, px)

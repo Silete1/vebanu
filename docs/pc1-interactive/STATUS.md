@@ -70,3 +70,15 @@ only with that flag. Screenshots: anu_nav/data/work/playwright-mcp/interactive/.
 - Close-ups: tiling brick/plaster detail layer (world scale, albedo/mean + normal lit by the bake's moon) on the
   body within ~70 m of the camera; loaded on system pages only (0.42 MB).
 - Swap-in of the Workshops session's own model later: replace wardrobe() in web/workshops.py (same board dicts).
+
+## Round 5 (coordinator, 18 Nov): Workshops look
+- The shop is baked in Cycles (build_workshops.py --stage room): hangar_concrete_floor (neutral grey, measured) with
+  saw-cut joints every 6 m and wear, steel columns/beams, high mullioned windows, cool LED strips, panel saw, edge
+  bander, CNC bed with spoilboard, racks of sheets, a stock stack in the bed's free place. Drawn with the shared
+  bakedMaterial (components/scene3d/baked.ts, also used by the ziggurat).
+- Live parts: 1024 cube reflection probe of the baked room (PMREM) for lacquer/mirror/steel; window key light with
+  soft shadows on a ShadowMaterial catcher; light shafts + dust; kerf-lined sheet textures (canvas, from the nest);
+  gantry follows the nest's cut path with a spindle glow, sawdust settles behind it; melamine carcass, plinth,
+  handle profile (bar on stand-offs).
+- Scroll: desktop tier 2 pins the picture (.anu-hero--stage, 240svh) so the story plays over ~1.6 viewports.
+- Histograms: no frame clips (>= 250 on <= 0.01 % of pixels; 0.55 % mid-story = the intended blue edge glow).

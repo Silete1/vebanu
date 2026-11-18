@@ -966,3 +966,18 @@
     left: 0;
   }
 }
+
+@layer components {
+  /* a system with its own 3D story: on wide screens the picture stays pinned while ~2 viewports of scroll play it */
+  @media (min-width: 64rem) and (prefers-reduced-motion: no-preference) {
+    html[data-tier="2"] .anu-hero--stage .anu-hero__grid {
+      align-items: start;
+      min-block-size: 240svh;
+    }
+
+    html[data-tier="2"] .anu-hero--stage .anu-hero__visual {
+      position: sticky;
+      inset-block-start: max(5.5rem, calc(50svh - 16rem));
+    }
+  }
+}

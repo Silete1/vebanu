@@ -25,7 +25,10 @@ export function StoryHero({ system, locale }: { system: LocalizedSystem; locale:
   const poster = locale === "ar" && skyPosterSlugs.has(system.slug) ? `${system.visual.poster}-rtl` : system.visual.poster
 
   return (
-    <section className="anu-band anu-sky anu-hero" aria-labelledby="story-title">
+    <section
+      className={systemStages[system.slug] ? "anu-band anu-sky anu-hero anu-hero--stage" : "anu-band anu-sky anu-hero"}
+      aria-labelledby="story-title"
+    >
       <div className="anu-wrap anu-hero__grid">
         <div className="anu-hero__text">
           <nav aria-label={copy.systems} className="anu-crumbs">
