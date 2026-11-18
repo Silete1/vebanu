@@ -1,3 +1,7 @@
+import { industriesAr } from "@/lib/content/industries-ar"
+import { getSystem, type LocalizedSystem } from "@/lib/content/systems"
+import type { Locale } from "@/lib/i18n"
+
 export const industrySlugs = [
   "distribution",
   "manufacturing",
@@ -69,11 +73,8 @@ export type Industry = {
   odooCapabilities: readonly OdooCapabilityMapping[]
   buyerQuestions: FourItems<IndustryBuyerQuestion>
   relatedInsightSlugs: readonly RelatedInsightSlug[]
-  visual: {
-    imageUrl: string
-    description: string
-    alt: string
-  }
+  /** slugs of the ANU systems (lib/content/systems) this industry runs on; the first lends the industry its poster */
+  systems: readonly string[]
 }
 
 export const industries: readonly Industry[] = [
@@ -216,13 +217,7 @@ export const industries: readonly Industry[] = [
       "the-cost-of-running-without-a-single-source-of-truth",
       "from-whatsapp-approvals-to-controlled-business-processes",
     ],
-    visual: {
-      imageUrl:
-        "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1600&q=82",
-      description:
-        "A working warehouse aisle with stored goods and material-handling equipment, used to ground the page in physical distribution operations.",
-      alt: "Warehouse aisle with palletized goods prepared for distribution",
-    },
+    systems: ["retail-finance", "brain-lite", "brain"],
   },
   {
     slug: "manufacturing",
@@ -368,13 +363,7 @@ export const industries: readonly Industry[] = [
       "inventory-accuracy-is-an-operating-discipline",
       "when-odoo-customization-solves-the-wrong-problem",
     ],
-    visual: {
-      imageUrl:
-        "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1600&q=82",
-      description:
-        "A technician working with production equipment, representing accountable work, material use and operational evidence in light manufacturing.",
-      alt: "Technician operating equipment in a light manufacturing facility",
-    },
+    systems: ["workshops", "qalib", "brain"],
   },
   {
     slug: "retail",
@@ -515,13 +504,7 @@ export const industries: readonly Industry[] = [
       "what-owners-should-see-in-a-management-dashboard",
       "the-cost-of-running-without-a-single-source-of-truth",
     ],
-    visual: {
-      imageUrl:
-        "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1600&q=82",
-      description:
-        "A modern retail interior with visible merchandise and aisles, representing the branch environment where sales and stock records meet.",
-      alt: "Organized retail store interior with merchandise on display",
-    },
+    systems: ["brain-lite", "retail-finance", "brain"],
   },
   {
     slug: "logistics",
@@ -662,13 +645,7 @@ export const industries: readonly Industry[] = [
       "how-process-mapping-reduces-erp-implementation-risk",
       "why-digital-transformation-fails-without-operational-ownership",
     ],
-    visual: {
-      imageUrl:
-        "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=1600&q=82",
-      description:
-        "A container and freight operation, representing the coordinated handoffs, evidence and timing required in logistics work.",
-      alt: "Freight containers and handling equipment in a logistics terminal",
-    },
+    systems: ["twins", "field-operations", "maps"],
   },
   {
     slug: "healthcare",
@@ -809,13 +786,7 @@ export const industries: readonly Industry[] = [
       "why-digital-transformation-fails-without-operational-ownership",
       "what-owners-should-see-in-a-management-dashboard",
     ],
-    visual: {
-      imageUrl:
-        "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=1600&q=82",
-      description:
-        "A clean healthcare service environment, used to represent the operational setting while avoiding clinical claims or identifiable patient imagery.",
-      alt: "Clean healthcare service interior prepared for daily operations",
-    },
+    systems: ["bureau", "brain"],
   },
 ]
 
@@ -829,10 +800,6 @@ function localizeIndustry(industry: Industry, locale: Locale): Industry {
     metadata: {
       ...industry.metadata,
       ...translation.metadata,
-    },
-    visual: {
-      ...industry.visual,
-      ...translation.visual,
     },
   }
 }
@@ -848,5 +815,120 @@ export function getIndustry(
 export function getIndustries(locale: Locale = "en"): readonly Industry[] {
   return industries.map((industry) => localizeIndustry(industry, locale))
 }
-import { industriesAr } from "@/lib/content/industries-ar"
-import type { Locale } from "@/lib/i18n"
+
+/** The ANU systems an industry runs on, in its own order; the first one's poster stands for the industry. */
+export function getIndustrySystems(industry: Industry, locale: Locale): LocalizedSystem[] {
+  return industry.systems.flatMap((slug) => {
+    const system = getSystem(locale, slug)
+    return system ? [system] : []
+  })
+}
+
+/** The words around the industry pages: index, chapters, rail and links. */
+export type IndustriesCopy = {
+  meta: { title: string; description: string }
+  index: {
+    kicker: string
+    title: string
+    lede: string
+    chooseTitle: string
+    chooseLede: string
+    fitKicker: string
+    fitTitle: string
+    fitLede: string
+  }
+  crumbs: string
+  crumbsLabel: string
+  assessment: string
+  runsOn: string
+  rail: string
+  chapters: { breaks: string; flow: string; platform: string; systems: string; questions: string }
+  breaksTitle: string
+  platformTitle: string
+  platformLede: string
+  modules: string
+  systemsTitle: string
+  systemsLede: string
+  questionsTitle: string
+}
+
+export const industriesCopy: Record<Locale, IndustriesCopy> = {
+  en: {
+    meta: {
+      title: "Industries",
+      description:
+        "Explore how ANU designs operating control and implements Odoo ERP for distribution, manufacturing, retail, logistics, and healthcare groups in Iraq.",
+    },
+    index: {
+      kicker: "Industries",
+      title: "Odoo ERP for your industry.",
+      lede: "ANU maps the decisions, evidence and handoffs that matter in your sector, then implements them in Odoo.",
+      chooseTitle: "Choose your industry.",
+      chooseLede:
+        "Each page explains the operational risks, workflow and Odoo capabilities relevant to that industry, and the ANU systems it runs on.",
+      fitKicker: "Industry fit",
+      fitTitle: "One method. Different control priorities.",
+      fitLede:
+        "ANU keeps one implementation discipline while changing the operating model, evidence and management questions for each sector.",
+    },
+    crumbs: "Industries",
+    crumbsLabel: "Breadcrumb",
+    assessment: "Start assessment",
+    runsOn: "Runs on",
+    rail: "On this page",
+    chapters: {
+      breaks: "The noise",
+      flow: "How it works",
+      platform: "Odoo implementation map",
+      systems: "ANU systems",
+      questions: "Questions",
+    },
+    breaksTitle: "Where operational control breaks.",
+    platformTitle: "Configure the platform around the work.",
+    platformLede:
+      "Modules support the operating model. They do not replace the decisions, ownership and evidence the process requires.",
+    modules: "Odoo modules",
+    systemsTitle: "The ANU systems this work runs on.",
+    systemsLede: "Each one is a complete system with its own story: what it does, how it works and how ANU builds it.",
+    questionsTitle: "Questions to settle before implementation.",
+  },
+  ar: {
+    meta: {
+      title: "القطاعات",
+      description:
+        "حلول رقابة تشغيلية وتطبيق Odoo ERP لشركات التوزيع والتصنيع والتجزئة والخدمات اللوجستية والرعاية الصحية في العراق.",
+    },
+    index: {
+      kicker: "القطاعات",
+      title: "نظام Odoo ERP لقطاعك.",
+      lede: "تحدد أنو القرارات والأدلة والتسليمات المهمة في قطاعك، ثم تطبّقها داخل Odoo.",
+      chooseTitle: "اختر قطاعك.",
+      chooseLede:
+        "تشرح كل صفحة المخاطر التشغيلية ومسار العمل وإمكانات Odoo المناسبة لذلك القطاع، وأنظمة أنو التي يعمل عليها.",
+      fitKicker: "ملاءمة القطاع",
+      fitTitle: "منهج واحد وأولويات رقابة مختلفة.",
+      fitLede:
+        "تحافظ أنو على منهج تطبيق واحد مع تكييف نموذج التشغيل والأدلة وأسئلة الإدارة لكل قطاع.",
+    },
+    crumbs: "القطاعات",
+    crumbsLabel: "مسار الصفحة",
+    assessment: "ابدأ التقييم",
+    runsOn: "يعمل على",
+    rail: "في هذه الصفحة",
+    chapters: {
+      breaks: "الفوضى",
+      flow: "كيف يعمل",
+      platform: "خريطة تطبيق Odoo",
+      systems: "أنظمة أنو",
+      questions: "أسئلة",
+    },
+    breaksTitle: "أين تضعف الرقابة التشغيلية؟",
+    platformTitle: "هيّئ المنصة حول العمل الفعلي.",
+    platformLede:
+      "تدعم الوحدات نموذج التشغيل، لكنها لا تستبدل القرارات والمسؤولية والأدلة التي تحتاج إليها العملية.",
+    modules: "وحدات Odoo",
+    systemsTitle: "أنظمة أنو التي يعمل عليها هذا القطاع.",
+    systemsLede: "لكل منها قصته الكاملة: ماذا يفعل، وكيف يعمل، وكيف تبنيه أنو.",
+    questionsTitle: "أسئلة يجب حسمها قبل التطبيق.",
+  },
+}
