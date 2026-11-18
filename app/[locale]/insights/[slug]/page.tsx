@@ -90,7 +90,7 @@ export default async function InsightArticlePage({
             <Container>
               <Link
                 href={localizedPath(locale, "/insights")}
-                className="mono-label inline-flex items-center gap-2 rounded-sm text-white/64 transition-colors outline-none hover:text-white focus-visible:ring-2 focus-visible:ring-[var(--color-bioluminescent-lime)] focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--color-abyssal-ink)]"
+                className="mono-label inline-flex items-center gap-2 rounded-sm text-white/80 transition-colors outline-none hover:text-white focus-visible:ring-2 focus-visible:ring-[var(--color-bioluminescent-lime)] focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--color-abyssal-ink)]"
               >
                 <ArrowLeftIcon className="size-4 rtl:-scale-x-100" />
                 {isRtl ? "العودة إلى الرؤى" : "Back to insights"}

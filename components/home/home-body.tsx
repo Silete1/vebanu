@@ -43,7 +43,7 @@ function SectionLabel({
   return (
     <p
       className={`mono-label tag-dot flex items-center gap-2 ${
-        dark ? "text-white/64" : "text-[var(--color-graphite)]"
+        dark ? "text-white/80" : "text-[var(--color-graphite)]"
       }`}
     >
       {children}
@@ -110,7 +110,7 @@ export function HomeIntroSection({ locale }: { locale: Locale }) {
                   {copy.workStory.map((step) => (
                     <span
                       key={step.counter}
-                      className="mono-label story-counter inline-flex rounded-full border border-[var(--color-graphite)] px-5 py-3 text-white/76"
+                      className="mono-label story-counter inline-flex rounded-full border border-[var(--color-graphite)] bg-[var(--color-abyssal-ink)] px-5 py-3 text-white/80"
                     >
                       {step.counter}
                     </span>

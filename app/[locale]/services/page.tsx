@@ -72,7 +72,7 @@ export default async function ServicesPage({
         data-header-theme="dark"
       >
         <Container>
-          <p className="mono-label tag-dot flex items-center gap-2 text-white/64">
+          <p className="mono-label tag-dot flex items-center gap-2 text-white/80">
             {copy.eyebrow}
           </p>
           <h1 className="display-headline mt-10 max-w-[10ch]">{copy.title}</h1>

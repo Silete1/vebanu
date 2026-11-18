@@ -60,7 +60,7 @@ export function SiteFooter({ locale }: { locale: Locale }) {
 
           <div className="grid gap-6 sm:grid-cols-2" data-footer-reveal>
             <div className="border-s border-white/18 ps-5">
-              <p className="mono-label text-white/64">{copy.navigate}</p>
+              <p className="mono-label text-white/80">{copy.navigate}</p>
               <nav
                 className="mt-3 grid gap-2"
                 aria-label={copy.footerNavigation}
@@ -77,7 +77,7 @@ export function SiteFooter({ locale }: { locale: Locale }) {
               </nav>
             </div>
             <div className="border-s border-white/18 ps-5">
-              <p className="mono-label text-white/64">{copy.connect}</p>
+              <p className="mono-label text-white/80">{copy.connect}</p>
               <div className="mt-3 grid gap-2">
                 <Link
                   href={getWhatsappHref(locale)}
