@@ -20,7 +20,9 @@ Until the brief is shared and split: the current site only gets the hosting move
 ## Status
 | Area | State |
 |---|---|
-| **Remake (new production)** | Waiting for PC2's brief on `pc2/remake-brief`; then a plan + work split on this board |
+| **Remake (new production)** | PC2 builds it on `pc2/web-redesign` (Forgejo only). Brief: `pc2/remake-brief` docs/remake/BRIEF.md. Split agreed (site-mail 003). Staging https://site.brain.anu.ltd = pc2/web-redesign 59bd03c |
+| **Photoreal 3D (PC1)** | Lab repo `Documentsnu-3d-lab` (scripted Blender, Cycles/OptiX on RTX 4060). Shots: (d) Brain ziggurat — running; (c) Workshops explode, (b) port flyover — next. Unreal after the disk cleanup + owner's Epic sign-in. Tools research → `anu-3d-lab/docs/TOOLS.md`. Proposed to PC2 in site-mail 004: PC2 keeps (a) home + its procedural set |
+| **Assets repo** | Forgejo `Silete1/anu-web-assets` (private). PC1 agent pushing logo, decks, renders, reels, 3D |
 | Hosting move (Vercel → anu-cloud-01) | Server copy healthy at https://site.brain.anu.ltd. Branch `hosting/hetzner`. Runbook `deploy/README.md`. Waiting: Resend key in site.env, DNS login, owner's go |
 | Current-site fixes (audit 18 Nov) | DONE on `site/improvements` 14bd109, live on staging: hero video 4.45→0.81/0.49 MB, headline visible without JS + subline, one brand per title, OG cards, robots/noindex off-production, branded 404, Services in nav, email in contact, contrast, fonts, 44px footer taps, RTL arrows, dead files removed. Reaches anu.ltd at the DNS switch (or a merge to main for Vercel) |
 | Production | www.anu.ltd = `main` 245731b on Vercel |
@@ -43,6 +45,8 @@ Until the brief is shared and split: the current site only gets the hosting move
 - README design section is out of date (says bone-white + lime; the site is navy + electric blue).
 
 ## Owner decisions queue
+0. Go to publish `site/improvements` to anu.ltd (merge to main → Vercel). Auto mode needs the owner's explicit yes.
+0b. Disk for Unreal: approve dropping unused Docker volumes (~24 GB) and unused images (~13 GB, keeping odoo:19/postgres:16), and be at the keyboard for the compaction admin prompt + Epic sign-in.
 1. Go for the DNS switch of anu.ltd to the server (after the form test passes).
 2. Who holds the Google Cloud DNS login and the Vercel login.
 3. Arabic wording on staging: hero subline, "راسل أنو بالبريد", Arabic 404 text.
@@ -66,4 +70,7 @@ Until the brief is shared and split: the current site only gets the hosting move
 |---|---|---|
 | msc `twin-mail/to-pc2/025` | PC1 → PC2 | website handover + 4 asks (sent before this board existed) |
 | `site-mail/to-pc2/001` | PC1 → PC2 | this board exists; reply here |
+| `site-mail/to-pc1/001` | PC2 → PC1 | brief + remake branches, split, no Vercel/DNS access, website2 = old template |
+| `site-mail/to-pc2/003` | PC1 → PC2 | split ACK, staging = remake, ports from site/improvements, Unreal native on PC1 |
+| `site-mail/to-pc2/004` | PC1 → PC2 | photoreal shot split: PC1 (d)(c)(b), PC2 (a) + procedural set |
 | `site-mail/to-pc2/002` | PC1 → PC2 | owner: full remake (3D, Sumerian Anu); push the brief to `pc2/remake-brief`, say what exists, propose the split |
