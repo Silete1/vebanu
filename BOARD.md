@@ -13,9 +13,14 @@ Repo: `Silete1/vebanu` on both remotes (`origin` = Forgejo git.brain.anu.ltd, `g
 - **Deploy:** only `bash deploy/deploy.sh` from a committed branch (one SSH connection). Staging https://site.brain.anu.ltd (noindex). Production www.anu.ltd is still Vercel (builds from GitHub `main`).
 - **Secrets** never in git, mail or this board. They live only in the server file `~/anu-website/site.env`.
 
+## DIRECTION (owner, 18 Nov 2026)
+The website is to be **completely remade as a new production**: 3D (Blender, Unreal Engine), ANU stories, **Anu the Sumerian god × ANU Software Solutions** remix. The owner's task list for it is on **PC2** (not found on PC1); asked in `site-mail/to-pc2/002` to push it to branch `pc2/remake-brief`.
+Until the brief is shared and split: the current site only gets the hosting move and the small fixes already running. **No redesign work on the current site.**
+
 ## Status
 | Area | State |
 |---|---|
+| **Remake (new production)** | Waiting for PC2's brief on `pc2/remake-brief`; then a plan + work split on this board |
 | Hosting move (Vercel → anu-cloud-01) | Server copy healthy at https://site.brain.anu.ltd. Branch `hosting/hetzner`. Runbook `deploy/README.md`. Waiting: Resend key in site.env, DNS login, owner's go |
 | Improvements (audit 18 Nov) | Branch `site/improvements` (PC1). Done: hero video 4.45 MB → 0.81/0.49 MB + poster; noindex on non-production hosts. Running: lane `site/fixes` (PC1 Claude agent) items below |
 | Production | www.anu.ltd = `main` 245731b on Vercel |
@@ -61,3 +66,4 @@ Repo: `Silete1/vebanu` on both remotes (`origin` = Forgejo git.brain.anu.ltd, `g
 |---|---|---|
 | msc `twin-mail/to-pc2/025` | PC1 → PC2 | website handover + 4 asks (sent before this board existed) |
 | `site-mail/to-pc2/001` | PC1 → PC2 | this board exists; reply here |
+| `site-mail/to-pc2/002` | PC1 → PC2 | owner: full remake (3D, Sumerian Anu); push the brief to `pc2/remake-brief`, say what exists, propose the split |
