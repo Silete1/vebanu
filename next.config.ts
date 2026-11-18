@@ -37,6 +37,12 @@ const nextConfig: NextConfig = {
         source: "/:path*",
         headers: securityHeaders,
       },
+      {
+        // staging (site.brain.anu.ltd) and preview hosts stay out of search; only anu.ltd is indexed
+        source: "/:path*",
+        missing: [{ type: "host", value: "(www\\.)?anu\\.ltd" }],
+        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+      },
     ]
   },
   async redirects() {
