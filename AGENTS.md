@@ -129,7 +129,7 @@ Read this file first. Do not begin each task with a full repository scan. Use th
 - Deploy: `bash deploy/deploy.sh` from Git Bash (committed HEAD only, one SSH connection). Staging: https://site.brain.anu.ltd/en.
 - Secrets are only on the server in `~/anu-website/site.env`, never in git.
 - Remotes: `origin` = Forgejo `git.brain.anu.ltd` (VPN-only web UI), `github` = GitHub `Silete1/vebanu` (Vercel builds from it).
-- Coordination: every website agent (Claude PC1, Codex PC1, PC2) uses the board on branch `coord/board` (`BOARD.md`; PC1 worktree `C:UsersLenovoDocumentsebanu-board`) and the tag mailbox `site-mail/to-pc1|to-pc2/NNN`. Read the board before any task; claim before starting; own branches only.
+- Coordination: every website agent (Claude PC1, Codex PC1, PC2) uses the board on branch `coord/board` (`BOARD.md`; PC1 worktree `C:/Users/Lenovo/Documents/vebanu-board`) and the tag mailbox `site-mail/to-pc1|to-pc2/NNN`. Read the board before any task; claim before starting; own branches only.
 
 ## Environment and Config Files
 
