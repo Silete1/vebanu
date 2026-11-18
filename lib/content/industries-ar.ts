@@ -30,7 +30,6 @@ export type IndustryTranslation = {
     application: string
   }[]
   buyerQuestions: FourItems<{ question: string; answer: string }>
-  visual: { description: string; alt: string }
 }
 
 export const industriesAr: Record<IndustrySlug, IndustryTranslation> = {
@@ -165,11 +164,6 @@ export const industriesAr: Record<IndustrySlug, IndustryTranslation> = {
           "نعم. يجب توحيد الأصناف والوحدات والتصنيفات والعملاء والموردين والأرصدة قبل الانتقال المنضبط.",
       },
     ],
-    visual: {
-      description:
-        "بيئة مخزن توزيع منظمة تمثل حركة البضائع والرقابة التشغيلية.",
-      alt: "ممرات مخزن توزيع منظمة وجاهزة لتنفيذ الطلبات",
-    },
   },
   manufacturing: {
     name: "التصنيع",
@@ -306,10 +300,6 @@ export const industriesAr: Record<IndustrySlug, IndustryTranslation> = {
           "يمكنه جمع تكلفة المواد والعمليات والمخزون، لكن دقة النتيجة تعتمد على قواعد تكلفة وبيانات تشغيل منضبطة.",
       },
     ],
-    visual: {
-      description: "بيئة تصنيع حديثة تمثل الإنتاج المنظم ومراكز العمل.",
-      alt: "خط إنتاج حديث داخل مصنع منظم",
-    },
   },
   retail: {
     name: "التجزئة ومتاجر الفروع",
@@ -442,10 +432,6 @@ export const industriesAr: Record<IndustrySlug, IndustryTranslation> = {
           "نعم عندما تُعرّف الإيرادات والتكاليف والمخزون والمصروفات ومراكز التحليل بصورة متسقة.",
       },
     ],
-    visual: {
-      description: "متجر تجزئة منظم يمثل تشغيل الفروع ونقاط البيع.",
-      alt: "مساحة بيع بالتجزئة حديثة ومنظمة",
-    },
   },
   logistics: {
     name: "الخدمات اللوجستية والنقل",
@@ -577,10 +563,6 @@ export const industriesAr: Record<IndustrySlug, IndustryTranslation> = {
           "يمكن ذلك عندما تُسجل الإيرادات والمصروفات والوقت والموارد على بُعد تحليلي موحد.",
       },
     ],
-    visual: {
-      description: "مركز لوجستي منظم يمثل حركة الشحنات والتخطيط للتسليم.",
-      alt: "عمليات لوجستية منظمة داخل مركز توزيع",
-    },
   },
   healthcare: {
     name: "عمليات الرعاية الصحية",
@@ -713,10 +695,5 @@ export const industriesAr: Record<IndustrySlug, IndustryTranslation> = {
           "يجب تحديد نطاق البيانات والوصول والاستضافة والاحتفاظ والامتثال قبل التصميم، وألا تدخل البيانات السريرية أو الشخصية غير الضرورية في مسار إداري.",
       },
     ],
-    visual: {
-      description:
-        "بيئة خدمات صحية نظيفة تمثل التشغيل اليومي من دون ادعاءات سريرية أو صور مرضى يمكن التعرف إليهم.",
-      alt: "مرفق خدمات صحية نظيف وجاهز للتشغيل اليومي",
-    },
   },
 }

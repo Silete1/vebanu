@@ -411,13 +411,87 @@ export const insights: Insight[] = [
   },
 ]
 
-export const featuredInsight =
-  insights.find((insight) => insight.featured) ?? insights[0]
-
 export function getInsightBySlug(slug: string) {
   return insights.find((insight) => insight.slug === slug)
 }
 
-export function getLocalizedText(value: LocalizedText, locale: Locale) {
-  return value[locale]
+/** The words around the field notes: the index, the topic filter and the article frame. */
+export type NotesCopy = {
+  meta: { title: string; description: string }
+  kicker: string
+  title: string
+  lede: string
+  featured: string
+  read: string
+  indexTitle: string
+  indexLede: string
+  filterLabel: string
+  showing: string
+  of: string
+  empty: string
+  crumbsLabel: string
+  rail: string
+  by: string
+  minutes: { read: string; watch: string }
+  question: { label: string; text: string }
+  related: string
+  all: string
+}
+
+export const notesCopy: Record<Locale, NotesCopy> = {
+  en: {
+    meta: {
+      title: "Field notes",
+      description:
+        "Practical thinking from ANU on business control, operations, finance, inventory, Odoo ERP and digital transformation.",
+    },
+    kicker: "Field notes",
+    title: "Working notes for a more controlled business.",
+    lede: "Short, practical observations drawn from ERP delivery, process work and management-control questions.",
+    featured: "Featured field note",
+    read: "Read the note",
+    indexTitle: "Field notes index",
+    indexLede: "Notes matching the selected topic, ordered by publication date.",
+    filterLabel: "Filter field notes by topic",
+    showing: "Showing",
+    of: "of",
+    empty: "No field notes have been published in this topic yet.",
+    crumbsLabel: "Breadcrumb",
+    rail: "In this note",
+    by: "By",
+    minutes: { read: "min read", watch: "min watch" },
+    question: {
+      label: "Operating question",
+      text: "Which decision, evidence or responsibility still exists outside the system?",
+    },
+    related: "Related field notes",
+    all: "All field notes",
+  },
+  ar: {
+    meta: {
+      title: "ملاحظات ميدانية",
+      description: "رؤى عملية من أنو حول الرقابة التشغيلية والمالية والمخزون وتطبيق Odoo ERP والتحول الرقمي.",
+    },
+    kicker: "ملاحظات ميدانية",
+    title: "ملاحظات عملية لأعمال أكثر انضباطاً.",
+    lede: "ملاحظات قصيرة وعملية من واقع تطبيق ERP وتصميم العمليات وأسئلة الضبط الإداري.",
+    featured: "ملاحظة ميدانية مميزة",
+    read: "اقرأ الملاحظة",
+    indexTitle: "فهرس الملاحظات الميدانية",
+    indexLede: "ملاحظات تطابق الموضوع المختار ومرتبة حسب تاريخ النشر.",
+    filterLabel: "تصفية الملاحظات حسب الموضوع",
+    showing: "عرض",
+    of: "من",
+    empty: "لم تُنشر ملاحظات ميدانية في هذا الموضوع بعد.",
+    crumbsLabel: "مسار الصفحة",
+    rail: "في هذه الملاحظة",
+    by: "بواسطة",
+    minutes: { read: "دقيقة قراءة", watch: "دقيقة مشاهدة" },
+    question: {
+      label: "سؤال تنفيذي",
+      text: "ما القرار أو الدليل أو المسؤولية التي ما زالت موجودة خارج النظام؟",
+    },
+    related: "ملاحظات ميدانية مرتبطة",
+    all: "كل الملاحظات",
+  },
 }
