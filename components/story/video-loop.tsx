@@ -34,10 +34,21 @@ export function VideoLoop({ base, webm, poster }: { base: string; webm: boolean;
       { rootMargin: "120px" }
     )
     const onPlaying = () => video.classList.add("is-live")
+    // a realtime scene taking over the same box makes the loop redundant: stop it
+    const scene = video.parentElement?.querySelector(".anu-scene")
+    const sceneWatch = new MutationObserver(() => {
+      if (scene?.classList.contains("is-live")) {
+        io.disconnect()
+        video.pause()
+        video.classList.remove("is-live")
+      }
+    })
+    if (scene) sceneWatch.observe(scene, { attributes: true, attributeFilter: ["class"] })
     video.addEventListener("playing", onPlaying)
     io.observe(video)
     return () => {
       io.disconnect()
+      sceneWatch.disconnect()
       video.removeEventListener("playing", onPlaying)
     }
   }, [])

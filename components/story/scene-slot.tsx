@@ -40,8 +40,8 @@ export function SceneSlot({ scene }: { scene: SceneName }) {
           observer?.disconnect()
           const idle = window.requestIdleCallback ?? ((fn: () => void) => window.setTimeout(fn, 200))
           idle(async () => {
-            const module = await load()
-            if (!cancelled) dispose = module.mount(element)
+            const scene = await load()
+            if (!cancelled) dispose = scene.mount(element)
           })
         },
         { rootMargin: "200px" }
